@@ -4,15 +4,13 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
-	"os"
-	"strings"
 
 	"github.com/lexcao/genapi/internal/model"
 )
 
-func GenerateFile(filename string, interfaces []model.Interface) error {
+func GenerateFile(filename string, interfaces []model.Interface) ([]byte, error) {
 	if len(interfaces) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	var buf bytes.Buffer
@@ -24,14 +22,13 @@ func GenerateFile(filename string, interfaces []model.Interface) error {
 	}
 
 	if err := templates.ExecuteTemplate(&buf, tmplMain, data); err != nil {
-		return fmt.Errorf("failed to execute template: %w", err)
+		return nil, fmt.Errorf("failed to execute template: %w", err)
 	}
 
 	fomatted, err := format.Source(buf.Bytes())
 	if err != nil {
-		return fmt.Errorf("failed to format source: %w", err)
+		return nil, fmt.Errorf("failed to format source: %w", err)
 	}
 
-	newFilename := strings.TrimSuffix(filename, ".go") + ".gen.go"
-	return os.WriteFile(newFilename, fomatted, 0644)
+	return fomatted, nil
 }

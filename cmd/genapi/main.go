@@ -8,5 +8,5 @@ func main() {
 	// 2. Create app
 
 	// 3. Run
-	internal.Run()
+	internal.Run(internal.Config{})
 }
