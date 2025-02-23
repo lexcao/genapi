@@ -35,6 +35,12 @@ import (
 {{range .Interfaces}}
 {{template "tmplInterface" .}}
 {{end}}
+
+func init() {
+	{{- range .Interfaces }}
+	genapi.Register[{{.Name}}, *{{printf "impl%s" .Name}}]()
+	{{- end }}
+}
 `))
 
 func init() {

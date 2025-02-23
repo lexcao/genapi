@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/lexcao/genapi/internal/runtime/registry"
 )
 
 type Interface interface {
@@ -14,7 +16,11 @@ type Interface interface {
 }
 
 func New[T Interface](opts ...Option) T {
-	panic("not implemented")
+	return registry.New[T]()
+}
+
+func Register[api Interface, client Interface]() {
+	registry.Register[api, client]()
 }
 
 type Request struct {

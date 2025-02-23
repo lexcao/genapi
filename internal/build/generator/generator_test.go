@@ -70,6 +70,10 @@ func (i *implGitHub) ListRepositories(ctx context.Context, owner string) error {
 	})
 	return genapi.HandleResponse0(resp, err)
 }
+
+func init() {
+	genapi.Register[GitHub, *implGitHub]()
+}
 `
 	assert.Equal(t, expect, string(actual))
 }

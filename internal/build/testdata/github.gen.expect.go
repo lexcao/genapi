@@ -35,3 +35,7 @@ func (i *implGitHub) ListRepositories(ctx context.Context, username string, perP
 	})
 	return genapi.HandleResponse[[]*Repository](resp, err)
 }
+
+func init() {
+	genapi.Register[GitHub, *implGitHub]()
+}
