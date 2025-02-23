@@ -21,6 +21,10 @@ func TestParseFile(t *testing.T) {
 	expect := model.Interface{
 		Name:    "GitHub",
 		Package: "testdata",
+		Imports: []string{
+			`"context"`,
+			`"github.com/lexcao/genapi"`,
+		},
 		Annotations: annotation.InterfaceAnnotations{
 			BaseURL: annotation.BaseURL{Value: "https://api.github.com"},
 			Headers: []annotation.Header{
@@ -378,6 +382,66 @@ func TestHasEmbededInterface(t *testing.T) {
 			})
 
 			require.Equal(t, test.want, found)
+		})
+	}
+}
+
+func TestCollectImports(t *testing.T) {
+	tests := []struct {
+		name string
+		code string
+		want []string
+	}{
+		{
+			name: "no imports",
+		},
+		{
+			name: "one import",
+			code: `
+			import "context"
+			`,
+			want: []string{
+				`"context"`,
+			},
+		},
+		{
+			name: "many imports",
+			code: `
+			import (
+				"context"
+				"github.com/lexcao/genapi"
+			)
+			`,
+			want: []string{
+				`"context"`,
+				`"github.com/lexcao/genapi"`,
+			},
+		},
+		{
+			name: "many imports with newline",
+			code: `
+			import (
+				"context"
+
+				"github.com/lexcao/genapi"
+			)
+			`,
+			want: []string{
+				`"context"`,
+				`"github.com/lexcao/genapi"`,
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			parseCodeNode(t, test.code, func(file *ast.File) func(ast.Node) bool {
+				return func(n ast.Node) bool {
+					got := collectImports(file.Imports)
+					require.Equal(t, test.want, got)
+					return false
+				}
+			})
 		})
 	}
 }

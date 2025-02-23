@@ -68,6 +68,7 @@ func parseInterface(params parseInterfaceParams) model.Interface {
 	result := model.Interface{
 		Name:    params.TypeSpec.Name.Name,
 		Package: params.File.Name.Name,
+		Imports: collectImports(params.File.Imports),
 	}
 
 	result.Annotations = annotation.ParseInterfaceAnnotations(commentsString(params.Declaration.Doc))
@@ -123,6 +124,18 @@ func commentsString(doc *ast.CommentGroup) []string {
 	result := make([]string, len(doc.List))
 	for i, comment := range doc.List {
 		result[i] = comment.Text
+	}
+	return result
+}
+
+func collectImports(imports []*ast.ImportSpec) []string {
+	if len(imports) == 0 {
+		return nil
+	}
+
+	result := make([]string, len(imports))
+	for i, importSpec := range imports {
+		result[i] = importSpec.Path.Value
 	}
 	return result
 }
