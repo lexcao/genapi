@@ -60,6 +60,14 @@ func HandleResponse[T any](resp *Response, err error) (T, error) {
 	return result, &Error{Response: resp}
 }
 
+func MustHandleResponse[T any](resp *Response, err error) T {
+	result, err := HandleResponse[T](resp, err)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
 func HandleResponse0(resp *Response, err error) error {
 	if err != nil {
 		return fmt.Errorf("failed to send request: %w", err)

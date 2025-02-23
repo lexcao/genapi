@@ -40,13 +40,13 @@ func (i *{{ $impl }}) setHttpClient(client genapi.HttpClient) {
 	template.Must(templates.New(tmplMethod).Parse(`
 func (i *impl{{ .Interface }}) {{ .Name }}(
 {{- range $i, $p := .Params }}
-    {{- if $i }}, {{ end }}{{ $p.Name }} {{ $p.Type }}
+	{{- if $i }}, {{ end }}{{ $p.Name }} {{ $p.Type }}
 {{- end -}}
 )
 {{- if gt (len .Results) 1 }}({{- end -}}
-    {{- range $i, $r := .Results }}
-    {{- if $i }}, {{ end }}{{ $r.Name }} {{ $r.Type }}
-    {{- end -}}
+	{{- range $i, $r := .Results }}
+	{{- if $i }}, {{ end }}{{ $r.Name }} {{ $r.Type }}
+	{{- end -}}
 {{- if gt (len .Results) 1 }}){{- end -}}
 {{- " " -}}
 {
@@ -55,30 +55,35 @@ func (i *impl{{ .Interface }}) {{ .Name }}(
 `))
 
 	template.Must(templates.New(tmplMethodBody).Parse(`
-	i.client.Do(&genapi.Request{
-		{{- with .Bindings.Method -}}
+	{{- with .Bindings.Results -}}
+	{{- .Assignment -}} :=
+	{{- end -}}i.client.Do(&genapi.Request{
+		{{- with .Bindings.Method }}
 		Method: "{{.}}",
-		{{- end -}}
-		{{- with .Bindings.Path -}}
+		{{- end }}
+		{{- with .Bindings.Path }}
 		Path: "{{.}}",
-		{{- end -}}
-		{{- with .Bindings.PathParams -}}
-		PathParams: {{ . }},
-		{{- end -}}
-		{{- with .Bindings.Queries -}}
-		Queries: {{ . }},
-		{{- end -}}
-		{{- with .Bindings.Headers -}}
-		Headers: {{ . }},
-		{{- end -}}
-		{{- with .Bindings.Context -}}
+		{{- end }}
+		{{- with .Bindings.PathParams }}
+		PathParams: {{.}},
+		{{- end }}
+		{{- with .Bindings.Queries }}
+		Queries: {{.}},
+		{{- end }}
+		{{- with .Bindings.Headers }}
+		Headers: {{.}},
+		{{- end }}
+		{{- with .Bindings.Context }}
 		Context: {{.}},
-		{{- end -}}
-		{{- with .Bindings.Body -}}
+		{{- end }}
+		{{- with .Bindings.Body }}
 		Body: {{.}},
-		{{- end -}}
+		{{- end }}
 	})
-    `))
+	{{ with .Bindings.Results -}}
+	return {{ .Statement -}}
+	{{- end -}}
+	`))
 }
 
 // TODO: 5. Handle Result & Error

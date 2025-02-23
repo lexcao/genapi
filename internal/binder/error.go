@@ -19,3 +19,11 @@ type ErrDuplicated struct {
 func (e *ErrDuplicated) Error() string {
 	return fmt.Sprintf("duplicated %s variable {%s} found", e.Type, e.Value)
 }
+
+type ErrUnsupported struct {
+	Message string
+}
+
+func (e *ErrUnsupported) Error() string {
+	return fmt.Sprintf("unsupported %s", e.Message)
+}

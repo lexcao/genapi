@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -9,6 +10,45 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+func TestGenerateFile(t *testing.T) {
+	err := GenerateFile("test.go", []model.Interface{
+		{
+			Name:    "GitHub",
+			Package: "generator",
+			Methods: []model.Method{
+				{
+					Name: "ListRepositories",
+					Params: []model.Param{
+						{Name: "ctx", Type: "context.Context"},
+						{Name: "owner", Type: "string"},
+					},
+					Results: []model.Param{
+						{Type: "[]Repository"},
+						{Type: "error"},
+					},
+					Bindings: &model.Bindings{
+						Results: &model.BindingResults{
+							Assignment: "resp, err",
+							Statement:  "genapi.HandleResponse[[]Repository](resp, err)",
+						},
+						PathParams: "map[string]string{\"owner\": owner}",
+						Path:       "/users/{owner}/repos",
+						Method:     "GET",
+					},
+				},
+			},
+		},
+	})
+	require.NoError(t, err)
+
+	// check file exists
+	_, err = os.Stat("test.gen.go")
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		os.Remove("test.gen.go")
+	})
+}
 
 func TestGenerateInterface(t *testing.T) {
 	actual, err := generateInterface(tmplInterface, model.Interface{
@@ -29,7 +69,6 @@ func (i *implTest) setHttpClient(client genapi.HttpClient) {
 }
 
 func TestGenerateMethod(t *testing.T) {
-	t.Skip("TODO: not finished")
 	tests := []struct {
 		name     string
 		method   model.Method
@@ -53,12 +92,20 @@ func (i *implClient) NoParams() {
 				Name:      "OneParam",
 				Interface: "Client",
 				Params: []model.Param{
-					{Name: "param", Type: "string"},
+					{Name: "owner", Type: "string"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					RequestLine: annotation.RequestLine{
+						Path: "/repos/{owner}",
+					},
 				},
 			},
 			expected: `
-func (i *implClient) OneParam(param string) {
-	i.client.Do(&genapi.Request{})
+func (i *implClient) OneParam(owner string) {
+	i.client.Do(&genapi.Request{
+		Path:       "/repos/{owner}",
+		PathParams: map[string]string{"owner": owner},
+	})
 }
 `,
 		},
@@ -73,7 +120,8 @@ func (i *implClient) OneParam(param string) {
 			},
 			expected: `
 func (i *implClient) OneResult() error {
-	i.client.Do(&genapi.Request{})
+	resp, err := i.client.Do(&genapi.Request{})
+	return genapi.HandleResponse0(resp, err)
 }
 `,
 		},
@@ -83,17 +131,26 @@ func (i *implClient) OneResult() error {
 				Name:      "TwoParamsTwoResults",
 				Interface: "Client",
 				Params: []model.Param{
-					{Name: "a", Type: "int"},
-					{Name: "b", Type: "string"},
+					{Name: "owner", Type: "string"},
+					{Name: "repo", Type: "string"},
 				},
 				Results: []model.Param{
-					{Type: "bool"},
+					{Type: "Result"},
 					{Type: "error"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					RequestLine: annotation.RequestLine{
+						Path: "/repos/{owner}/{repo}",
+					},
 				},
 			},
 			expected: `
-func (i *implClient) TwoParamsTwoResults(a int, b string) (bool, error) {
-
+func (i *implClient) TwoParamsTwoResults(owner string, repo string) (Result, error) {
+	resp, err := i.client.Do(&genapi.Request{
+		Path:       "/repos/{owner}/{repo}",
+		PathParams: map[string]string{"owner": owner, "repo": repo},
+	})
+	return genapi.HandleResponse[Result](resp, err)
 }
 `,
 		},
@@ -106,12 +163,15 @@ func (i *implClient) TwoParamsTwoResults(a int, b string) (bool, error) {
 					{Name: "ctx", Type: "context.Context"},
 				},
 				Results: []model.Param{
-					{Type: "context.Context"},
+					{Type: "result.Result"},
 				},
 			},
 			expected: `
-func (i *implClient) WithImports(ctx context.Context) context.Context {
-
+func (i *implClient) WithImports(ctx context.Context) result.Result {
+	resp, err := i.client.Do(&genapi.Request{
+		Context: ctx,
+	})
+	return genapi.MustHandleResponse[result.Result](resp, err)
 }
 `,
 		},
@@ -153,7 +213,10 @@ i.client.Do(&genapi.Request{})
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Method: "GET", Path: "/repos"})
+i.client.Do(&genapi.Request{
+	Method: "GET",
+	Path:   "/repos",
+})
 `,
 		},
 		{
@@ -170,7 +233,11 @@ i.client.Do(&genapi.Request{Method: "GET", Path: "/repos"})
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Method: "GET", Path: "/repos/{owner}", PathParams: map[string]string{"owner": owner}})
+i.client.Do(&genapi.Request{
+	Method:     "GET",
+	Path:       "/repos/{owner}",
+	PathParams: map[string]string{"owner": owner},
+})
 `,
 		},
 		{
@@ -186,7 +253,9 @@ i.client.Do(&genapi.Request{Method: "GET", Path: "/repos/{owner}", PathParams: m
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Queries: url.Values{"sort": []string{sort}}})
+i.client.Do(&genapi.Request{
+	Queries: url.Values{"sort": []string{sort}},
+})
 `,
 		},
 		{
@@ -203,7 +272,9 @@ i.client.Do(&genapi.Request{Queries: url.Values{"sort": []string{sort}}})
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Queries: url.Values{"page": []string{page}, "sort": []string{"desc"}}})
+i.client.Do(&genapi.Request{
+	Queries: url.Values{"page": []string{page}, "sort": []string{"desc"}},
+})
 `,
 		},
 		{
@@ -219,7 +290,9 @@ i.client.Do(&genapi.Request{Queries: url.Values{"page": []string{page}, "sort": 
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Headers: http.Header{"Authorization": []string{token}}})
+i.client.Do(&genapi.Request{
+	Headers: http.Header{"Authorization": []string{token}},
+})
 `,
 		},
 		{
@@ -236,7 +309,9 @@ i.client.Do(&genapi.Request{Headers: http.Header{"Authorization": []string{token
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Headers: http.Header{"Authorization": []string{token}, "Content-Type": []string{"application/json"}}})
+i.client.Do(&genapi.Request{
+	Headers: http.Header{"Authorization": []string{token}, "Content-Type": []string{"application/json"}},
+})
 `,
 		},
 		{
@@ -247,8 +322,10 @@ i.client.Do(&genapi.Request{Headers: http.Header{"Authorization": []string{token
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Context: ctx})
-			`,
+i.client.Do(&genapi.Request{
+	Context: ctx,
+})
+`,
 		},
 		{
 			name: "with body",
@@ -258,7 +335,96 @@ i.client.Do(&genapi.Request{Context: ctx})
 				},
 			},
 			expected: `
-i.client.Do(&genapi.Request{Body: body})
+i.client.Do(&genapi.Request{
+	Body: body,
+})
+`,
+		},
+		{
+			name: "with results 1 any",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "Result"},
+				},
+			},
+			expected: `
+resp, err := i.client.Do(&genapi.Request{})
+return genapi.MustHandleResponse[Result](resp, err)
+			`,
+		},
+		{
+			name: "with results 1 genapi.Response",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "genapi.Response"},
+				},
+			},
+			expected: `
+resp, _ := i.client.Do(&genapi.Request{})
+return *resp
+			`,
+		},
+		{
+			name: "with results 1 *genapi.Response",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "*genapi.Response"},
+				},
+			},
+			expected: `
+resp, _ := i.client.Do(&genapi.Request{})
+return resp
+			`,
+		},
+		{
+			name: "with results 1 error",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "error"},
+				},
+			},
+			expected: `
+resp, err := i.client.Do(&genapi.Request{})
+return genapi.HandleResponse0(resp, err)
+			`,
+		},
+		{
+			name: "with results 2 any",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "Result"},
+					{Type: "error"},
+				},
+			},
+			expected: `
+resp, err := i.client.Do(&genapi.Request{})
+return genapi.HandleResponse[Result](resp, err)
+			`,
+		},
+		{
+			name: "with results 2 genapi.Response",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "genapi.Response"},
+					{Type: "error"},
+				},
+			},
+			expected: `
+resp, err := i.client.Do(&genapi.Request{})
+return *resp, err
+			`,
+		},
+		{
+			name: "with results 2 *genapi.Response",
+			method: model.Method{
+				Results: []model.Param{
+					{Type: "*genapi.Response"},
+					{Type: "error"},
+				},
+			},
+			expected: `
+resp, err := i.client.Do(&genapi.Request{})
+return resp, err
 			`,
 		},
 	}

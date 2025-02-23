@@ -29,7 +29,12 @@ type Bindings struct {
 	Queries    string
 	Headers    string
 	PathParams string
-	Results    string
+	Results    *BindingResults
+}
+
+type BindingResults struct {
+	Assignment string
+	Statement  string
 }
 
 // TODO: add unit tests
