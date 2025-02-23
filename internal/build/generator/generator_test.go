@@ -72,7 +72,7 @@ func (i *implGitHub) ListRepositories(ctx context.Context, owner string) error {
 }
 
 func init() {
-	genapi.Register[GitHub, *implGitHub]()
+	genapi.Register[GitHub, implGitHub]()
 }
 `
 	assert.Equal(t, expect, string(actual))

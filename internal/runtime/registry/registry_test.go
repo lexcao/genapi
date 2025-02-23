@@ -30,6 +30,12 @@ func TestRegistry(t *testing.T) {
 			assert.Equal(t, "done", got.Do())
 		})
 
+		t.Run("Pointer", func(t *testing.T) {
+			Register[Doer, *implDoer]()
+			got := New[Doer]()
+			assert.Equal(t, "done", got.Do())
+		})
+
 		t.Run("Package", func(t *testing.T) {
 			Register[simple.Valuer, *simple.ImplValuer]()
 			got := New[simple.Valuer]()

@@ -37,5 +37,5 @@ func (i *implGitHub) ListRepositories(ctx context.Context, username string, perP
 }
 
 func init() {
-	genapi.Register[GitHub, *implGitHub]()
+	genapi.Register[GitHub, implGitHub]()
 }
