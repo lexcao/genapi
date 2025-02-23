@@ -3,8 +3,8 @@ package binder
 import (
 	"strings"
 
-	"github.com/lexcao/genapi/internal/model"
-	"github.com/lexcao/genapi/internal/parser/annotation"
+	"github.com/lexcao/genapi/internal/build/model"
+	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
 type binding interface {

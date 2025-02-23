@@ -1,7 +1,7 @@
 package binder
 
 import (
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 func Bind(interfaceModel *model.Interface) error {

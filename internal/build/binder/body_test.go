@@ -3,7 +3,7 @@ package binder
 import (
 	"testing"
 
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 func TestBindBody(t *testing.T) {

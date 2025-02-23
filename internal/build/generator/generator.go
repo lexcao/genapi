@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"go/format"
 
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 func GenerateFile(filename string, interfaces []model.Interface) ([]byte, error) {

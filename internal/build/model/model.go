@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/lexcao/genapi/internal/parser/annotation"
+	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
 type Interface struct {

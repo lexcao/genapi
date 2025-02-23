@@ -3,7 +3,7 @@ package binder
 import (
 	"fmt"
 
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 type resultBinding struct {

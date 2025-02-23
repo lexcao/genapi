@@ -3,7 +3,7 @@ package generator
 import (
 	"text/template"
 
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 type TemplateName = string
@@ -102,5 +102,3 @@ func (i *impl{{ .Interface }}) {{ .Name }}(
 	{{- end -}}
 	`))
 }
-
-// TODO: 5. Handle Result & Error

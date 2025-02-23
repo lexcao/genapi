@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"go/format"
 
-	"github.com/lexcao/genapi/internal/binder"
-	"github.com/lexcao/genapi/internal/model"
+	"github.com/lexcao/genapi/internal/build/binder"
+	"github.com/lexcao/genapi/internal/build/model"
 )
 
 func generateInterface(tmpl TemplateName, data model.Interface) (string, error) {

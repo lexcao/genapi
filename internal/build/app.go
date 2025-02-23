@@ -1,12 +1,12 @@
-package internal
+package build
 
 import (
 	"os"
 	"strings"
 
-	"github.com/lexcao/genapi/internal/binder"
-	"github.com/lexcao/genapi/internal/generator"
-	"github.com/lexcao/genapi/internal/parser"
+	"github.com/lexcao/genapi/internal/build/binder"
+	"github.com/lexcao/genapi/internal/build/generator"
+	"github.com/lexcao/genapi/internal/build/parser"
 )
 
 type Config struct {

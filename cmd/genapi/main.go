@@ -1,6 +1,6 @@
 package main
 
-import "github.com/lexcao/genapi/internal"
+import "github.com/lexcao/genapi/internal/build"
 
 func main() {
 	// 1. Parse command flags
@@ -8,5 +8,5 @@ func main() {
 	// 2. Create app
 
 	// 3. Run
-	internal.Run(internal.Config{})
+	build.Run(build.Config{})
 }

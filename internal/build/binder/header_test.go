@@ -3,8 +3,8 @@ package binder
 import (
 	"testing"
 
-	"github.com/lexcao/genapi/internal/model"
-	"github.com/lexcao/genapi/internal/parser/annotation"
+	"github.com/lexcao/genapi/internal/build/model"
+	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
 func TestBindHeader(t *testing.T) {

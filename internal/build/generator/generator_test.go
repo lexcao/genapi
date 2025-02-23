@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/lexcao/genapi/internal/model"
-	"github.com/lexcao/genapi/internal/parser/annotation"
+	"github.com/lexcao/genapi/internal/build/model"
+	"github.com/lexcao/genapi/internal/build/parser/annotation"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
