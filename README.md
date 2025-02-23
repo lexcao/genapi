@@ -52,3 +52,7 @@ func main() {
 - @Header("Accept", "application/vnd.github.v3+json")
 - @GET, @POST, @PUT, @DELETE, @PATCH, @OPTIONS, @HEAD http methods
 - @Query("sort", "{sort}")
+
+
+Dependencies:
+- App -> Generator -> Binder -> Parser -> Model -> Annotation

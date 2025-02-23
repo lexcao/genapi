@@ -7,12 +7,14 @@ import (
 	"github.com/lexcao/genapi/internal/model"
 	"github.com/lexcao/genapi/internal/parser/annotation"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGenerateInterface(t *testing.T) {
-	actual := generate(tmplInterface, model.Interface{
+	actual, err := generateInterface(tmplInterface, model.Interface{
 		Name: "Test",
 	})
+	require.NoError(t, err)
 	expected := `
 type implTest struct {
 	client genapi.HttpClient
@@ -117,7 +119,8 @@ func (i *implClient) WithImports(ctx context.Context) context.Context {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			actual := generate(tmplMethod, test.method)
+			actual, err := generateMethod(tmplMethod, test.method)
+			require.NoError(t, err)
 			assert.Equal(t, strings.TrimSpace(test.expected), strings.TrimSpace(actual))
 		})
 	}
@@ -189,6 +192,9 @@ i.client.Do(&genapi.Request{Queries: url.Values{"sort": []string{sort}}})
 		{
 			name: "with query multiple",
 			method: model.Method{
+				Params: []model.Param{
+					{Name: "page", Type: "int"},
+				},
 				Annotations: annotation.MethodAnnotations{
 					Queries: []annotation.Query{
 						{Key: "sort", Value: "desc"},
@@ -203,6 +209,9 @@ i.client.Do(&genapi.Request{Queries: url.Values{"page": []string{page}, "sort": 
 		{
 			name: "with header single",
 			method: model.Method{
+				Params: []model.Param{
+					{Name: "token", Type: "string"},
+				},
 				Annotations: annotation.MethodAnnotations{
 					Headers: []annotation.Header{
 						{Key: "Authorization", Values: []annotation.Variable{"{token}"}},
@@ -216,6 +225,9 @@ i.client.Do(&genapi.Request{Headers: http.Header{"Authorization": []string{token
 		{
 			name: "with header multiple",
 			method: model.Method{
+				Params: []model.Param{
+					{Name: "token", Type: "string"},
+				},
 				Annotations: annotation.MethodAnnotations{
 					Headers: []annotation.Header{
 						{Key: "Authorization", Values: []annotation.Variable{"{token}"}},
@@ -252,7 +264,8 @@ i.client.Do(&genapi.Request{Body: body})
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			actual := generate(tmplMethodBody, test.method)
+			actual, err := generateMethod(tmplMethodBody, test.method)
+			require.NoError(t, err)
 			assert.Equal(t, strings.TrimSpace(test.expected), strings.TrimSpace(actual))
 		})
 	}
