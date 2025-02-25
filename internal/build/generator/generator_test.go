@@ -18,8 +18,12 @@ func TestGenerateFile(t *testing.T) {
 			Package: "generator",
 			Imports: common.SetOf(
 				`"context"`,
+				`"net/http"`,
 				`"github.com/lexcao/genapi"`,
 			),
+			Bindings: &model.InterfaceBindings{
+				Config: `genapi.Config{BaseURL: "https://api.github.com", Headers: http.Header{"Accept": []string{"application/vnd.github.v3+json"}}}`,
+			},
 			Methods: []model.Method{
 				{
 					Name:      "ListRepositories",
@@ -31,7 +35,7 @@ func TestGenerateFile(t *testing.T) {
 					Results: []model.Param{
 						{Type: "error"},
 					},
-					Bindings: &model.Bindings{
+					Bindings: &model.MethodBindings{
 						Results: &model.BindingResults{
 							Assignment: "resp, err",
 							Statement:  "genapi.HandleResponse0(resp, err)",
@@ -52,6 +56,7 @@ package generator
 import (
 	"context"
 	"github.com/lexcao/genapi"
+	"net/http"
 )
 
 type implGitHub struct {
@@ -73,7 +78,9 @@ func (i *implGitHub) ListRepositories(ctx context.Context, owner string) error {
 }
 
 func init() {
-	genapi.Register[GitHub, *implGitHub]()
+	genapi.Register[GitHub, *implGitHub](
+		genapi.Config{BaseURL: "https://api.github.com", Headers: http.Header{"Accept": []string{"application/vnd.github.v3+json"}}},
+	)
 }
 `
 	assert.Equal(t, expect, string(actual))

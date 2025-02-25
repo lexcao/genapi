@@ -16,7 +16,7 @@ func TestBindHeader(t *testing.T) {
 					Headers: []annotation.Header{},
 				},
 			},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "one header",
@@ -30,7 +30,7 @@ func TestBindHeader(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Headers: `http.Header{"Authorization":[]string{token}}`,
 			},
 			expectedBinded:  []string{"token"},
@@ -50,7 +50,7 @@ func TestBindHeader(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Headers: `http.Header{"Authorization":[]string{token}, "Content-Type":[]string{type}}`,
 			},
 			expectedBinded:  []string{"token", "type"},
@@ -65,7 +65,7 @@ func TestBindHeader(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Headers: `http.Header{"Accept":[]string{"application/json"}}`,
 			},
 			expectedImports: []string{`"net/http"`},
@@ -94,7 +94,7 @@ func TestBindHeader(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Headers: `http.Header{"Accept":[]string{type1, type2}}`,
 			},
 			expectedBinded:  []string{"type1", "type2"},
@@ -113,7 +113,7 @@ func TestBindHeader(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Headers: `http.Header{"Accept":[]string{"application/json"}, "Authorization":[]string{token}}`,
 			},
 			expectedBinded:  []string{"token"},

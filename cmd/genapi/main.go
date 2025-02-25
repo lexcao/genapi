@@ -1,12 +1,27 @@
 package main
 
-import "github.com/lexcao/genapi/internal/build"
+import (
+	"flag"
+	"fmt"
+	"os"
+
+	"github.com/lexcao/genapi/internal/build"
+)
 
 func main() {
 	// 1. Parse command flags
+	var config build.Config
+	flag.StringVar(&config.Filename, "file", "", "Input file path")
+	flag.Parse()
 
-	// 2. Create app
+	if config.Filename == "" {
+		fmt.Println("Error: input file is required")
+		flag.Usage()
+		os.Exit(1)
+	}
 
-	// 3. Run
-	build.Run(build.Config{})
+	if err := build.Run(config); err != nil {
+		fmt.Printf("Error: %v\n", err)
+		os.Exit(1)
+	}
 }

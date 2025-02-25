@@ -31,7 +31,7 @@ var bindings = []binding{
 }
 
 func newBindingContext(method *model.Method) *context {
-	method.Bindings = &model.Bindings{}
+	method.Bindings = &model.MethodBindings{}
 
 	paramsByName := map[string]model.Param{}
 	for _, param := range method.Params {

@@ -22,23 +22,34 @@ func (i *implDoer) Do() string {
 	return "done"
 }
 
+type Config struct {
+	Hello string
+}
+
 func TestRegistry(t *testing.T) {
 	t.Run("Simple", func(t *testing.T) {
 		t.Run("Local", func(t *testing.T) {
 			Register[Doer, implDoer]()
-			got := New[Doer]()
+			got, _ := New[Doer]()
 			assert.Equal(t, "done", got.Do())
+		})
+
+		t.Run("Config", func(t *testing.T) {
+			Register[Doer, implDoer](Config{Hello: "world"})
+			got, config := New[Doer]()
+			assert.Equal(t, "done", got.Do())
+			assert.Equal(t, Config{Hello: "world"}, config)
 		})
 
 		t.Run("Pointer", func(t *testing.T) {
 			Register[Doer, *implDoer]()
-			got := New[Doer]()
+			got, _ := New[Doer]()
 			assert.Equal(t, "done", got.Do())
 		})
 
 		t.Run("Package", func(t *testing.T) {
 			Register[simple.Valuer, *simple.ImplValuer]()
-			got := New[simple.Valuer]()
+			got, _ := New[simple.Valuer]()
 			assert.Equal(t, "Value from simple", got.Value())
 		})
 	})
@@ -48,10 +59,10 @@ func TestRegistry(t *testing.T) {
 			Register[pkg1.Valuer, *pkg1.ImplValuer]()
 			Register[pkg2.Valuer, *pkg2.ImplValuer]()
 
-			got := New[pkg1.Valuer]()
+			got, _ := New[pkg1.Valuer]()
 			assert.Equal(t, "Value from pkg1", got.Value())
 
-			got = New[pkg2.Valuer]()
+			got, _ = New[pkg2.Valuer]()
 			assert.Equal(t, "Value from pkg2", got.Value())
 		})
 
@@ -59,10 +70,10 @@ func TestRegistry(t *testing.T) {
 			Register[pkg1_value.Valuer, *pkg1_value.ImplValuer]()
 			Register[pkg2_value.Valuer, *pkg2_value.ImplValuer]()
 
-			got := New[pkg1_value.Valuer]()
+			got, _ := New[pkg1_value.Valuer]()
 			assert.Equal(t, "Value from pkg1.value", got.Value())
 
-			got = New[pkg2_value.Valuer]()
+			got, _ = New[pkg2_value.Valuer]()
 			assert.Equal(t, "Value from pkg2.value", got.Value())
 		})
 	})

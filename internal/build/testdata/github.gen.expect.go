@@ -4,6 +4,7 @@ package testdata
 import (
 	"context"
 	"github.com/lexcao/genapi"
+	"net/http"
 	"net/url"
 )
 
@@ -38,5 +39,14 @@ func (i *implGitHub) ListRepositories(ctx context.Context, username string, perP
 }
 
 func init() {
-	genapi.Register[GitHub, *implGitHub]()
+	genapi.Register[GitHub, *implGitHub](
+		genapi.Config{
+			BaseURL: "https://api.github.com",
+			Headers: http.Header{
+				"Accept": []string{
+					"application/vnd.github.v3+json",
+				},
+			},
+		},
+	)
 }

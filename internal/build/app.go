@@ -20,8 +20,8 @@ func Run(config Config) error {
 		return err
 	}
 
-	for _, iface := range interfaces {
-		if err := binder.Bind(&iface); err != nil {
+	for i := range interfaces {
+		if err := binder.Bind(&interfaces[i]); err != nil {
 			return err
 		}
 	}

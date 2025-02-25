@@ -18,7 +18,7 @@ func TestBindPath(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Path: "/path",
 			},
 		},

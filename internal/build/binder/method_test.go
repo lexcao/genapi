@@ -18,7 +18,7 @@ func TestBindMethod(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Method: "GET",
 			},
 		},

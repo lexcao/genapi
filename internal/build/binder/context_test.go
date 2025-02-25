@@ -11,7 +11,7 @@ func TestBindContext(t *testing.T) {
 		{
 			name:             "empty context",
 			given:            model.Method{},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "context with value",
@@ -20,7 +20,7 @@ func TestBindContext(t *testing.T) {
 					{Name: "ctx", Type: "context.Context"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Context: "ctx",
 			},
 			expectedBinded: []string{"ctx"},

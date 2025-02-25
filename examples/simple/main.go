@@ -26,7 +26,7 @@ type Repository struct {
 
 func main() {
 	client := genapi.New[GitHub](
-		genapi.WithHeader("X-Auth-Token", "GITHUB_TOKEN"),
+	// genapi.WithHeader("X-Auth-Token", "GITHUB_TOKEN"),
 	)
 
 	repositories, err := client.ListRepositories(context.Background(), "octocat", "desc")

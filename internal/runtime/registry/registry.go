@@ -11,14 +11,19 @@ type key struct {
 	name string
 }
 
-var registry = &struct {
-	registration map[key]reflect.Type
-	lock         sync.RWMutex
-}{
-	registration: make(map[key]reflect.Type),
+type value struct {
+	typ    reflect.Type
+	config []any
 }
 
-func Register[api any, client any]() {
+var registry = &struct {
+	registration map[key]value
+	lock         sync.RWMutex
+}{
+	registration: make(map[key]value),
+}
+
+func Register[api any, client any](config ...any) {
 	registry.lock.Lock()
 	defer registry.lock.Unlock()
 
@@ -27,20 +32,29 @@ func Register[api any, client any]() {
 		clientType = clientType.Elem()
 	}
 
-	registry.registration[getKey[api]()] = clientType
+	registry.registration[getKey[api]()] = value{
+		typ:    clientType,
+		config: config,
+	}
 }
 
-func New[api any]() api {
+func New[api any]() (api, any) {
 	registry.lock.RLock()
 	defer registry.lock.RUnlock()
 
 	key := getKey[api]()
-	clientType := registry.registration[key]
-	if clientType == nil {
+	value, ok := registry.registration[key]
+	if !ok {
 		panic(fmt.Sprintf("no registration for key: %s", key))
 	}
 
-	return reflect.New(clientType).Interface().(api)
+	clientImpl := reflect.New(value.typ).Interface().(api)
+
+	if len(value.config) == 0 {
+		return clientImpl, nil
+	}
+
+	return clientImpl, value.config[0]
 }
 
 func getKey[api any]() key {

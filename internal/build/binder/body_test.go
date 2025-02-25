@@ -11,7 +11,7 @@ func TestBindBody(t *testing.T) {
 		{
 			name:             "empty",
 			given:            model.Method{},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "empty with disallowed primitive",
@@ -20,7 +20,7 @@ func TestBindBody(t *testing.T) {
 					{Name: "num", Type: "int"},
 				},
 			},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "one body param",
@@ -29,7 +29,7 @@ func TestBindBody(t *testing.T) {
 					{Name: "req", Type: "Request"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Body: "req",
 			},
 			expectedBinded: []string{"req"},

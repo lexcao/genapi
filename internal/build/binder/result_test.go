@@ -11,7 +11,7 @@ func TestBindResult(t *testing.T) {
 		{
 			name:             "empty result",
 			given:            model.Method{},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "single result with any",
@@ -20,7 +20,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "Result"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, err",
 					Statement:  "genapi.MustHandleResponse[Result](resp, err)",
@@ -34,7 +34,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "genapi.Response"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, _",
 					Statement:  "*resp",
@@ -48,7 +48,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "*genapi.Response"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, _",
 					Statement:  "resp",
@@ -62,7 +62,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "error"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, err",
 					Statement:  "genapi.HandleResponse0(resp, err)",
@@ -77,7 +77,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "error"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, err",
 					Statement:  "genapi.HandleResponse[Result](resp, err)",
@@ -92,7 +92,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "error"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, err",
 					Statement:  "*resp, err",
@@ -107,7 +107,7 @@ func TestBindResult(t *testing.T) {
 					{Type: "error"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Results: &model.BindingResults{
 					Assignment: "resp, err",
 					Statement:  "resp, err",

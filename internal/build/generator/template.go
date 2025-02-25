@@ -38,7 +38,9 @@ import (
 
 func init() {
 	{{- range .Interfaces }}
-	genapi.Register[{{.Name}}, *{{printf "impl%s" .Name}}]()
+	genapi.Register[{{.Name}}, *impl{{.Name}}](
+		{{ .Bindings.Config }},
+	)
 	{{- end }}
 }
 `))

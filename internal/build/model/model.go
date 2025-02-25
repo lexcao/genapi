@@ -11,6 +11,11 @@ type Interface struct {
 	Imports     common.Set[string]
 	Methods     []Method
 	Annotations annotation.InterfaceAnnotations
+	Bindings    *InterfaceBindings
+}
+
+type InterfaceBindings struct {
+	Config string
 }
 
 type Method struct {
@@ -19,11 +24,11 @@ type Method struct {
 	Params      []Param
 	Results     []Param
 	Annotations annotation.MethodAnnotations
-	Bindings    *Bindings
+	Bindings    *MethodBindings
 }
 
-// Bindings bind Method and Annotation to genapi.Request
-type Bindings struct {
+// MethodBindings bind Method and Annotation to genapi.Request
+type MethodBindings struct {
 	Method     string
 	Path       string
 	Body       string

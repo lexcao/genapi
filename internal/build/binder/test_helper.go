@@ -11,7 +11,7 @@ type testCase struct {
 	name             string
 	given            model.Method
 	expectedError    error
-	expectedBindings model.Bindings
+	expectedBindings model.MethodBindings
 	expectedBinded   []string
 	expectedImports  []string
 }

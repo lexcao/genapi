@@ -5,6 +5,10 @@ import (
 )
 
 func Bind(iface *model.Interface) error {
+	if err := BindInterface(iface); err != nil {
+		return err
+	}
+
 	for i := range iface.Methods {
 		if err := BindMethod(&iface.Methods[i]); err != nil {
 			return err

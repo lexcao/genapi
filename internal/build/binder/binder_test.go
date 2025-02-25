@@ -13,13 +13,13 @@ func TestBind(t *testing.T) {
 	cases := []struct {
 		name             string
 		given            model.Method
-		expectedBindings model.Bindings
+		expectedBindings model.MethodBindings
 		expectedImports  []string
 	}{
 		{
 			name:             "empty",
 			given:            model.Method{},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "all bindings",
@@ -49,7 +49,7 @@ func TestBind(t *testing.T) {
 					{Name: "token", Type: "string"},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Method:     "GET",
 				Path:       "/repos/{owner}/{repo}",
 				Context:    "ctx",

@@ -16,7 +16,7 @@ func TestBindQuery(t *testing.T) {
 					Queries: []annotation.Query{},
 				},
 			},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "one query",
@@ -30,7 +30,7 @@ func TestBindQuery(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Queries: `url.Values{"sort":[]string{sort}}`,
 			},
 			expectedBinded:  []string{"sort"},
@@ -50,7 +50,7 @@ func TestBindQuery(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Queries: `url.Values{"page":[]string{page}, "sort":[]string{sort}}`,
 			},
 			expectedBinded:  []string{"sort", "page"},
@@ -65,7 +65,7 @@ func TestBindQuery(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Queries: `url.Values{"sort":[]string{"desc"}}`,
 			},
 			expectedImports: []string{`"net/url"`},
@@ -95,7 +95,7 @@ func TestBindQuery(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				Queries: `url.Values{"sort":[]string{sort1, sort2}}`,
 			},
 			expectedBinded:  []string{"sort1", "sort2"},

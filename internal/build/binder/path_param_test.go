@@ -18,7 +18,7 @@ func TestBindPathParam(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{},
+			expectedBindings: model.MethodBindings{},
 		},
 		{
 			name: "one path param",
@@ -32,7 +32,7 @@ func TestBindPathParam(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				PathParams: `map[string]string{"owner":owner}`,
 			},
 			expectedBinded: []string{"owner"},
@@ -50,7 +50,7 @@ func TestBindPathParam(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				PathParams: `map[string]string{"owner":owner, "repo":repo}`,
 			},
 			expectedBinded: []string{"owner", "repo"},
@@ -78,7 +78,7 @@ func TestBindPathParam(t *testing.T) {
 					},
 				},
 			},
-			expectedBindings: model.Bindings{
+			expectedBindings: model.MethodBindings{
 				PathParams: `map[string]string{"owner":owner}`,
 			},
 			expectedBinded: []string{"owner"},
