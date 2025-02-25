@@ -38,7 +38,7 @@ import (
 
 func init() {
 	{{- range .Interfaces }}
-	genapi.Register[{{.Name}}, {{printf "impl%s" .Name}}]()
+	genapi.Register[{{.Name}}, *{{printf "impl%s" .Name}}]()
 	{{- end }}
 }
 `))
@@ -50,8 +50,8 @@ type {{ $impl }} struct {
 	client genapi.HttpClient
 }
 
-// setHttpClient implments genapi.Interface
-func (i *{{ $impl }}) setHttpClient(client genapi.HttpClient) {
+// SetHttpClient implments genapi.Interface
+func (i *{{ $impl }}) SetHttpClient(client genapi.HttpClient) {
 	i.client = client
 }
 
@@ -61,7 +61,7 @@ func (i *{{ $impl }}) setHttpClient(client genapi.HttpClient) {
 `))
 
 	template.Must(templates.New(tmplMethod).Parse(`
-func (i *impl{{ .Interface }}) {{ .Name }}(
+func (i *impl{{ .Interface.Name }}) {{ .Name }}(
 {{- range $i, $p := .Params }}
 	{{- if $i }}, {{ end }}{{ $p.Name }} {{ $p.Type }}
 {{- end -}}

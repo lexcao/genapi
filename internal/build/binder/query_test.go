@@ -33,7 +33,8 @@ func TestBindQuery(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Queries: `url.Values{"sort":[]string{sort}}`,
 			},
-			expectedBinded: []string{"sort"},
+			expectedBinded:  []string{"sort"},
+			expectedImports: []string{`"net/url"`},
 		},
 		{
 			name: "multiple queries",
@@ -52,7 +53,8 @@ func TestBindQuery(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Queries: `url.Values{"page":[]string{page}, "sort":[]string{sort}}`,
 			},
-			expectedBinded: []string{"sort", "page"},
+			expectedBinded:  []string{"sort", "page"},
+			expectedImports: []string{`"net/url"`},
 		},
 		{
 			name: "query with constant value",
@@ -66,6 +68,7 @@ func TestBindQuery(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Queries: `url.Values{"sort":[]string{"desc"}}`,
 			},
+			expectedImports: []string{`"net/url"`},
 		},
 		{
 			name: "query param not found",
@@ -95,7 +98,8 @@ func TestBindQuery(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Queries: `url.Values{"sort":[]string{sort1, sort2}}`,
 			},
-			expectedBinded: []string{"sort1", "sort2"},
+			expectedBinded:  []string{"sort1", "sort2"},
+			expectedImports: []string{`"net/url"`},
 		},
 	})
 }

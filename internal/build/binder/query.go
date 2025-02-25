@@ -18,6 +18,7 @@ func (b *queryBinding) Bind(ctx *context) error {
 		return nil
 	}
 
+	ctx.Method.Interface.Imports.Add(`"net/url"`)
 	values := url.Values{}
 	queries := ctx.Method.Annotations.Queries
 
@@ -25,7 +26,7 @@ func (b *queryBinding) Bind(ctx *context) error {
 		if query.Value.IsVariable() {
 			escaped := query.Value.Escape()
 			if _, ok := ctx.ParamsByName[escaped]; ok {
-				ctx.BindedParams[escaped] = struct{}{}
+				ctx.BindedParams.Add(escaped)
 			} else {
 				return &ErrNotFound{Type: "query", Value: escaped}
 			}

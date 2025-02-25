@@ -3,6 +3,7 @@ package binder
 import (
 	"strings"
 
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
@@ -15,7 +16,7 @@ type binding interface {
 type context struct {
 	Method       *model.Method
 	ParamsByName map[string]model.Param
-	BindedParams map[string]struct{}
+	BindedParams common.Set[string]
 }
 
 var bindings = []binding{
@@ -40,7 +41,6 @@ func newBindingContext(method *model.Method) *context {
 	return &context{
 		Method:       method,
 		ParamsByName: paramsByName,
-		BindedParams: make(map[string]struct{}),
 	}
 }
 

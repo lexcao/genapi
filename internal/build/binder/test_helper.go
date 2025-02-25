@@ -13,6 +13,7 @@ type testCase struct {
 	expectedError    error
 	expectedBindings model.Bindings
 	expectedBinded   []string
+	expectedImports  []string
 }
 
 func testBind(t *testing.T, binding binding, cases []testCase) {
@@ -20,6 +21,7 @@ func testBind(t *testing.T, binding binding, cases []testCase) {
 
 	for _, c := range cases {
 		t.Run(binding.Name()+":"+c.name, func(t *testing.T) {
+			c.given.Interface = &model.Interface{}
 			ctx := newBindingContext(&c.given)
 			err := binding.Bind(ctx)
 			if c.expectedError != nil {
@@ -31,11 +33,8 @@ func testBind(t *testing.T, binding binding, cases []testCase) {
 			require.NoError(t, err)
 			require.Equal(t, c.expectedBindings, *c.given.Bindings)
 
-			var binded []string
-			for k := range ctx.BindedParams {
-				binded = append(binded, k)
-			}
-			require.ElementsMatch(t, c.expectedBinded, binded)
+			require.ElementsMatch(t, c.expectedBinded, ctx.BindedParams.Slices())
+			require.ElementsMatch(t, c.expectedImports, ctx.Method.Interface.Imports.Slices())
 		})
 	}
 }

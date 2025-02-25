@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"go/types"
 
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
@@ -76,7 +77,7 @@ func parseInterface(params parseInterfaceParams) model.Interface {
 	for _, method := range params.Interface.Methods.List {
 		if fn, ok := method.Type.(*ast.FuncType); ok {
 			parsed := parseMethod(method, fn)
-			parsed.Interface = result.Name
+			parsed.Interface = &result
 			result.Methods = append(result.Methods, parsed)
 		}
 	}
@@ -128,14 +129,14 @@ func commentsString(doc *ast.CommentGroup) []string {
 	return result
 }
 
-func collectImports(imports []*ast.ImportSpec) []string {
+func collectImports(imports []*ast.ImportSpec) common.Set[string] {
 	if len(imports) == 0 {
-		return nil
+		return common.Set[string]{}
 	}
 
-	result := make([]string, len(imports))
-	for i, importSpec := range imports {
-		result[i] = importSpec.Path.Value
+	var result common.Set[string]
+	for _, importSpec := range imports {
+		result.Add(importSpec.Path.Value)
 	}
 	return result
 }

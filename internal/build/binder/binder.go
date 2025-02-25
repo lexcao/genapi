@@ -4,9 +4,9 @@ import (
 	"github.com/lexcao/genapi/internal/build/model"
 )
 
-func Bind(interfaceModel *model.Interface) error {
-	for i := range interfaceModel.Methods {
-		if err := BindMethod(&interfaceModel.Methods[i]); err != nil {
+func Bind(iface *model.Interface) error {
+	for i := range iface.Methods {
+		if err := BindMethod(&iface.Methods[i]); err != nil {
 			return err
 		}
 	}

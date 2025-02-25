@@ -18,6 +18,7 @@ func (b *headerBinding) Bind(ctx *context) error {
 		return nil
 	}
 
+	ctx.Method.Interface.Imports.Add(`"net/http"`)
 	values := http.Header{}
 	headers := ctx.Method.Annotations.Headers
 
@@ -26,7 +27,7 @@ func (b *headerBinding) Bind(ctx *context) error {
 			if value.IsVariable() {
 				escaped := value.Escape()
 				if _, ok := ctx.ParamsByName[escaped]; ok {
-					ctx.BindedParams[escaped] = struct{}{}
+					ctx.BindedParams.Add(escaped)
 				} else {
 					return &ErrNotFound{Type: "header", Value: escaped}
 				}

@@ -22,7 +22,7 @@ func (b *pathParamBinding) Bind(ctx *context) error {
 		escaped := param.Escape()
 		if param.IsVariable() {
 			if _, ok := ctx.ParamsByName[escaped]; ok {
-				ctx.BindedParams[escaped] = struct{}{}
+				ctx.BindedParams.Add(escaped)
 			} else {
 				return &ErrNotFound{Type: "path", Value: escaped}
 			}

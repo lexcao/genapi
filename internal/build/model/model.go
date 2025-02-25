@@ -1,20 +1,21 @@
 package model
 
 import (
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
 type Interface struct {
 	Name        string
 	Package     string
-	Imports     []string
+	Imports     common.Set[string]
 	Methods     []Method
 	Annotations annotation.InterfaceAnnotations
 }
 
 type Method struct {
 	Name        string
-	Interface   string
+	Interface   *Interface
 	Params      []Param
 	Results     []Param
 	Annotations annotation.MethodAnnotations

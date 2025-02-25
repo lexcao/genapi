@@ -10,7 +10,7 @@ func (b *bodyBinding) Name() string {
 
 func (b *bodyBinding) Bind(ctx *context) error {
 	for _, param := range ctx.Method.Params {
-		if _, ok := ctx.BindedParams[param.Name]; ok {
+		if ctx.BindedParams.Contains(param.Name) {
 			continue
 		}
 
@@ -22,7 +22,7 @@ func (b *bodyBinding) Bind(ctx *context) error {
 			return &ErrDuplicated{Type: "body", Value: param.Name}
 		}
 
-		ctx.BindedParams[param.Name] = struct{}{}
+		ctx.BindedParams.Add(param.Name)
 		ctx.Method.Bindings.Body = param.Name
 	}
 

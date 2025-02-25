@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 	"github.com/stretchr/testify/assert"
@@ -15,14 +16,14 @@ func TestGenerateFile(t *testing.T) {
 		{
 			Name:    "GitHub",
 			Package: "generator",
-			Imports: []string{
+			Imports: common.SetOf(
 				`"context"`,
 				`"github.com/lexcao/genapi"`,
-			},
+			),
 			Methods: []model.Method{
 				{
 					Name:      "ListRepositories",
-					Interface: "GitHub",
+					Interface: &model.Interface{Name: "GitHub"},
 					Params: []model.Param{
 						{Name: "ctx", Type: "context.Context"},
 						{Name: "owner", Type: "string"},
@@ -57,8 +58,8 @@ type implGitHub struct {
 	client genapi.HttpClient
 }
 
-// setHttpClient implments genapi.Interface
-func (i *implGitHub) setHttpClient(client genapi.HttpClient) {
+// SetHttpClient implments genapi.Interface
+func (i *implGitHub) SetHttpClient(client genapi.HttpClient) {
 	i.client = client
 }
 
@@ -72,7 +73,7 @@ func (i *implGitHub) ListRepositories(ctx context.Context, owner string) error {
 }
 
 func init() {
-	genapi.Register[GitHub, implGitHub]()
+	genapi.Register[GitHub, *implGitHub]()
 }
 `
 	assert.Equal(t, expect, string(actual))
@@ -88,8 +89,8 @@ type implTest struct {
 	client genapi.HttpClient
 }
 
-// setHttpClient implments genapi.Interface
-func (i *implTest) setHttpClient(client genapi.HttpClient) {
+// SetHttpClient implments genapi.Interface
+func (i *implTest) SetHttpClient(client genapi.HttpClient) {
 	i.client = client
 }
 `
@@ -106,7 +107,7 @@ func TestGenerateMethod(t *testing.T) {
 			name: "no params no results",
 			method: model.Method{
 				Name:      "NoParams",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 			},
 			expected: `
 func (i *implClient) NoParams() {
@@ -118,7 +119,7 @@ func (i *implClient) NoParams() {
 			name: "one param no results",
 			method: model.Method{
 				Name:      "OneParam",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 				Params: []model.Param{
 					{Name: "owner", Type: "string"},
 				},
@@ -141,7 +142,7 @@ func (i *implClient) OneParam(owner string) {
 			name: "no params one result",
 			method: model.Method{
 				Name:      "OneResult",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 				Results: []model.Param{
 					{Type: "error"},
 				},
@@ -157,7 +158,7 @@ func (i *implClient) OneResult() error {
 			name: "two params two results",
 			method: model.Method{
 				Name:      "TwoParamsTwoResults",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 				Params: []model.Param{
 					{Name: "owner", Type: "string"},
 					{Name: "repo", Type: "string"},
@@ -186,7 +187,7 @@ func (i *implClient) TwoParamsTwoResults(owner string, repo string) (Result, err
 			name: "one param one request with imports",
 			method: model.Method{
 				Name:      "WithImports",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 				Params: []model.Param{
 					{Name: "ctx", Type: "context.Context"},
 				},
@@ -224,7 +225,7 @@ func TestGenerateMethodBody(t *testing.T) {
 			name: "no body",
 			method: model.Method{
 				Name:      "NoBody",
-				Interface: "Client",
+				Interface: &model.Interface{Name: "Client"},
 			},
 			expected: `
 i.client.Do(&genapi.Request{})
@@ -458,6 +459,7 @@ return resp, err
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			test.method.Interface = &model.Interface{}
 			actual, err := generateMethod(tmplMethodBody, test.method)
 			require.NoError(t, err)
 			assert.Equal(t, strings.TrimSpace(test.expected), strings.TrimSpace(actual))

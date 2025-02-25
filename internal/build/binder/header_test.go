@@ -33,7 +33,8 @@ func TestBindHeader(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Headers: `http.Header{"Authorization":[]string{token}}`,
 			},
-			expectedBinded: []string{"token"},
+			expectedBinded:  []string{"token"},
+			expectedImports: []string{`"net/http"`},
 		},
 		{
 			name: "multiple headers",
@@ -52,7 +53,8 @@ func TestBindHeader(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Headers: `http.Header{"Authorization":[]string{token}, "Content-Type":[]string{type}}`,
 			},
-			expectedBinded: []string{"token", "type"},
+			expectedBinded:  []string{"token", "type"},
+			expectedImports: []string{`"net/http"`},
 		},
 		{
 			name: "header with constant value",
@@ -66,6 +68,7 @@ func TestBindHeader(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Headers: `http.Header{"Accept":[]string{"application/json"}}`,
 			},
+			expectedImports: []string{`"net/http"`},
 		},
 		{
 			name: "header param not found",
@@ -94,7 +97,8 @@ func TestBindHeader(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Headers: `http.Header{"Accept":[]string{type1, type2}}`,
 			},
-			expectedBinded: []string{"type1", "type2"},
+			expectedBinded:  []string{"type1", "type2"},
+			expectedImports: []string{`"net/http"`},
 		},
 		{
 			name: "mixed constant and variable values",
@@ -112,7 +116,8 @@ func TestBindHeader(t *testing.T) {
 			expectedBindings: model.Bindings{
 				Headers: `http.Header{"Accept":[]string{"application/json"}, "Authorization":[]string{token}}`,
 			},
-			expectedBinded: []string{"token"},
+			expectedBinded:  []string{"token"},
+			expectedImports: []string{`"net/http"`},
 		},
 	})
 }

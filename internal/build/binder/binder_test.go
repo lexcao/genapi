@@ -14,6 +14,7 @@ func TestBind(t *testing.T) {
 		name             string
 		given            model.Method
 		expectedBindings model.Bindings
+		expectedImports  []string
 	}{
 		{
 			name:             "empty",
@@ -57,14 +58,17 @@ func TestBind(t *testing.T) {
 				Headers:    `http.Header{"Authorization":[]string{token}, "Content-Type":[]string{"application/json"}}`,
 				Queries:    `url.Values{"page":[]string{"1"}, "perPage":[]string{"10"}, "sort":[]string{sort}}`,
 			},
+			expectedImports: []string{`"net/http"`, `"net/url"`},
 		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
+			c.given.Interface = &model.Interface{}
 			err := BindMethod(&c.given)
 			require.NoError(t, err)
 			assert.Equal(t, c.expectedBindings, *c.given.Bindings)
+			assert.ElementsMatch(t, c.expectedImports, c.given.Interface.Imports.Slices())
 		})
 	}
 }

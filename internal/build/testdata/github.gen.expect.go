@@ -4,14 +4,15 @@ package testdata
 import (
 	"context"
 	"github.com/lexcao/genapi"
+	"net/url"
 )
 
 type implGitHub struct {
 	client genapi.HttpClient
 }
 
-// setHttpClient implments genapi.Interface
-func (i *implGitHub) setHttpClient(client genapi.HttpClient) {
+// SetHttpClient implments genapi.Interface
+func (i *implGitHub) SetHttpClient(client genapi.HttpClient) {
 	i.client = client
 }
 
@@ -37,5 +38,5 @@ func (i *implGitHub) ListRepositories(ctx context.Context, username string, perP
 }
 
 func init() {
-	genapi.Register[GitHub, implGitHub]()
+	genapi.Register[GitHub, *implGitHub]()
 }

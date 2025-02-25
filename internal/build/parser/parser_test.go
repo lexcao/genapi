@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"testing"
 
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 	"github.com/stretchr/testify/require"
@@ -21,10 +22,10 @@ func TestParseFile(t *testing.T) {
 	expect := model.Interface{
 		Name:    "GitHub",
 		Package: "testdata",
-		Imports: []string{
+		Imports: common.SetOf(
 			`"context"`,
 			`"github.com/lexcao/genapi"`,
-		},
+		),
 		Annotations: annotation.InterfaceAnnotations{
 			BaseURL: annotation.BaseURL{Value: "https://api.github.com"},
 			Headers: []annotation.Header{
@@ -33,8 +34,7 @@ func TestParseFile(t *testing.T) {
 		},
 		Methods: []model.Method{
 			{
-				Name:      "ListRepositories",
-				Interface: "GitHub",
+				Name: "ListRepositories",
 				Params: []model.Param{
 					{Name: "ctx", Type: "context.Context"},
 					{Name: "owner", Type: "string"},
@@ -55,8 +55,7 @@ func TestParseFile(t *testing.T) {
 				},
 			},
 			{
-				Name:      "ListContributors",
-				Interface: "GitHub",
+				Name: "ListContributors",
 				Params: []model.Param{
 					{Name: "ctx", Type: "context.Context"},
 					{Name: "owner", Type: "string"},
@@ -74,8 +73,7 @@ func TestParseFile(t *testing.T) {
 				},
 			},
 			{
-				Name:      "CreateIssue",
-				Interface: "GitHub",
+				Name: "CreateIssue",
 				Params: []model.Param{
 					{Name: "ctx", Type: "context.Context"},
 					{Name: "issue", Type: "Issue"},
@@ -94,7 +92,8 @@ func TestParseFile(t *testing.T) {
 			},
 		},
 	}
-	require.Equal(t, expect, actual)
+
+	require.Equal(t, expect, clearSelfPointer(actual))
 }
 
 func TestParseInterface(t *testing.T) {
@@ -117,7 +116,7 @@ func TestParseInterface(t *testing.T) {
 				Method()
 			}
 			`,
-			want: model.Interface{Name: "Interface", Package: "main", Methods: []model.Method{{Name: "Method", Interface: "Interface"}}},
+			want: model.Interface{Name: "Interface", Package: "main", Methods: []model.Method{{Name: "Method"}}},
 		},
 		{
 			name: "many methods",
@@ -132,8 +131,8 @@ func TestParseInterface(t *testing.T) {
 				Name:    "Interface",
 				Package: "main",
 				Methods: []model.Method{
-					{Name: "Test", Interface: "Interface", Params: []model.Param{{Name: "a", Type: "int"}}},
-					{Name: "Test2", Interface: "Interface", Params: []model.Param{{Name: "a", Type: "int"}}, Results: []model.Param{{Type: "error"}}},
+					{Name: "Test", Params: []model.Param{{Name: "a", Type: "int"}}},
+					{Name: "Test2", Params: []model.Param{{Name: "a", Type: "int"}}, Results: []model.Param{{Type: "error"}}},
 				},
 				Annotations: annotation.InterfaceAnnotations{
 					BaseURL: annotation.BaseURL{Value: "https://api.example.com"},
@@ -156,7 +155,7 @@ func TestParseInterface(t *testing.T) {
 										TypeSpec:    typeSpec,
 										Interface:   iface,
 									})
-									require.Equal(t, test.want, got)
+									require.Equal(t, test.want, clearSelfPointer(got))
 									return false
 								}
 							}
@@ -390,7 +389,7 @@ func TestCollectImports(t *testing.T) {
 	tests := []struct {
 		name string
 		code string
-		want []string
+		want common.Set[string]
 	}{
 		{
 			name: "no imports",
@@ -400,9 +399,7 @@ func TestCollectImports(t *testing.T) {
 			code: `
 			import "context"
 			`,
-			want: []string{
-				`"context"`,
-			},
+			want: common.SetOf(`"context"`),
 		},
 		{
 			name: "many imports",
@@ -412,10 +409,10 @@ func TestCollectImports(t *testing.T) {
 				"github.com/lexcao/genapi"
 			)
 			`,
-			want: []string{
+			want: common.SetOf(
 				`"context"`,
 				`"github.com/lexcao/genapi"`,
-			},
+			),
 		},
 		{
 			name: "many imports with newline",
@@ -426,10 +423,10 @@ func TestCollectImports(t *testing.T) {
 				"github.com/lexcao/genapi"
 			)
 			`,
-			want: []string{
+			want: common.SetOf(
 				`"context"`,
 				`"github.com/lexcao/genapi"`,
-			},
+			),
 		},
 	}
 
@@ -453,4 +450,11 @@ func parseCodeNode(t *testing.T, code string, fn func(*ast.File) func(ast.Node) 
 	require.NoError(t, err)
 
 	ast.Inspect(file, fn(file))
+}
+
+func clearSelfPointer(iface model.Interface) model.Interface {
+	for i := range iface.Methods {
+		iface.Methods[i].Interface = nil
+	}
+	return iface
 }

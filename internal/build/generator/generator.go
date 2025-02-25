@@ -16,7 +16,7 @@ func GenerateFile(filename string, interfaces []model.Interface) ([]byte, error)
 	var buf bytes.Buffer
 
 	var data = templateData{
-		Imports:    interfaces[0].Imports,
+		Imports:    interfaces[0].Imports.Slices(),
 		Package:    interfaces[0].Package,
 		Interfaces: interfaces,
 	}
