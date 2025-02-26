@@ -11,8 +11,8 @@ type Response = internal.Response
 type Config = internal.Config
 type HttpClient = internal.HttpClient
 
-func New[T Interface]() T {
-	return runtime.New[T]()
+func New[T Interface](opts ...Option) T {
+	return runtime.New[T](opts...)
 }
 
 func Register[api Interface, client Interface](config Config) {

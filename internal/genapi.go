@@ -31,3 +31,7 @@ type HttpClient interface {
 	SetConfig(Config)
 	Do(req *Request) (*Response, error)
 }
+
+type Option interface {
+	Apply(Config)
+}
