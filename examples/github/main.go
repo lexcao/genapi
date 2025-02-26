@@ -2,36 +2,29 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 
 	"github.com/lexcao/genapi"
+	"github.com/lexcao/genapi/examples/github/api"
 )
 
-//go:generate genapi
-
-// @BaseURL("https://api.github.com")
-// @Header("Accept", "application/vnd.github.v3+json")
-type GitHub interface {
-	genapi.Interface
-
-	// @GET("/repos/{owner}")
-	// @Query("sort", "{sort}")
-	// ListRepositories list repositories for specific user
-	ListRepositories(ctx context.Context, owner string, sort string) ([]Repository, error)
-}
-
-type Repository struct {
-	Name string `json:"name"`
-}
-
 func main() {
-	client := genapi.New[GitHub](
-	// genapi.WithHeader("X-Auth-Token", "GITHUB_TOKEN"),
-	)
+	client := genapi.New[api.GitHub]()
 
-	repositories, err := client.ListRepositories(context.Background(), "octocat", "desc")
+	contributors, err := client.Contributors(context.Background(), "lexcao", "genapi")
 	if err != nil {
-		fmt.Errorf("failed to list repositories: %w", err)
+		fmt.Printf("failed to get contributors: %v\n", err)
+		var apiErr *genapi.Error
+		if errors.As(err, &apiErr) {
+			body, _ := io.ReadAll(apiErr.Response.Body)
+			fmt.Printf("API error: %v\n", string(body))
+		}
+		return
 	}
-	fmt.Println(repositories)
+
+	for _, contributor := range contributors {
+		fmt.Printf("%s (%d)\n", contributor.Login, contributor.Contributions)
+	}
 }

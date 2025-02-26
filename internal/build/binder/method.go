@@ -1,8 +1,6 @@
 package binder
 
-type methodBinding struct {
-	binding
-}
+type methodBinding struct{}
 
 func (b *methodBinding) Name() string {
 	return "Method"

@@ -101,7 +101,9 @@ func parse(input string) (Annotation, error) {
 						break
 					}
 					if ch != ' ' {
-						r.UnreadRune()
+						if err := r.UnreadRune(); err != nil {
+							return Annotation{}, err
+						}
 						break
 					}
 				}

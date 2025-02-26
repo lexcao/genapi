@@ -1,8 +1,6 @@
 package binder
 
-type contextBinding struct {
-	binding
-}
+type contextBinding struct{}
 
 func (b *contextBinding) Name() string {
 	return "Context"

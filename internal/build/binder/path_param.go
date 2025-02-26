@@ -2,9 +2,7 @@ package binder
 
 import "fmt"
 
-type pathParamBinding struct {
-	binding
-}
+type pathParamBinding struct{}
 
 func (b *pathParamBinding) Name() string {
 	return "PathParam"

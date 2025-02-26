@@ -1,8 +1,6 @@
 package binder
 
-type pathBinding struct {
-	binding
-}
+type pathBinding struct{}
 
 func (b *pathBinding) Name() string {
 	return "Path"

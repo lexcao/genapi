@@ -1,8 +1,6 @@
 package binder
 
-type bodyBinding struct {
-	binding
-}
+type bodyBinding struct{}
 
 func (b *bodyBinding) Name() string {
 	return "Body"

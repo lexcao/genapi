@@ -5,9 +5,7 @@ import (
 	"net/http"
 )
 
-type headerBinding struct {
-	binding
-}
+type headerBinding struct{}
 
 func (b *headerBinding) Name() string {
 	return "Header"

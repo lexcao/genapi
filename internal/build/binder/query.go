@@ -5,9 +5,7 @@ import (
 	"net/url"
 )
 
-type queryBinding struct {
-	binding
-}
+type queryBinding struct{}
 
 func (b *queryBinding) Name() string {
 	return "Query"

@@ -6,9 +6,7 @@ import (
 	"github.com/lexcao/genapi/internal/build/model"
 )
 
-type resultBinding struct {
-	binding
-}
+type resultBinding struct{}
 
 func (b *resultBinding) Name() string {
 	return "Result"
