@@ -1,10 +1,11 @@
-package api
+package e2e
 
 import "github.com/lexcao/genapi"
 
-//go:generate go run ../../../cmd/genapi/main.go -file $GOFILE
+//go:generate ./genapi -file $GOFILE
 
 // @BaseURL("https://httpbin.org")
+// @Header("Global-Header", "global-value")
 type HttpBin interface {
 	genapi.Interface
 
@@ -26,4 +27,5 @@ type Response struct {
 	Args    map[string]string `json:"args"`
 	Headers map[string]string `json:"headers"`
 	URL     string            `json:"url"`
+	JSON    map[string]any    `json:"json"`
 }
