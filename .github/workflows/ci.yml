@@ -40,9 +40,3 @@ jobs:
 
       - name: Run tests
         run: make test
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage.txt
-          fail_ci_if_error: true 

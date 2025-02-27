@@ -3,7 +3,6 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/lexcao/genapi.svg)](https://pkg.go.dev/github.com/lexcao/genapi)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lexcao/genapi)](https://goreportcard.com/report/github.com/lexcao/genapi)
 [![CI](https://github.com/lexcao/genapi/actions/workflows/ci.yml/badge.svg)](https://github.com/lexcao/genapi/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/lexcao/genapi/branch/main/graph/badge.svg)](https://codecov.io/gh/lexcao/genapi)
 [![License](https://img.shields.io/github/license/lexcao/genapi)](LICENSE)
 
 genapi is a declarative HTTP client generator for Go, inspired by OpenFeign(https://github.com/OpenFeign/feign). It allows you to write HTTP clients using just interface definitions with annotations, eliminating the need for manual HTTP request handling.
