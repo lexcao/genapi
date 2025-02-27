@@ -6,7 +6,7 @@ test:
 	go test -v -race ./...
 
 lint:
-	golangci-lint run
+	golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=
 
 coverage:
 	go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
