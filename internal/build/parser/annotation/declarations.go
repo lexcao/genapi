@@ -157,7 +157,7 @@ type annotationAlias interface {
 	alias() []string
 }
 
-var annotatableType = reflect.TypeFor[annotatable]()
+var annotatableType = typeFor[annotatable]()
 
 var errSkipTyped = errors.New("skip typed")
 
@@ -207,4 +207,13 @@ func typed(annotation Annotation, input any) error {
 	}
 
 	return errSkipTyped
+}
+
+// typeFor returns the [Type] that represents the type argument T.
+func typeFor[T any]() reflect.Type {
+	var v T
+	if t := reflect.TypeOf(v); t != nil {
+		return t // optimize for T being a non-interface kind
+	}
+	return reflect.TypeOf((*T)(nil)).Elem() // only for an interface kind
 }
