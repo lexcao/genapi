@@ -18,9 +18,6 @@ func main() {
 	http.Handle("/", fs)
 
 	log.Printf("Starting server on :%d, serving from directory: %s\n", *port, *dir)
-	log.Printf("Access designs at:\n")
-	log.Printf("  Design 1: http://localhost:%d/design1/\n", *port)
-	log.Printf("  Design 2: http://localhost:%d/design2/\n", *port)
-	log.Printf("  Design 3: http://localhost:%d/design3/\n", *port)
+	log.Printf("Access at: http://localhost:%d\n", *port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }

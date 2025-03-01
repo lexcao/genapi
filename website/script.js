@@ -3,43 +3,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
     
+    // Function to add/remove PrismJS dark theme
+    const updatePrismTheme = (isDark) => {
+        // For custom styling, we rely on the .dark-mode class and our CSS overrides
+        // This provides a smooth transition between themes
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+        
+        // Re-highlight all code blocks to apply new theme
+        if (window.Prism) {
+            Prism.highlightAll();
+        }
+    };
+    
     // Check for saved theme preference or use the system preference
     const savedTheme = localStorage.getItem('theme');
     
     if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
         document.body.classList.add('dark-mode');
+        updatePrismTheme(true);
     }
     
     // Toggle theme when button is clicked
     themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.toggle('dark-mode');
+        updatePrismTheme(isDarkMode);
         
         // Save preference to localStorage
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
-        } else {
-            localStorage.setItem('theme', 'light');
-        }
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     });
     
     // Mobile menu toggle
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     
-    menuToggle.addEventListener('click', () => {
-        menuToggle.classList.toggle('active');
-        mainNav.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
-    });
+    if (menuToggle && mainNav) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mainNav.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+    }
     
     // Close mobile menu when clicking on a link
     const navLinks = document.querySelectorAll('.main-nav a');
     
     for (const link of navLinks) {
         link.addEventListener('click', () => {
-            menuToggle.classList.remove('active');
-            mainNav.classList.remove('active');
-            document.body.classList.remove('menu-open');
+            if (menuToggle && mainNav) {
+                menuToggle.classList.remove('active');
+                mainNav.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
         });
     }
     
@@ -69,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Smooth scrolling for anchor links
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    const anchorLinks = document.querySelectorAll('a[href^="#"]:not(.annotation-nav a)');
     
     for (const link of anchorLinks) {
         link.addEventListener('click', (e) => {
@@ -91,6 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     behavior: 'smooth'
                 });
             }
+        });
+    }
+    
+    // Annotation navigation functionality
+    const annotationNavLinks = document.querySelectorAll('.annotation-nav a');
+    const annotationSections = document.querySelectorAll('.annotation-section');
+    
+    for (const link of annotationNavLinks) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Remove active class from all links and sections
+            for (const l of annotationNavLinks) {
+                l.classList.remove('active');
+            }
+            
+            for (const s of annotationSections) {
+                s.classList.remove('active');
+            }
+
+            // Add active class to clicked link
+            this.classList.add('active');
+
+            // Show corresponding section
+            const targetId = this.getAttribute('href');
+            document.querySelector(targetId).classList.add('active');
         });
     }
     

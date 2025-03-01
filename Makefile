@@ -1,4 +1,4 @@
-.PHONY: all test lint coverage generate clean
+.PHONY: all test lint coverage generate clean website
 
 all: lint test
 
@@ -18,3 +18,6 @@ generate:
 clean:
 	rm -f coverage.txt coverage.html
 	go clean 
+
+website:
+	go run ./website/server.go -dir ./website
