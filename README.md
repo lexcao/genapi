@@ -27,7 +27,7 @@ go get github.com/lexcao/genapi
 1. Define your API interface:
 
 ```go
-//go:generate genapi -file $GOFILE
+//go:generate go run github.com/lexcao/genapi/cmd/genapi  -file $GOFILE
 
 // @BaseURL("https://api.github.com")
 // @Header("Accept", "application/vnd.github.v3+json")
