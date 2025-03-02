@@ -1,43 +1,49 @@
 package binder
 
 import (
-	"fmt"
-	"strings"
-
+	"github.com/lexcao/genapi/internal/build/binder/printer"
 	"github.com/lexcao/genapi/internal/build/model"
 )
 
 func BindInterface(iface *model.Interface) error {
-	var builder strings.Builder
-
-	builder.WriteString("genapi.Config{")
-	{
-		// BaseURL
-		if iface.Annotations.BaseURL.Value != "" {
-			builder.WriteRune('\n')
-			builder.WriteString(fmt.Sprintf("\tBaseURL: %q,\n", iface.Annotations.BaseURL.Value))
+	headers := map[string]bindedVariablesPrinter{}
+	for _, header := range iface.Annotations.Headers {
+		for _, value := range header.Values {
+			headers[header.Key] = append(headers[header.Key], model.BindedVariable{
+				Variable: value,
+			})
 		}
 	}
-	{
-		// Headers
-		if len(iface.Annotations.Headers) > 0 {
+
+	config := printer.PrintWith("genapi.Config", func(p *printer.Printer) {
+		if iface.Annotations.BaseURL.Value != "" {
+			p.KeyValueLine(func(p *printer.Printer) {
+				p.Unquoted("BaseURL")
+			}, func(p *printer.Printer) {
+				p.Quote(iface.Annotations.BaseURL.Value)
+			})
+		}
+
+		if len(headers) > 0 {
 			iface.Imports.Add(`"net/http"`)
 
-			builder.WriteString("\tHeaders: http.Header{\n")
-			for _, header := range iface.Annotations.Headers {
-				builder.WriteString(fmt.Sprintf("\t\t%q: []string{\n", header.Key))
-				for _, value := range header.Values {
-					builder.WriteString(fmt.Sprintf("\t\t\t%q,\n", value.String()))
-				}
-				builder.WriteString("\t\t},\n")
-			}
-			builder.WriteString("\t},\n")
+			p.KeyValueLine(func(p *printer.Printer) {
+				p.Unquoted("Headers")
+			}, func(p *printer.Printer) {
+				p.Item(bindedHeaderPrinter{
+					orderBy: iface.Annotations.Headers,
+					binded:  headers,
+				})
+			})
 		}
+	})
+
+	if len(headers) == 0 && iface.Annotations.BaseURL.Value == "" {
+		config = "genapi.Config{}"
 	}
-	builder.WriteString("}")
 
 	iface.Bindings = &model.InterfaceBindings{
-		Config: builder.String(),
+		Config: config,
 	}
 
 	return nil

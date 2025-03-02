@@ -12,12 +12,14 @@ func SetOf[T comparable](items ...T) Set[T] {
 	return s
 }
 
-func (s *Set[T]) Add(item T) {
+func (s *Set[T]) Add(items ...T) {
 	if s.items == nil {
 		s.items = make(map[T]struct{})
 	}
 
-	s.items[item] = struct{}{}
+	for _, item := range items {
+		s.items[item] = struct{}{}
+	}
 }
 
 func (s Set[T]) Contains(item T) bool {

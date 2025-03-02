@@ -31,7 +31,11 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{"Authorization":[]string{token}}`,
+				Headers: `http.Header{
+	"Authorization": []string{
+		token,
+	},
+}`,
 			},
 			expectedBinded:  []string{"token"},
 			expectedImports: []string{`"net/http"`},
@@ -51,7 +55,14 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{"Authorization":[]string{token}, "Content-Type":[]string{type}}`,
+				Headers: `http.Header{
+	"Authorization": []string{
+		token,
+	},
+	"Content-Type": []string{
+		type,
+	},
+}`,
 			},
 			expectedBinded:  []string{"token", "type"},
 			expectedImports: []string{`"net/http"`},
@@ -66,7 +77,11 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{"Accept":[]string{"application/json"}}`,
+				Headers: `http.Header{
+	"Accept": []string{
+		"application/json",
+	},
+}`,
 			},
 			expectedImports: []string{`"net/http"`},
 		},
@@ -95,7 +110,12 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{"Accept":[]string{type1, type2}}`,
+				Headers: `http.Header{
+	"Accept": []string{
+		type1,
+		type2,
+	},
+}`,
 			},
 			expectedBinded:  []string{"type1", "type2"},
 			expectedImports: []string{`"net/http"`},
@@ -114,10 +134,115 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{"Accept":[]string{"application/json"}, "Authorization":[]string{token}}`,
+				Headers: `http.Header{
+	"Accept": []string{
+		"application/json",
+	},
+	"Authorization": []string{
+		token,
+	},
+}`,
 			},
 			expectedBinded:  []string{"token"},
 			expectedImports: []string{`"net/http"`},
+		},
+		{
+			name: "integer header param",
+			given: model.Method{
+				Params: []model.Param{
+					{Name: "apiVersion", Type: "int"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					Headers: []annotation.Header{
+						{Key: "Api-Version", Values: []annotation.Variable{"{apiVersion}"}},
+					},
+				},
+			},
+			expectedBindings: model.MethodBindings{
+				Headers: `http.Header{
+	"Api-Version": []string{
+		strconv.Itoa(int(apiVersion)),
+	},
+}`,
+			},
+			expectedBinded:  []string{"apiVersion"},
+			expectedImports: []string{`"net/http"`, `"strconv"`},
+		},
+		{
+			name: "float header param",
+			given: model.Method{
+				Params: []model.Param{
+					{Name: "rate", Type: "float64"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					Headers: []annotation.Header{
+						{Key: "X-Rate-Limit", Values: []annotation.Variable{"{rate}"}},
+					},
+				},
+			},
+			expectedBindings: model.MethodBindings{
+				Headers: `http.Header{
+	"X-Rate-Limit": []string{
+		strconv.FormatFloat(float64(rate), 'f', -1, 64),
+	},
+}`,
+			},
+			expectedBinded:  []string{"rate"},
+			expectedImports: []string{`"net/http"`, `"strconv"`},
+		},
+		{
+			name: "boolean header param",
+			given: model.Method{
+				Params: []model.Param{
+					{Name: "debug", Type: "bool"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					Headers: []annotation.Header{
+						{Key: "X-Debug-Mode", Values: []annotation.Variable{"{debug}"}},
+					},
+				},
+			},
+			expectedBindings: model.MethodBindings{
+				Headers: `http.Header{
+	"X-Debug-Mode": []string{
+		strconv.FormatBool(debug),
+	},
+}`,
+			},
+			expectedBinded:  []string{"debug"},
+			expectedImports: []string{`"net/http"`, `"strconv"`},
+		},
+		{
+			name: "mixed type header params",
+			given: model.Method{
+				Params: []model.Param{
+					{Name: "token", Type: "string"},
+					{Name: "version", Type: "int"},
+					{Name: "debug", Type: "bool"},
+				},
+				Annotations: annotation.MethodAnnotations{
+					Headers: []annotation.Header{
+						{Key: "Authorization", Values: []annotation.Variable{"{token}"}},
+						{Key: "X-Api-Version", Values: []annotation.Variable{"{version}"}},
+						{Key: "X-Debug-Mode", Values: []annotation.Variable{"{debug}"}},
+					},
+				},
+			},
+			expectedBindings: model.MethodBindings{
+				Headers: `http.Header{
+	"Authorization": []string{
+		token,
+	},
+	"X-Api-Version": []string{
+		strconv.Itoa(int(version)),
+	},
+	"X-Debug-Mode": []string{
+		strconv.FormatBool(debug),
+	},
+}`,
+			},
+			expectedBinded:  []string{"token", "version", "debug"},
+			expectedImports: []string{`"net/http"`, `"strconv"`},
 		},
 	})
 }

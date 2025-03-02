@@ -1,11 +1,8 @@
 package binder
 
 import (
-	"strings"
-
 	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
-	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
 type binding interface {
@@ -42,18 +39,4 @@ func newBindingContext(method *model.Method) *context {
 		Method:       method,
 		ParamsByName: paramsByName,
 	}
-}
-
-// input - is a string value of a map
-// value - is a variable param like {owner}
-// example:
-// input: `map[string]string{"owner": "{owner}", "repo": "{repo}"}`
-// ouput: `map[string]string{"owner": owner, "repo": repo}`
-func replaceVariable(input string, value annotation.Variable) string {
-	if !value.IsVariable() {
-		return input
-	}
-
-	v := value.Escape()
-	return strings.ReplaceAll(input, `"{`+v+`}"`, v)
 }

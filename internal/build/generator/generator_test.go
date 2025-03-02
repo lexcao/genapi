@@ -139,8 +139,10 @@ func (i *implClient) NoParams() {
 			expected: `
 func (i *implClient) OneParam(owner string) {
 	i.client.Do(&genapi.Request{
-		Path:       "/repos/{owner}",
-		PathParams: map[string]string{"owner": owner},
+		Path: "/repos/{owner}",
+		PathParams: map[string]string{
+			"owner": owner,
+		},
 	})
 }
 `,
@@ -183,8 +185,11 @@ func (i *implClient) OneResult() error {
 			expected: `
 func (i *implClient) TwoParamsTwoResults(owner string, repo string) (Result, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Path:       "/repos/{owner}/{repo}",
-		PathParams: map[string]string{"owner": owner, "repo": repo},
+		Path: "/repos/{owner}/{repo}",
+		PathParams: map[string]string{
+			"owner": owner,
+			"repo":  repo,
+		},
 	})
 	return genapi.HandleResponse[Result](resp, err)
 }
@@ -270,9 +275,11 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Method:     "GET",
-	Path:       "/repos/{owner}",
-	PathParams: map[string]string{"owner": owner},
+	Method: "GET",
+	Path:   "/repos/{owner}",
+	PathParams: map[string]string{
+		"owner": owner,
+	},
 })
 `,
 		},
@@ -290,7 +297,11 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Queries: url.Values{"sort": []string{sort}},
+	Queries: url.Values{
+		"sort": []string{
+			sort,
+		},
+	},
 })
 `,
 		},
@@ -302,14 +313,21 @@ i.client.Do(&genapi.Request{
 				},
 				Annotations: annotation.MethodAnnotations{
 					Queries: []annotation.Query{
-						{Key: "sort", Value: "desc"},
 						{Key: "page", Value: "{page}"},
+						{Key: "sort", Value: "desc"},
 					},
 				},
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Queries: url.Values{"page": []string{page}, "sort": []string{"desc"}},
+	Queries: url.Values{
+		"page": []string{
+			strconv.Itoa(int(page)),
+		},
+		"sort": []string{
+			"desc",
+		},
+	},
 })
 `,
 		},
@@ -327,7 +345,11 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Headers: http.Header{"Authorization": []string{token}},
+	Headers: http.Header{
+		"Authorization": []string{
+			token,
+		},
+	},
 })
 `,
 		},
@@ -346,7 +368,14 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Headers: http.Header{"Authorization": []string{token}, "Content-Type": []string{"application/json"}},
+	Headers: http.Header{
+		"Authorization": []string{
+			token,
+		},
+		"Content-Type": []string{
+			"application/json",
+		},
+	},
 })
 `,
 		},

@@ -6,6 +6,7 @@ import (
 	"github.com/lexcao/genapi"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type implTestAPI struct {
@@ -19,21 +20,39 @@ func (i *implTestAPI) SetHttpClient(client genapi.HttpClient) {
 
 func (i *implTestAPI) GetEcho(id string, query string) (*genapi.Response, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:     "GET",
-		Path:       "/echo/{id}",
-		PathParams: map[string]string{"id": id},
-		Queries:    url.Values{"query": []string{query}},
-		Headers:    http.Header{"Echo-Header": []string{"echo-value"}},
+		Method: "GET",
+		Path:   "/echo/{id}",
+		PathParams: map[string]string{
+			"id": id,
+		},
+		Queries: url.Values{
+			"query": []string{
+				query,
+			},
+		},
+		Headers: http.Header{
+			"Echo-Header": []string{
+				"echo-value",
+			},
+		},
 	})
 	return resp, err
 }
 
 func (i *implTestAPI) PostEcho(ctx context.Context, body RequestBody, query string) (*ResponseBody, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:  "Post",
-		Path:    "/echo",
-		Queries: url.Values{"query": []string{query}},
-		Headers: http.Header{"Echo-Header": []string{"echo-value"}},
+		Method: "Post",
+		Path:   "/echo",
+		Queries: url.Values{
+			"query": []string{
+				query,
+			},
+		},
+		Headers: http.Header{
+			"Echo-Header": []string{
+				"echo-value",
+			},
+		},
 		Context: ctx,
 		Body:    body,
 	})
@@ -42,20 +61,95 @@ func (i *implTestAPI) PostEcho(ctx context.Context, body RequestBody, query stri
 
 func (i *implTestAPI) PostEchoError(statusCode string) error {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:  "Post",
-		Path:    "/echo/error",
-		Queries: url.Values{"status_code": []string{statusCode}},
+		Method: "Post",
+		Path:   "/echo/error",
+		Queries: url.Values{
+			"status_code": []string{
+				statusCode,
+			},
+		},
 	})
 	return genapi.HandleResponse0(resp, err)
 }
 
-func init() {
-	genapi.Register[TestAPI, *implTestAPI](
-		genapi.Config{Headers: http.Header{
-			"Global-Header": []string{
-				"global-value",
+func (i *implTestAPI) GetEchoNumbers(id int, page int, pageSize int) (*genapi.Response, error) {
+	resp, err := i.client.Do(&genapi.Request{
+		Method: "GET",
+		Path:   "/echo/number/{id}",
+		PathParams: map[string]string{
+			"id": strconv.Itoa(int(id)),
+		},
+		Queries: url.Values{
+			"page": []string{
+				strconv.Itoa(int(page)),
 			},
 		},
+		Headers: http.Header{
+			"X-Page-Size": []string{
+				strconv.Itoa(int(pageSize)),
+			},
+		},
+	})
+	return resp, err
+}
+
+func (i *implTestAPI) GetEchoBoolean(enabled bool, isAdmin bool, debug bool) (*genapi.Response, error) {
+	resp, err := i.client.Do(&genapi.Request{
+		Method: "GET",
+		Path:   "/echo/boolean/{enabled}",
+		PathParams: map[string]string{
+			"enabled": strconv.FormatBool(enabled),
+		},
+		Queries: url.Values{
+			"admin": []string{
+				strconv.FormatBool(isAdmin),
+			},
+		},
+		Headers: http.Header{
+			"X-Debug": []string{
+				strconv.FormatBool(debug),
+			},
+		},
+	})
+	return resp, err
+}
+
+func (i *implTestAPI) GetEchoMixed(id int, enabled bool, page int, isAdmin bool, pageSize int, debug bool) (*genapi.Response, error) {
+	resp, err := i.client.Do(&genapi.Request{
+		Method: "GET",
+		Path:   "/echo/mixed/{id}/{enabled}",
+		PathParams: map[string]string{
+			"id":      strconv.Itoa(int(id)),
+			"enabled": strconv.FormatBool(enabled),
+		},
+		Queries: url.Values{
+			"page": []string{
+				strconv.Itoa(int(page)),
+			},
+			"admin": []string{
+				strconv.FormatBool(isAdmin),
+			},
+		},
+		Headers: http.Header{
+			"X-Page-Size": []string{
+				strconv.Itoa(int(pageSize)),
+			},
+			"X-Debug": []string{
+				strconv.FormatBool(debug),
+			},
+		},
+	})
+	return resp, err
+}
+
+func init() {
+	genapi.Register[TestAPI, *implTestAPI](
+		genapi.Config{
+			Headers: http.Header{
+				"Global-Header": []string{
+					"global-value",
+				},
+			},
 		},
 	)
 }

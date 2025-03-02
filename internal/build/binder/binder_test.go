@@ -50,13 +50,33 @@ func TestBind(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Method:     "GET",
-				Path:       "/repos/{owner}/{repo}",
-				Context:    "ctx",
-				Body:       "request",
-				PathParams: `map[string]string{"owner":owner, "repo":repo}`,
-				Headers:    `http.Header{"Authorization":[]string{token}, "Content-Type":[]string{"application/json"}}`,
-				Queries:    `url.Values{"page":[]string{"1"}, "perPage":[]string{"10"}, "sort":[]string{sort}}`,
+				Method:  "GET",
+				Path:    "/repos/{owner}/{repo}",
+				Context: "ctx",
+				Body:    "request",
+				PathParams: `map[string]string{
+	"owner": owner,
+	"repo": repo,
+}`,
+				Headers: `http.Header{
+	"Authorization": []string{
+		token,
+	},
+	"Content-Type": []string{
+		"application/json",
+	},
+}`,
+				Queries: `url.Values{
+	"sort": []string{
+		sort,
+	},
+	"page": []string{
+		"1",
+	},
+	"perPage": []string{
+		"10",
+	},
+}`,
 			},
 			expectedImports: []string{`"net/http"`, `"net/url"`},
 		},

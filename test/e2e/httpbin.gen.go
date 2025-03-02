@@ -18,10 +18,21 @@ func (i *implHttpBin) SetHttpClient(client genapi.HttpClient) {
 
 func (i *implHttpBin) Get(value string) (*Response, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:  "GET",
-		Path:    "/get",
-		Queries: url.Values{"key": []string{"value"}, "value": []string{value}},
-		Headers: http.Header{"X-Hello": []string{"world"}},
+		Method: "GET",
+		Path:   "/get",
+		Queries: url.Values{
+			"key": []string{
+				"value",
+			},
+			"value": []string{
+				value,
+			},
+		},
+		Headers: http.Header{
+			"X-Hello": []string{
+				"world",
+			},
+		},
 	})
 	return genapi.HandleResponse[*Response](resp, err)
 }

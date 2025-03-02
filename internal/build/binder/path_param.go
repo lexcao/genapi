@@ -1,6 +1,9 @@
 package binder
 
-import "fmt"
+import (
+	"github.com/lexcao/genapi/internal/build/binder/printer"
+	"github.com/lexcao/genapi/internal/build/model"
+)
 
 type pathParamBinding struct{}
 
@@ -13,26 +16,46 @@ func (b *pathParamBinding) Bind(ctx *context) error {
 		return nil
 	}
 
-	values := map[string]string{}
+	values := map[string]model.BindedVariable{}
 	pathParams := ctx.Method.Annotations.RequestLine.PathParams()
 
-	for _, param := range pathParams {
-		escaped := param.Escape()
-		if param.IsVariable() {
-			if _, ok := ctx.ParamsByName[escaped]; ok {
+	for _, variable := range pathParams {
+		bindedValue := model.BindedVariable{Variable: variable}
+		escaped := variable.Escape()
+		if variable.IsVariable() {
+			if param, ok := ctx.ParamsByName[escaped]; ok {
+				if param.Type != "string" {
+					ctx.Method.Interface.Imports.Add(`"strconv"`)
+				}
 				ctx.BindedParams.Add(escaped)
+				bindedValue.Param = &param
 			} else {
 				return &ErrNotFound{Type: "path", Value: escaped}
 			}
 		}
-		values[escaped] = param.String()
+		values[escaped] = bindedValue
 	}
 
-	result := fmt.Sprintf("%#v", values)
+	result := printer.PrintWith("map[string]string", func(p *printer.Printer) {
+		seen := map[string]bool{}
+		for _, variable := range pathParams {
+			key := variable.Escape()
+			value, ok := values[key]
+			if !ok {
+				continue
+			}
+			if seen[key] {
+				continue
+			}
+			seen[key] = true
 
-	for _, param := range pathParams {
-		result = replaceVariable(result, param)
-	}
+			p.KeyValueLine(func(p *printer.Printer) {
+				p.Quote(key)
+			}, func(p *printer.Printer) {
+				printVariable(p, value)
+			})
+		}
+	})
 
 	ctx.Method.Bindings.PathParams = result
 	return nil

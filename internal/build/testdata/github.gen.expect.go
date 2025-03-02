@@ -6,6 +6,7 @@ import (
 	"github.com/lexcao/genapi"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type implGitHub struct {
@@ -19,21 +20,35 @@ func (i *implGitHub) SetHttpClient(client genapi.HttpClient) {
 
 func (i *implGitHub) GetUser(ctx context.Context, username string) (*User, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:     "get",
-		Path:       "/users/{username}",
-		PathParams: map[string]string{"username": username},
-		Context:    ctx,
+		Method: "get",
+		Path:   "/users/{username}",
+		PathParams: map[string]string{
+			"username": username,
+		},
+		Context: ctx,
 	})
 	return genapi.HandleResponse[*User](resp, err)
 }
 
 func (i *implGitHub) ListRepositories(ctx context.Context, username string, perPage int) ([]*Repository, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:     "get",
-		Path:       "/users/{username}/repos",
-		PathParams: map[string]string{"username": username},
-		Queries:    url.Values{"direction": []string{"desc"}, "per_page": []string{perPage}, "sort": []string{"created"}},
-		Context:    ctx,
+		Method: "get",
+		Path:   "/users/{username}/repos",
+		PathParams: map[string]string{
+			"username": username,
+		},
+		Queries: url.Values{
+			"sort": []string{
+				"created",
+			},
+			"direction": []string{
+				"desc",
+			},
+			"per_page": []string{
+				strconv.Itoa(int(perPage)),
+			},
+		},
+		Context: ctx,
 	})
 	return genapi.HandleResponse[[]*Repository](resp, err)
 }

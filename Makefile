@@ -5,6 +5,9 @@ all: lint test
 test:
 	go test -v -race ./...
 
+test-e2e:
+	E2E_TEST=true go test -v -race ./test/e2e
+
 lint:
 	golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=
 

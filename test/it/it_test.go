@@ -42,4 +42,33 @@ func TestIntegration(t *testing.T) {
 		require.ErrorAs(t, err, &e)
 		assert.Equal(t, 500, e.Response.StatusCode)
 	})
+
+	t.Run("get echo numbers", func(t *testing.T) {
+		resp, err := api.GetEchoNumbers(123, 1, 20)
+		require.NoError(t, err)
+		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, "20", resp.Header.Get("X-Page-Size"))
+		assert.Contains(t, resp.Request.URL.Path, "/echo/number/123")
+		assert.Contains(t, resp.Request.URL.RawQuery, "page=1")
+	})
+
+	t.Run("get echo boolean", func(t *testing.T) {
+		resp, err := api.GetEchoBoolean(true, false, true)
+		require.NoError(t, err)
+		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, "true", resp.Header.Get("X-Debug"))
+		assert.Contains(t, resp.Request.URL.Path, "/echo/boolean/true")
+		assert.Contains(t, resp.Request.URL.RawQuery, "admin=false")
+	})
+
+	t.Run("get echo mixed", func(t *testing.T) {
+		resp, err := api.GetEchoMixed(123, true, 1, false, 20, true)
+		require.NoError(t, err)
+		assert.Equal(t, 200, resp.StatusCode)
+		assert.Equal(t, "20", resp.Header.Get("X-Page-Size"))
+		assert.Equal(t, "true", resp.Header.Get("X-Debug"))
+		assert.Contains(t, resp.Request.URL.Path, "/echo/mixed/123/true")
+		assert.Contains(t, resp.Request.URL.RawQuery, "page=1")
+		assert.Contains(t, resp.Request.URL.RawQuery, "admin=false")
+	})
 }

@@ -27,6 +27,11 @@ type Method struct {
 	Bindings    *MethodBindings
 }
 
+type BindedVariable struct {
+	annotation.Variable
+	Param *Param
+}
+
 // MethodBindings bind Method and Annotation to genapi.Request
 type MethodBindings struct {
 	Method     string
