@@ -27,6 +27,10 @@ go get github.com/lexcao/genapi
 1. Define your API interface:
 
 ```go
+package api
+
+import "github.com/lexcao/genapi"
+
 //go:generate go run github.com/lexcao/genapi/cmd/genapi  -file $GOFILE
 
 // @BaseURL("https://api.github.com")
@@ -47,14 +51,20 @@ type Contributor struct {
 2. Generate the client code:
 
 ```bash
-go generate ./...
+go generate ./api
 ```
 
 3. Use the client:
 
 ```go
+import (
+    "fmt"
+    "github.com/lexcao/genapi"
+    "your/package/to/api"
+)
+
 func main() {
-    client := genapi.New[GitHub]()
+    client := genapi.New[api.GitHub]()
 
     contributors, err := client.Contributors(context.Background(), "lexcao", "genapi")
     if err != nil {
@@ -72,7 +82,7 @@ func main() {
 The client can be configured with various options:
 
 ```go
-client := genapi.New[GitHub](
+client := genapi.New[api.GitHub](
     // Set dynamic BaseURL
     genapi.WithBaseURL(os.GetEnv("API_ENDPOINT")),
     
