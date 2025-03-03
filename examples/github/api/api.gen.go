@@ -18,21 +18,27 @@ func (i *implGitHub) SetHttpClient(client genapi.HttpClient) {
 
 func (i *implGitHub) Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error) {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:     "GET",
-		Path:       "/repos/{owner}/{repo}/contributors",
-		PathParams: map[string]string{"owner": owner, "repo": repo},
-		Context:    ctx,
+		Method: "GET",
+		Path:   "/repos/{owner}/{repo}/contributors",
+		PathParams: map[string]string{
+			"owner": owner,
+			"repo":  repo,
+		},
+		Context: ctx,
 	})
 	return genapi.HandleResponse[[]Contributor](resp, err)
 }
 
 func (i *implGitHub) CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error {
 	resp, err := i.client.Do(&genapi.Request{
-		Method:     "POST",
-		Path:       "/repos/{owner}/{repo}/issues",
-		PathParams: map[string]string{"owner": owner, "repo": repo},
-		Context:    ctx,
-		Body:       issue,
+		Method: "POST",
+		Path:   "/repos/{owner}/{repo}/issues",
+		PathParams: map[string]string{
+			"owner": owner,
+			"repo":  repo,
+		},
+		Context: ctx,
+		Body:    issue,
 	})
 	return genapi.HandleResponse0(resp, err)
 }

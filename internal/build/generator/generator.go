@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"go/format"
 
+	"github.com/lexcao/genapi/internal/build/common"
 	"github.com/lexcao/genapi/internal/build/model"
 )
 
@@ -16,7 +17,7 @@ func GenerateFile(filename string, interfaces []model.Interface) ([]byte, error)
 	var buf bytes.Buffer
 
 	var data = templateData{
-		Imports:    interfaces[0].Imports.Slices(),
+		Imports:    collectImports(interfaces),
 		Package:    interfaces[0].Package,
 		Interfaces: interfaces,
 	}
@@ -31,4 +32,14 @@ func GenerateFile(filename string, interfaces []model.Interface) ([]byte, error)
 	}
 
 	return fomatted, nil
+}
+
+func collectImports(interfaces []model.Interface) []string {
+	var imports common.Set[string]
+
+	for _, iface := range interfaces {
+		imports.Add(iface.Imports.Slices()...)
+	}
+
+	return imports.Slices()
 }
