@@ -335,7 +335,7 @@ func TestParseParams(t *testing.T) {
 	}
 }
 
-func TestHasEmbededInterface(t *testing.T) {
+func TestHasEmbeddedInterface(t *testing.T) {
 	typ := "genapi.Interface"
 
 	tests := []struct {
@@ -344,7 +344,7 @@ func TestHasEmbededInterface(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "no embeded interface",
+			name: "no embedded interface",
 			code: `
 			type Interface interface {
 				Method()
@@ -353,7 +353,7 @@ func TestHasEmbededInterface(t *testing.T) {
 			want: false,
 		},
 		{
-			name: "embeded interface",
+			name: "embedded interface",
 			code: `
 			type Interface interface {
 				genapi.Interface
@@ -372,7 +372,7 @@ func TestHasEmbededInterface(t *testing.T) {
 				return func(n ast.Node) bool {
 					if typeSpec, ok := n.(*ast.TypeSpec); ok {
 						if interfaceType, ok := typeSpec.Type.(*ast.InterfaceType); ok {
-							found = hasEmbededInterface(interfaceType, typ)
+							found = hasEmbeddedInterface(interfaceType, typ)
 							return false
 						}
 					}

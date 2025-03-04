@@ -11,7 +11,7 @@ import (
 	"github.com/lexcao/genapi/internal/build/parser/annotation"
 )
 
-const EMBEDED_INTERFACE = "genapi.Interface"
+const EMBEDDED_INTERFACE = "genapi.Interface"
 
 // ParseFile parse the given file and return the interface definition
 func ParseFile(filename string) ([]model.Interface, error) {
@@ -28,7 +28,7 @@ func ParseFile(filename string) ([]model.Interface, error) {
 			for _, spec := range decl.Specs {
 				if typeSpec, ok := spec.(*ast.TypeSpec); ok {
 					if iface, ok := typeSpec.Type.(*ast.InterfaceType); ok {
-						if hasEmbededInterface(iface, EMBEDED_INTERFACE) {
+						if hasEmbeddedInterface(iface, EMBEDDED_INTERFACE) {
 							interfaces = append(interfaces, parseInterface(
 								parseInterfaceParams{
 									File:        file,
@@ -49,7 +49,7 @@ func ParseFile(filename string) ([]model.Interface, error) {
 	return interfaces, nil
 }
 
-func hasEmbededInterface(iface *ast.InterfaceType, typ string) bool {
+func hasEmbeddedInterface(iface *ast.InterfaceType, typ string) bool {
 	for _, field := range iface.Methods.List {
 		if _, ok := field.Type.(*ast.SelectorExpr); ok {
 			return types.ExprString(field.Type) == typ
