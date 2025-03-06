@@ -12,8 +12,10 @@ import (
 	"github.com/lexcao/genapi/internal"
 )
 
-var DefaultClient = &HttpClient{
-	client: http.DefaultClient,
+var DefaultClient = New(http.DefaultClient)
+
+func New(client *http.Client) *HttpClient {
+	return &HttpClient{client: client}
 }
 
 type HttpClient struct {

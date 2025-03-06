@@ -15,7 +15,7 @@ genapi is a declarative HTTP client generator for Go, inspired by OpenFeign(http
 - Custom header support
 - Flexible response handling
 - Context support for cancellation/timeouts
-- **Use your favorate any go http client in runtime**
+- **Use your favorate http client in runtime**
 
 ## Installation
 
@@ -52,7 +52,7 @@ type Contributor struct {
 2. Generate the client code:
 
 ```bash
-go generate ./api
+$ go generate ./api
 ```
 
 3. Use the client:
@@ -77,6 +77,55 @@ func main() {
     }
 }
 ```
+
+## Core Feature: replace HttpClient in runtime
+
+### Replace default HttpClient
+
+```go
+package main
+
+import (
+    "net/http"
+    "github.com/lexcao/genapi"
+)
+
+func main() {
+    httpClient := &http.Client{}
+
+    genapi.New[api.GitHub](
+        genapi.WithHttpClient(http.New(httpClient))
+    )
+}
+```
+
+### Use Resty as genapi HttpClient
+
+Resty is as seperate pkg, you need to install first
+
+```bash
+$ go get github.com/lexcao/genapi/pkg/clients/resty
+```
+
+Then use as following,
+
+```go
+package main
+
+import (
+	"github.com/lexcao/genapi"
+	"github.com/lexcao/genapi/pkg/clients/resty"
+    resty_client "github.com/go-resty/resty/v2"
+)
+
+func main() {
+	client := genapi.New[api.GitHub](
+		genapi.WithHttpClient(resty.DefaultClient),           // default Resty client
+        genapi.WithHttpClient(resty.New(resty_client.New())), // customized Resty client
+	)
+}
+```
+
 
 ## Configuration
 
@@ -166,24 +215,24 @@ if errors.As(err, &apiErr) {
 
 1. Clone the repository
 ```bash
-git clone https://github.com/lexcao/genapi.git
-cd genapi
+$ git clone https://github.com/lexcao/genapi.git
+$ cd genapi
 ```
 
 2. Install dependencies
 ```bash
-go mod download
+$ go mod download
 ```
 
 3. Run tests
 ```bash
-make test
+$ make test
 ```
 
 ### Available Make Commands
 
-- `make test` - Run tests
-- `make lint` - Run linter
+- `make test` - Run tests for all go modules
+- `make lint` - Run linter for all go modules
 - `make generate` - Run go generate
 - `make clean` - Clean up generated files
 

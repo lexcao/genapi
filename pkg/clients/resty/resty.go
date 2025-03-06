@@ -22,8 +22,9 @@ func (c *HttpClient) SetConfig(config genapi.Config) {
 
 func (c *HttpClient) Do(req *genapi.Request) (*genapi.Response, error) {
 	restyReq := c.client.NewRequest().
-		SetContext(req.Context).
+		SetDoNotParseResponse(true).
 		SetPathParams(req.PathParams).
+		SetContext(req.Context).
 		SetBody(req.Body)
 
 	for key, value := range req.Header {
