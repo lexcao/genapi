@@ -1,26 +1,24 @@
-.PHONY: all test lint coverage generate clean website
+.PHONY: all test lint generate website
+
+GO_MOD_DIRS := $(shell find . -type f -name 'go.mod' -exec dirname {} \; | sort)
+
+define run_in_modules
+	@set -e; for dir in $(GO_MOD_DIRS); do \
+	  echo "\033[1;34m>> Found go.mod in \033[1;32m$${dir}\033[0m"; \
+	  (cd "$${dir}" && $(1)); \
+	done
+endef
 
 all: lint test
 
 test:
-	go test -v -race ./...
-
-test-e2e:
-	E2E_TEST=true go test -v -race ./test/e2e
+	$(call run_in_modules,go mod tidy && go test -v -race -count=1 ./...)
 
 lint:
-	golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=
-
-coverage:
-	go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
-	go tool cover -html=coverage.txt -o coverage.html
+	$(call run_in_modules,go mod tidy && golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=)
 
 generate:
 	go generate ./...
-
-clean:
-	rm -f coverage.txt coverage.html
-	go clean 
 
 website:
 	go run ./website/server.go -dir ./website

@@ -180,7 +180,6 @@ make test
 
 - `make test` - Run tests
 - `make lint` - Run linter
-- `make coverage` - Generate test coverage report
 - `make generate` - Run go generate
 - `make clean` - Clean up generated files
 
