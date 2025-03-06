@@ -2,7 +2,7 @@ package e2e
 
 import "github.com/lexcao/genapi"
 
-//go:generate ./genapi -file $GOFILE
+//go:generate go run github.com/lexcao/genapi/cmd/genapi -file $GOFILE
 
 // @BaseURL("https://httpbin.org")
 // @Header("Global-Header", "global-value")

@@ -39,7 +39,7 @@ type MethodBindings struct {
 	Body       string
 	Context    string
 	Queries    string
-	Headers    string
+	Header     string
 	PathParams string
 	Imports    string
 	Results    *BindingResults

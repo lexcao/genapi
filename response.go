@@ -3,7 +3,6 @@ package genapi
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 )
 
 type Error struct {
@@ -21,14 +20,8 @@ func HandleResponse[T any](resp *Response, err error) (T, error) {
 	}
 
 	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return result, fmt.Errorf("failed to read response body: %w", err)
-		}
-		defer resp.Body.Close()
-
-		if err := json.Unmarshal(body, &result); err != nil {
-			return result, fmt.Errorf("failed to unmarshal response body: %w", err)
+		if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			return result, fmt.Errorf("failed to decode response body: %w", err)
 		}
 
 		return result, nil

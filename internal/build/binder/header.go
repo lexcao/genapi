@@ -49,6 +49,6 @@ func (b *headerBinding) Bind(ctx *context) error {
 		binded:  bindedHeaders,
 	})
 
-	ctx.Method.Bindings.Headers = headersValue
+	ctx.Method.Bindings.Header = headersValue
 	return nil
 }

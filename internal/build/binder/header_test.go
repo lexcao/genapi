@@ -31,7 +31,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Authorization": []string{
 		token,
 	},
@@ -55,7 +55,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Authorization": []string{
 		token,
 	},
@@ -77,7 +77,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Accept": []string{
 		"application/json",
 	},
@@ -110,7 +110,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Accept": []string{
 		type1,
 		type2,
@@ -134,7 +134,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Accept": []string{
 		"application/json",
 	},
@@ -159,7 +159,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Api-Version": []string{
 		strconv.Itoa(int(apiVersion)),
 	},
@@ -181,7 +181,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"X-Rate-Limit": []string{
 		strconv.FormatFloat(float64(rate), 'f', -1, 64),
 	},
@@ -203,7 +203,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"X-Debug-Mode": []string{
 		strconv.FormatBool(debug),
 	},
@@ -229,7 +229,7 @@ func TestBindHeader(t *testing.T) {
 				},
 			},
 			expectedBindings: model.MethodBindings{
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Authorization": []string{
 		token,
 	},

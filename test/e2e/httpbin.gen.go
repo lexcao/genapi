@@ -28,7 +28,7 @@ func (i *implHttpBin) Get(value string) (*Response, error) {
 				value,
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"X-Hello": []string{
 				"world",
 			},
@@ -50,7 +50,7 @@ func init() {
 	genapi.Register[HttpBin, *implHttpBin](
 		genapi.Config{
 			BaseURL: "https://httpbin.org",
-			Headers: http.Header{
+			Header: http.Header{
 				"Global-Header": []string{
 					"global-value",
 				},

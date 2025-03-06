@@ -1,6 +1,8 @@
 package runtime
 
-import "github.com/lexcao/genapi/internal"
+import (
+	"github.com/lexcao/genapi/internal"
+)
 
 type Options struct {
 	HttpClient internal.HttpClient

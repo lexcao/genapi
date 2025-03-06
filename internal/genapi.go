@@ -15,7 +15,7 @@ type Request struct {
 	Method     string
 	Path       string
 	Queries    url.Values
-	Headers    http.Header
+	Header     http.Header
 	PathParams map[string]string
 	Context    context.Context
 }
@@ -24,7 +24,7 @@ type Response = http.Response
 
 type Config struct {
 	BaseURL string
-	Headers http.Header
+	Header  http.Header
 }
 
 type HttpClient interface {

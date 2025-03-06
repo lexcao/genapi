@@ -28,7 +28,7 @@ func BindInterface(iface *model.Interface) error {
 			iface.Imports.Add(`"net/http"`)
 
 			p.KeyValueLine(func(p *printer.Printer) {
-				p.Unquoted("Headers")
+				p.Unquoted("Header")
 			}, func(p *printer.Printer) {
 				p.Item(bindedHeaderPrinter{
 					orderBy: iface.Annotations.Headers,

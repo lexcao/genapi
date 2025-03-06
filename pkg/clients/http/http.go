@@ -1,4 +1,4 @@
-package client
+package http
 
 import (
 	"bytes"
@@ -52,10 +52,10 @@ func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
 	}
 
 	httpReq.Header = make(http.Header)
-	for k, v := range c.config.Headers {
+	for k, v := range c.config.Header {
 		httpReq.Header[k] = v
 	}
-	for k, v := range req.Headers {
+	for k, v := range req.Header {
 		httpReq.Header[k] = v
 	}
 

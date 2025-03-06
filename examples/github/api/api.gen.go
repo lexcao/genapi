@@ -47,7 +47,7 @@ func init() {
 	genapi.Register[GitHub, *implGitHub](
 		genapi.Config{
 			BaseURL: "https://api.github.com",
-			Headers: http.Header{
+			Header: http.Header{
 				"Accept": []string{
 					"application/vnd.github.v3+json",
 				},

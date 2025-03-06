@@ -58,7 +58,7 @@ func TestBind(t *testing.T) {
 	"owner": owner,
 	"repo": repo,
 }`,
-				Headers: `http.Header{
+				Header: `http.Header{
 	"Authorization": []string{
 		token,
 	},

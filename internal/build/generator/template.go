@@ -95,8 +95,8 @@ func (i *impl{{ .Interface.Name }}) {{ .Name }}(
 		{{- with .Bindings.Queries }}
 		Queries: {{.}},
 		{{- end }}
-		{{- with .Bindings.Headers }}
-		Headers: {{.}},
+		{{- with .Bindings.Header }}
+		Header: {{.}},
 		{{- end }}
 		{{- with .Bindings.Context }}
 		Context: {{.}},

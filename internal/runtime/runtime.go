@@ -2,8 +2,8 @@ package runtime
 
 import (
 	"github.com/lexcao/genapi/internal"
-	"github.com/lexcao/genapi/internal/runtime/client"
 	"github.com/lexcao/genapi/internal/runtime/registry"
+	"github.com/lexcao/genapi/pkg/clients/http"
 )
 
 func New[T internal.Interface](opts ...Option) T {
@@ -11,7 +11,7 @@ func New[T internal.Interface](opts ...Option) T {
 
 	// build options
 	options := &Options{
-		HttpClient: client.DefaultClient,
+		HttpClient: http.DefaultClient,
 	}
 	if config, ok := config.(internal.Config); ok {
 		options.Config = config

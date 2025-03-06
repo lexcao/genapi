@@ -28,7 +28,7 @@ func TestBindInterface(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, `genapi.Config{
 	BaseURL: "https://api.example.com",
-	Headers: http.Header{
+	Header: http.Header{
 		"Content-Type": []string{
 			"application/json",
 		},

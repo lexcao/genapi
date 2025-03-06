@@ -17,7 +17,7 @@ type HttpClient struct {
 
 func (c *HttpClient) SetConfig(config genapi.Config) {
 	c.client.SetBaseURL(config.BaseURL)
-	c.client.Header = config.Headers
+	c.client.Header = config.Header
 }
 
 func (c *HttpClient) Do(req *genapi.Request) (*genapi.Response, error) {
@@ -26,7 +26,7 @@ func (c *HttpClient) Do(req *genapi.Request) (*genapi.Response, error) {
 		SetPathParams(req.PathParams).
 		SetBody(req.Body)
 
-	for key, value := range req.Headers {
+	for key, value := range req.Header {
 		for _, v := range value {
 			restyReq.Header.Add(key, v)
 		}

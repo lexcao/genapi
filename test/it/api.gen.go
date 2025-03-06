@@ -30,7 +30,7 @@ func (i *implTestAPI) GetEcho(id string, query string) (*genapi.Response, error)
 				query,
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"Echo-Header": []string{
 				"echo-value",
 			},
@@ -48,7 +48,7 @@ func (i *implTestAPI) PostEcho(ctx context.Context, body RequestBody, query stri
 				query,
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"Echo-Header": []string{
 				"echo-value",
 			},
@@ -84,7 +84,7 @@ func (i *implTestAPI) GetEchoNumbers(id int, page int, pageSize int) (*genapi.Re
 				strconv.Itoa(int(page)),
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"X-Page-Size": []string{
 				strconv.Itoa(int(pageSize)),
 			},
@@ -105,7 +105,7 @@ func (i *implTestAPI) GetEchoBoolean(enabled bool, isAdmin bool, debug bool) (*g
 				strconv.FormatBool(isAdmin),
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"X-Debug": []string{
 				strconv.FormatBool(debug),
 			},
@@ -130,7 +130,7 @@ func (i *implTestAPI) GetEchoMixed(id int, enabled bool, page int, isAdmin bool,
 				strconv.FormatBool(isAdmin),
 			},
 		},
-		Headers: http.Header{
+		Header: http.Header{
 			"X-Page-Size": []string{
 				strconv.Itoa(int(pageSize)),
 			},
@@ -145,7 +145,7 @@ func (i *implTestAPI) GetEchoMixed(id int, enabled bool, page int, isAdmin bool,
 func init() {
 	genapi.Register[TestAPI, *implTestAPI](
 		genapi.Config{
-			Headers: http.Header{
+			Header: http.Header{
 				"Global-Header": []string{
 					"global-value",
 				},

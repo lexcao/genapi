@@ -442,7 +442,7 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Headers: http.Header{
+	Header: http.Header{
 		"Authorization": []string{
 			token,
 		},
@@ -465,7 +465,7 @@ i.client.Do(&genapi.Request{
 			},
 			expected: `
 i.client.Do(&genapi.Request{
-	Headers: http.Header{
+	Header: http.Header{
 		"Authorization": []string{
 			token,
 		},
