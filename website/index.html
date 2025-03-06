@@ -139,6 +139,7 @@ type TodoAPI interface {
                                 <button class="tab-button active" data-tab="definition">API Definition</button>
                                 <button class="tab-button" data-tab="generated">Generated Client</button>
                                 <button class="tab-button" data-tab="usage">Usage Example</button>
+                                <button class="tab-button" data-tab="replace-runtime">Replace Runtime Example</button>
                             </div>
 
                             <div class="tab-content">
@@ -264,6 +265,37 @@ func main() {
     }
     
     fmt.Printf("Created todo with ID: %d\n", created.ID)
+}</code></pre>
+                                </div>
+
+
+                                <div class="tab-pane" id="replace-runtime">
+                                    <pre><code class="language-go">package main
+
+import (
+    http_client "net/http"
+    resty_client "github.com/go-resty/resty/v2"
+    "yourproject/api"
+    "github.com/lexcao/genapi/pkg/clients/resty"
+    "github.com/lexcao/genapi/pkg/clients/http"
+    "github.com/lexcao/genapi"
+)
+
+func main() {
+    // Get API client instance
+    client := genapi.New[api.TodoAPI]()
+
+    // Customize standard Go http.Client
+    customHttpClient := &http_client.Client{}
+    client.SetHttpClient(http.New(customHttpClient))
+
+    // Or use Resty client
+    restyClient := resty_client.New()
+    client.SetHttpClient(resty.New(restyClient))
+
+    // Custom HTTP clients can be used by implementing
+    // the genapi.HttpClient interface
+    // Use genapi.TestHttpClient for testing
 }</code></pre>
                                 </div>
                             </div>
