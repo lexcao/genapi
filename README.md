@@ -93,9 +93,12 @@ import (
 func main() {
     httpClient := &http.Client{}
 
-    genapi.New[api.GitHub](
+    client := genapi.New[api.GitHub](
         genapi.WithHttpClient(http.New(httpClient))
     )
+
+    // or set client in the runtime
+    client.SetHttpClient(httpClient)
 }
 ```
 
@@ -126,6 +129,30 @@ func main() {
 }
 ```
 
+### Provide your own implmentation of HttpClient
+
+You should implmentate the interface `genapi.HttpClient`
+(You can follow the [resty](./pkg/clients/resty/resty.go) for reference)
+```go
+type HttpClient interface {
+	SetConfig(Config)
+	Do(req *Request) (*Response, error)
+}
+```
+
+After implmentation, you should test your code to verify the base cases provided by the genapi
+(You can follow the [resty_test](./pkg/clients/resty/resty_test.go) for reference)
+```go
+package client
+
+func (c *HttpClient) GetClient() *http.Client {
+	return c.client.GetClient()
+}
+
+func TestHttpClient(t *testing.T) {
+	genapi.TestHttpClient(t, func() genapi.HttpClientTester { return DefaultClient })
+}
+```
 
 ## Configuration
 

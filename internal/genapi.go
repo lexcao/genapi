@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+// Interface is the interface that mark this interface should be a genapi client that can be generated
 type Interface interface {
 	SetHttpClient(HttpClient)
 }
@@ -27,8 +28,13 @@ type Config struct {
 	Header  http.Header
 }
 
+// HttpClient is the genapi client runtime, the generated client will call this interface to send requests
+// You can provide your own implementation of HttpClient to use a different HTTP client
 type HttpClient interface {
+	// SetConfig sets the config for the client, global config
 	SetConfig(Config)
+
+	// Do sends a request and returns a response
 	Do(req *Request) (*Response, error)
 }
 
