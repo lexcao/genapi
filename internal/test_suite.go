@@ -186,6 +186,21 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 				})
 			})
 		})
+
+		t.Run("HandleResponse", func(t *testing.T) {
+			client := setupMockClient(t)
+
+			given := map[string]string{"name": "John"}
+			httpmock.RegisterResponder("GET", "/", httpmock.NewJsonResponderOrPanic(200, given))
+
+			resp, err := client.Do(&Request{Method: "GET", Path: "/"})
+			require.NoError(t, err)
+
+			var result map[string]string
+			err = json.NewDecoder(resp.Body).Decode(&result)
+			require.NoError(t, err)
+			assert.Equal(t, "John", result["name"])
+		})
 	})
 
 	t.Run("MockServer", func(t *testing.T) {
