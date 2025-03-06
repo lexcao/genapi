@@ -86,12 +86,13 @@ func main() {
 package main
 
 import (
-    "net/http"
+    http_client "net/http"
     "github.com/lexcao/genapi"
+    "github.com/lexcao/genapi/pkg/clients/http"
 )
 
 func main() {
-    httpClient := &http.Client{}
+    httpClient := &http_client.Client{}
 
     client := genapi.New[api.GitHub](
         genapi.WithHttpClient(http.New(httpClient))
@@ -144,6 +145,8 @@ After implmentation, you should test your code to verify the base cases provided
 (You can follow the [resty_test](./pkg/clients/resty/resty_test.go) for reference)
 ```go
 package client
+
+import "github.com/lexcao/genapi"
 
 func (c *HttpClient) GetClient() *http.Client {
 	return c.client.GetClient()
