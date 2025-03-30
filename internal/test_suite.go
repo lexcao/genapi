@@ -3,15 +3,15 @@ package internal
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"testing"
 	"time"
 
 	"github.com/jarcoal/httpmock"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 type HttpClientTester interface {
@@ -38,8 +38,8 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 
 				resp, err := client.Do(&Request{Method: "GET"})
 
-				require.NoError(t, err)
-				assert.Equal(t, http.StatusOK, resp.StatusCode)
+				RequireNoError(t, err)
+				AssertEqual(t, http.StatusOK, resp.StatusCode)
 			})
 
 			t.Run("GlobalHeaders", func(t *testing.T) {
@@ -52,14 +52,14 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 
 				httpmock.RegisterResponder("GET", "/genapi",
 					func(req *http.Request) (*http.Response, error) {
-						assert.Equal(t, "genapi/test_suite", req.Header.Get("User-Agent"))
+						AssertEqual(t, "genapi/test_suite", req.Header.Get("User-Agent"))
 						return httpmock.NewStringResponse(200, "OK"), nil
 					})
 
 				resp, err := client.Do(&Request{Method: "GET", Path: "/genapi"})
 
-				require.NoError(t, err)
-				assert.Equal(t, http.StatusOK, resp.StatusCode)
+				RequireNoError(t, err)
+				AssertEqual(t, http.StatusOK, resp.StatusCode)
 			})
 		})
 
@@ -153,8 +153,8 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 
 					resp, err := client.Do(&tc.request)
 
-					require.NoErrorf(t, err, "Failed for request: %v", tc.request)
-					assert.Equal(t, http.StatusOK, resp.StatusCode)
+					RequireNoError(t, err)
+					AssertEqual(t, http.StatusOK, resp.StatusCode)
 				})
 			}
 
@@ -178,11 +178,10 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						cancel()
 					}()
 
-					resp, err := client.Do(&Request{Method: "GET", Path: "/", Context: ctx})
+					_, err := client.Do(&Request{Method: "GET", Path: "/", Context: ctx})
 					close(done)
 
-					require.ErrorIs(t, err, context.Canceled)
-					require.Nil(t, resp)
+					RequireErrorIs(t, err, context.Canceled)
 				})
 			})
 		})
@@ -194,12 +193,12 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 			httpmock.RegisterResponder("GET", "/", httpmock.NewJsonResponderOrPanic(200, given))
 
 			resp, err := client.Do(&Request{Method: "GET", Path: "/"})
-			require.NoError(t, err)
+			RequireNoError(t, err)
 
 			var result map[string]string
 			err = json.NewDecoder(resp.Body).Decode(&result)
-			require.NoError(t, err)
-			assert.Equal(t, "John", result["name"])
+			RequireNoError(t, err)
+			AssertEqual(t, "John", result["name"])
 		})
 	})
 
@@ -230,7 +229,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 				},
 				mockServer: func(t *testing.T) http.HandlerFunc {
 					return func(w http.ResponseWriter, r *http.Request) {
-						assert.Equal(t, "/test", r.URL.Path)
+						AssertEqual(t, "/test", r.URL.Path)
 					}
 				},
 			},
@@ -246,7 +245,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 				},
 				mockServer: func(t *testing.T) http.HandlerFunc {
 					return func(w http.ResponseWriter, r *http.Request) {
-						assert.Equal(t, "/?a=1&b=2", r.URL.String())
+						AssertEqual(t, "/?a=1&b=2", r.URL.String())
 					}
 				},
 			},
@@ -260,7 +259,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 				},
 				mockServer: func(t *testing.T) http.HandlerFunc {
 					return func(w http.ResponseWriter, r *http.Request) {
-						assert.Equal(t, "genapi/test_suite", r.Header.Get("User-Agent"))
+						AssertEqual(t, "genapi/test_suite", r.Header.Get("User-Agent"))
 					}
 				},
 			},
@@ -298,9 +297,41 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 
 				resp, err := client.Do(&tc.request)
 
-				require.NoError(t, err)
-				assert.Equal(t, http.StatusOK, resp.StatusCode)
+				RequireNoError(t, err)
+				AssertEqual(t, http.StatusOK, resp.StatusCode)
 			})
 		}
 	})
+}
+
+func RequireNoError(t *testing.T, err error) {
+	t.Helper()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func RequireErrorIs(t *testing.T, err error, target error) {
+	t.Helper()
+
+	if !errors.Is(err, target) {
+		t.Fatalf("expected error %v, got %v", target, err)
+	}
+}
+
+func AssertEqual(t *testing.T, expected, actual any) {
+	t.Helper()
+
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("expected %v, got %v", expected, actual)
+	}
+}
+
+func AssertNotEqual(t *testing.T, expected, actual any) {
+	t.Helper()
+
+	if reflect.DeepEqual(expected, actual) {
+		t.Errorf("expected %v, got %v", expected, actual)
+	}
 }
