@@ -9,7 +9,4 @@ require (
 	github.com/lexcao/genapi v0.0.1
 )
 
-require (
-	github.com/jarcoal/httpmock v1.3.1 // indirect
-	golang.org/x/net v0.33.0 // indirect
-)
+require golang.org/x/net v0.33.0 // indirect

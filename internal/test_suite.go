@@ -10,8 +10,6 @@ import (
 	"reflect"
 	"testing"
 	"time"
-
-	"github.com/jarcoal/httpmock"
 )
 
 type HttpClientTester interface {
@@ -23,8 +21,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 	t.Run("MockClient", func(t *testing.T) {
 		setupMockClient := func(t *testing.T) HttpClient {
 			client := createClient()
-			httpmock.ActivateNonDefault(client.GetClient())
-			t.Cleanup(httpmock.DeactivateAndReset)
+			t.Cleanup(mockTransport.Activate(client.GetClient()))
 			return client
 		}
 
@@ -33,8 +30,8 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 				client := setupMockClient(t)
 				client.SetConfig(Config{BaseURL: "https://lexcao.com/genapi"})
 
-				httpmock.RegisterResponder("GET", "https://lexcao.com/genapi",
-					httpmock.NewStringResponder(200, "OK"))
+				mockTransport.RegisterResponder("GET", "https://lexcao.com/genapi",
+					mockTransport.stringResponder(200, "OK"))
 
 				resp, err := client.Do(&Request{Method: "GET"})
 
@@ -50,10 +47,10 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 					},
 				})
 
-				httpmock.RegisterResponder("GET", "/genapi",
+				mockTransport.RegisterResponder("GET", "/genapi",
 					func(req *http.Request) (*http.Response, error) {
 						AssertEqual(t, "genapi/test_suite", req.Header.Get("User-Agent"))
-						return httpmock.NewStringResponse(200, "OK"), nil
+						return mockTransport.stringResponse(200, "OK"), nil
 					})
 
 				resp, err := client.Do(&Request{Method: "GET", Path: "/genapi"})
@@ -76,7 +73,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						Path:   "/",
 					},
 					registerMock: func() {
-						httpmock.RegisterResponder("GET", "/", httpmock.NewStringResponder(200, "OK"))
+						mockTransport.RegisterResponder("GET", "/", mockTransport.stringResponder(200, "OK"))
 					},
 				},
 				{
@@ -89,7 +86,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						},
 					},
 					registerMock: func() {
-						httpmock.RegisterResponder("GET", "/test", httpmock.NewStringResponder(200, "OK"))
+						mockTransport.RegisterResponder("GET", "/test", mockTransport.stringResponder(200, "OK"))
 					},
 				},
 				{
@@ -103,7 +100,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						},
 					},
 					registerMock: func() {
-						httpmock.RegisterResponder("GET", "/?a=1&b=2", httpmock.NewStringResponder(200, "OK"))
+						mockTransport.RegisterResponder("GET", "/?a=1&b=2", mockTransport.stringResponder(200, "OK"))
 					},
 				},
 				{
@@ -115,11 +112,11 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						},
 					},
 					registerMock: func() {
-						httpmock.RegisterResponder("GET", "/header", func(req *http.Request) (*http.Response, error) {
+						mockTransport.RegisterResponder("GET", "/header", func(req *http.Request) (*http.Response, error) {
 							if req.Header.Get("User-Agent") != "genapi/test_suite" {
-								return httpmock.NewStringResponse(400, "Bad Request"), nil
+								return mockTransport.stringResponse(400, "Bad Request"), nil
 							}
-							return httpmock.NewStringResponse(200, "OK"), nil
+							return mockTransport.stringResponse(200, "OK"), nil
 						})
 					},
 				},
@@ -131,16 +128,16 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 						Body:   map[string]any{"name": "John"},
 					},
 					registerMock: func() {
-						httpmock.RegisterResponder("POST", "/body", func(req *http.Request) (*http.Response, error) {
+						mockTransport.RegisterResponder("POST", "/body", func(req *http.Request) (*http.Response, error) {
 							var body map[string]any
 							err := json.NewDecoder(req.Body).Decode(&body)
 							if err != nil {
-								return httpmock.NewStringResponse(500, "Internal Server Error"), err
+								return mockTransport.stringResponse(500, "Internal Server Error"), err
 							}
 							if body["name"] != "John" {
-								return httpmock.NewStringResponse(400, "Bad Request"), nil
+								return mockTransport.stringResponse(400, "Bad Request"), nil
 							}
-							return httpmock.NewStringResponse(200, "OK"), nil
+							return mockTransport.stringResponse(200, "OK"), nil
 						})
 					},
 				},
@@ -163,12 +160,12 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 					client := setupMockClient(t)
 					done := make(chan struct{})
 
-					httpmock.RegisterResponder("GET", "/", func(req *http.Request) (*http.Response, error) {
+					mockTransport.RegisterResponder("GET", "/", func(req *http.Request) (*http.Response, error) {
 						select {
 						case <-req.Context().Done():
 							return nil, req.Context().Err()
 						case <-done:
-							return httpmock.NewStringResponse(200, "OK"), nil
+							return mockTransport.stringResponse(200, "OK"), nil
 						}
 					})
 
@@ -189,8 +186,7 @@ func TestHttpClient(t *testing.T, createClient func() HttpClientTester) {
 		t.Run("HandleResponse", func(t *testing.T) {
 			client := setupMockClient(t)
 
-			given := map[string]string{"name": "John"}
-			httpmock.RegisterResponder("GET", "/", httpmock.NewJsonResponderOrPanic(200, given))
+			mockTransport.RegisterResponder("GET", "/", mockTransport.stringResponder(200, `{"name": "John"}`))
 
 			resp, err := client.Do(&Request{Method: "GET", Path: "/"})
 			RequireNoError(t, err)
