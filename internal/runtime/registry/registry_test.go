@@ -78,11 +78,20 @@ func TestRegistry(t *testing.T) {
 		})
 	})
 
-	t.Run("Panic", func(t *testing.T) {
+	t.Run("PanicsWithHelpfulMessage", func(t *testing.T) {
 		type NotImpl interface {
 			NotImplemented() string
 		}
-		assert.Panics(t, func() {
+		assert.PanicsWithValue(t, `
+genapi: no registration found for interface github.com/lexcao/genapi/internal/runtime/registry.NotImpl
+
+This usually means:
+1. You forgot to run 'go generate' on your API package
+2. The generated *.gen.go file wasn't imported
+3. There's a bug in code generation
+
+Run: go generate ./...
+`, func() {
 			New[NotImpl]()
 		})
 	})
