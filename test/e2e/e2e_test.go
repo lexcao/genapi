@@ -8,7 +8,8 @@ import (
 )
 
 func TestE2E(t *testing.T) {
-	client := genapi.New[HttpBin]()
+	client, err := genapi.New[HttpBin]()
+	require.NoError(t, err)
 
 	t.Run("get", func(t *testing.T) {
 		t.Parallel()

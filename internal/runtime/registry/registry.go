@@ -38,23 +38,24 @@ func Register[api any, client any](config ...any) {
 	}
 }
 
-func New[api any]() (api, any) {
+func New[api any]() (api, any, error) {
 	registry.lock.RLock()
 	defer registry.lock.RUnlock()
 
 	key := getKey[api]()
 	value, ok := registry.registration[key]
 	if !ok {
-		panic(fmt.Sprintf("no registration for key: %s", key))
+		var zero api
+		return zero, nil, fmt.Errorf("no registration found for interface %s.%s", key.pkg, key.name)
 	}
 
 	clientImpl := reflect.New(value.typ).Interface().(api)
 
 	if len(value.config) == 0 {
-		return clientImpl, nil
+		return clientImpl, nil, nil
 	}
 
-	return clientImpl, value.config[0]
+	return clientImpl, value.config[0], nil
 }
 
 func getKey[api any]() key {

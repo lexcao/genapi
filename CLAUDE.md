@@ -72,7 +72,7 @@ The Makefile automatically discovers and operates on all modules.
 Interfaces with `//go:generate` directives and genapi annotations become concrete clients:
 - Input: Interface with `@BaseURL`, `@GET`, `@POST` etc. annotations
 - Output: `*.gen.go` files with `Register` calls and client implementations
-- Runtime: `genapi.New[InterfaceType]()` creates configured client instances
+- Runtime: `genapi.New[InterfaceType]()` creates configured client instances (returns client and error)
 
 ## HTTP Client Architecture
 

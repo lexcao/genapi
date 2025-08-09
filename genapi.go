@@ -15,7 +15,7 @@ type HttpClientTester = internal.HttpClientTester
 type Option = runtime.Option
 type Options = runtime.Options
 
-func New[T Interface](opts ...Option) T {
+func New[T Interface](opts ...Option) (T, error) {
 	return runtime.New[T](opts...)
 }
 

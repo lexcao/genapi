@@ -14,9 +14,10 @@ func TestIntegration(t *testing.T) {
 	ts := httptest.NewServer(newServer(t))
 	t.Cleanup(ts.Close)
 
-	api := genapi.New[TestAPI](
+	api, err := genapi.New[TestAPI](
 		genapi.WithBaseURL(ts.URL),
 	)
+	require.NoError(t, err)
 
 	t.Run("get echo", func(t *testing.T) {
 		resp, err := api.GetEcho("123", "query")

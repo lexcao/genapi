@@ -1,7 +1,8 @@
 module github.com/lexcao/genapi/pkg/clients/resty
 
-go 1.21
-toolchain go1.24.1
+go 1.23.0
+
+toolchain go1.24.5
 
 replace github.com/lexcao/genapi => ../../../
 

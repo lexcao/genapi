@@ -19,10 +19,13 @@ import (
 )
 
 func main() {
-	client := genapi.New[api.GitHub](
+	client, err := genapi.New[api.GitHub](
 		genapi.WithHttpClient(resty.DefaultClient),           // default Resty client
         genapi.WithHttpClient(resty.New(resty_client.New())), // customized Resty client
 	)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 }
 ```
 

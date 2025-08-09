@@ -242,7 +242,10 @@ import (
 
 func main() {
     // Get API client instance
-    client := genapi.New[api.TodoAPI]()
+    client, err := genapi.New[api.TodoAPI]()
+    if err != nil {
+        log.Fatalf("Failed to create client: %v", err)
+    }
     
     // Fetch all todos
     todos, err := client.GetTodos(context.Background())
@@ -283,7 +286,10 @@ import (
 
 func main() {
     // Get API client instance
-    client := genapi.New[api.TodoAPI]()
+    client, err := genapi.New[api.TodoAPI]()
+    if err != nil {
+        log.Fatalf("Failed to create client: %v", err)
+    }
 
     // Customize standard Go http.Client
     customHttpClient := &http_client.Client{}
@@ -423,7 +429,10 @@ type UserAPI interface {
                                     <pre><code class="language-go">import "github.com/lexcao/genapi"
 
 // Create client
-client := genapi.New[api.UserAPI]()
+client, err := genapi.New[api.UserAPI]()
+if err != nil {
+    log.Fatalf("Failed to create client: %v", err)
+}
 
 // Use client with type safety
 users, err := client.GetUsers(context.Background())</code></pre>

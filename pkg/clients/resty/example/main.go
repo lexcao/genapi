@@ -12,9 +12,13 @@ import (
 )
 
 func main() {
-	client := genapi.New[api.GitHub](
+	client, err := genapi.New[api.GitHub](
 		genapi.WithHttpClient(resty.DefaultClient),
 	)
+	if err != nil {
+		fmt.Printf("failed to create client: %v\n", err)
+		return
+	}
 
 	contributors, err := client.Contributors(context.Background(), "lexcao", "genapi")
 	if err != nil {

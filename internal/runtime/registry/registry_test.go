@@ -30,26 +30,30 @@ func TestRegistry(t *testing.T) {
 	t.Run("Simple", func(t *testing.T) {
 		t.Run("Local", func(t *testing.T) {
 			Register[Doer, implDoer]()
-			got, _ := New[Doer]()
+			got, _, err := New[Doer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "done", got.Do())
 		})
 
 		t.Run("Config", func(t *testing.T) {
 			Register[Doer, implDoer](Config{Hello: "world"})
-			got, config := New[Doer]()
+			got, config, err := New[Doer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "done", got.Do())
 			assert.Equal(t, Config{Hello: "world"}, config)
 		})
 
 		t.Run("Pointer", func(t *testing.T) {
 			Register[Doer, *implDoer]()
-			got, _ := New[Doer]()
+			got, _, err := New[Doer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "done", got.Do())
 		})
 
 		t.Run("Package", func(t *testing.T) {
 			Register[simple.Valuer, *simple.ImplValuer]()
-			got, _ := New[simple.Valuer]()
+			got, _, err := New[simple.Valuer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "Value from simple", got.Value())
 		})
 	})
@@ -59,10 +63,12 @@ func TestRegistry(t *testing.T) {
 			Register[pkg1.Valuer, *pkg1.ImplValuer]()
 			Register[pkg2.Valuer, *pkg2.ImplValuer]()
 
-			got, _ := New[pkg1.Valuer]()
+			got, _, err := New[pkg1.Valuer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "Value from pkg1", got.Value())
 
-			got, _ = New[pkg2.Valuer]()
+			got, _, err = New[pkg2.Valuer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "Value from pkg2", got.Value())
 		})
 
@@ -70,20 +76,22 @@ func TestRegistry(t *testing.T) {
 			Register[pkg1_value.Valuer, *pkg1_value.ImplValuer]()
 			Register[pkg2_value.Valuer, *pkg2_value.ImplValuer]()
 
-			got, _ := New[pkg1_value.Valuer]()
+			got, _, err := New[pkg1_value.Valuer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "Value from pkg1.value", got.Value())
 
-			got, _ = New[pkg2_value.Valuer]()
+			got, _, err = New[pkg2_value.Valuer]()
+			assert.NoError(t, err)
 			assert.Equal(t, "Value from pkg2.value", got.Value())
 		})
 	})
 
-	t.Run("Panic", func(t *testing.T) {
+	t.Run("ErrorOnMissingRegistration", func(t *testing.T) {
 		type NotImpl interface {
 			NotImplemented() string
 		}
-		assert.Panics(t, func() {
-			New[NotImpl]()
-		})
+		_, _, err := New[NotImpl]()
+		assert.Error(t, err)
+		assert.Contains(t, err.Error(), "no registration found for interface")
 	})
 }

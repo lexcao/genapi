@@ -6,8 +6,12 @@ import (
 	"github.com/lexcao/genapi/pkg/clients/http"
 )
 
-func New[T internal.Interface](opts ...Option) T {
-	api, config := registry.New[T]()
+func New[T internal.Interface](opts ...Option) (T, error) {
+	api, config, err := registry.New[T]()
+	if err != nil {
+		var zero T
+		return zero, err
+	}
 
 	// build options
 	options := &Options{
@@ -22,7 +26,7 @@ func New[T internal.Interface](opts ...Option) T {
 
 	// finish initialization
 	api.SetHttpClient(options.client())
-	return api
+	return api, nil
 }
 
 func Register[api internal.Interface, client internal.Interface](config internal.Config) {

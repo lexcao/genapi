@@ -65,7 +65,10 @@ import (
 )
 
 func main() {
-    client := genapi.New[api.GitHub]()
+    client, err := genapi.New[api.GitHub]()
+    if err != nil {
+        log.Fatalf("failed to create client: %v", err)
+    }
 
     contributors, err := client.Contributors(context.Background(), "lexcao", "genapi")
     if err != nil {
@@ -94,9 +97,12 @@ import (
 func main() {
     httpClient := &http_client.Client{}
 
-    client := genapi.New[api.GitHub](
+    client, err := genapi.New[api.GitHub](
         genapi.WithHttpClient(http.New(httpClient))
     )
+    if err != nil {
+        log.Fatalf("failed to create client: %v", err)
+    }
 
     // or set client in the runtime
     client.SetHttpClient(httpClient)
@@ -123,10 +129,13 @@ import (
 )
 
 func main() {
-	client := genapi.New[api.GitHub](
+	client, err := genapi.New[api.GitHub](
 		genapi.WithHttpClient(resty.DefaultClient),           // default Resty client
         genapi.WithHttpClient(resty.New(resty_client.New())), // customized Resty client
 	)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
 }
 ```
 
@@ -162,7 +171,7 @@ func TestHttpClient(t *testing.T) {
 The client can be configured with various options:
 
 ```go
-client := genapi.New[api.GitHub](
+client, err := genapi.New[api.GitHub](
     // Set runtime client
     genapi.WithHttpClient(resty.DefaultClient),
 
@@ -174,6 +183,9 @@ client := genapi.New[api.GitHub](
         "Authorization": "Bearer " + token,
     }),
 )
+if err != nil {
+    log.Fatalf("failed to create client: %v", err)
+}
 ```
 
 ## Documentation
