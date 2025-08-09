@@ -45,7 +45,16 @@ func New[api any]() (api, any) {
 	key := getKey[api]()
 	value, ok := registry.registration[key]
 	if !ok {
-		panic(fmt.Sprintf("no registration for key: %s", key))
+		panic(fmt.Sprintf(`
+genapi: no registration found for interface %s.%s
+
+This usually means:
+1. You forgot to run 'go generate' on your API package
+2. The generated *.gen.go file wasn't imported
+3. There's a bug in code generation
+
+Run: go generate ./...
+`, key.pkg, key.name))
 	}
 
 	clientImpl := reflect.New(value.typ).Interface().(api)
