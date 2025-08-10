@@ -144,7 +144,7 @@ if ctx == nil {
 
 ### Phase 2 - Security & Quality
 - [x] Add input validation for tests (#4) - ❌ WON'T DO: Test-only utilities should remain simple
-- [ ] Implement URL validation (#5)
+- [x] Implement URL validation (#5) - ✅ FIXED: Added build-time validation + runtime caching for performance
 - [ ] Fix context handling (#9)
 - [ ] Standardize naming conventions (#10)
 
@@ -165,3 +165,4 @@ if ctx == nil {
 - Minimal dependencies are a positive aspect (reduces supply chain risk)
 - Focus on critical issues first as they affect core functionality
 - Consider creating issues for tracking individual improvements
+
