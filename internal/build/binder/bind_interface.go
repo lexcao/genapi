@@ -1,6 +1,9 @@
 package binder
 
 import (
+	"fmt"
+	"net/url"
+
 	"github.com/lexcao/genapi/internal/build/binder/printer"
 	"github.com/lexcao/genapi/internal/build/model"
 )
@@ -12,6 +15,14 @@ func BindInterface(iface *model.Interface) error {
 			headers[header.Key] = append(headers[header.Key], model.BindedVariable{
 				Variable: value,
 			})
+		}
+	}
+
+	// Validate base URL at build time before printing
+	if iface.Annotations.BaseURL.Value != "" {
+		if _, err := url.Parse(iface.Annotations.BaseURL.Value); err != nil {
+			return fmt.Errorf("invalid base URL '%s' in interface %s: %v", 
+				iface.Annotations.BaseURL.Value, iface.Name, err)
 		}
 	}
 

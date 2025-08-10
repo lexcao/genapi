@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -19,15 +20,24 @@ func New(client *http.Client) *HttpClient {
 }
 
 type HttpClient struct {
-	config internal.Config
-	client *http.Client
+	config  internal.Config
+	client  *http.Client
+	baseURL *url.URL
 }
 
 func (c *HttpClient) SetConfig(config internal.Config) {
 	if c.client == nil {
 		c.client = http.DefaultClient
 	}
+	
+	// Parse and cache base URL - panic on invalid since build-time validation should catch these
+	baseURL, err := url.Parse(config.BaseURL)
+	if err != nil {
+		panic(fmt.Sprintf("genapi: invalid base URL '%s': %v (this should have been caught at build time)", config.BaseURL, err))
+	}
+	
 	c.config = config
+	c.baseURL = baseURL
 }
 
 func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
@@ -45,7 +55,7 @@ func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
 		body = bytes.NewBuffer(bodyBytes)
 	}
 
-	url, err := resolveURL(c.config.BaseURL, req.Path, req.PathParams)
+	url, err := c.resolveURL(req.Path, req.PathParams)
 	if err != nil {
 		return nil, err
 	}
@@ -68,22 +78,17 @@ func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
 	return c.client.Do(httpReq)
 }
 
-func resolveURL(baseURL string, path string, pathParams map[string]string) (string, error) {
+func (c *HttpClient) resolveURL(path string, pathParams map[string]string) (string, error) {
 	var params []string
 	for key, value := range pathParams {
 		params = append(params, "{"+key+"}", url.PathEscape(value))
 	}
 	replacer := strings.NewReplacer(params...)
 
-	base, err := url.Parse(baseURL)
-	if err != nil {
-		return "", err
-	}
-
 	part, err := url.Parse(replacer.Replace(path))
 	if err != nil {
 		return "", err
 	}
 
-	return base.ResolveReference(part).String(), nil
+	return c.baseURL.ResolveReference(part).String(), nil
 }

@@ -43,4 +43,21 @@ func TestBindInterface(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, `genapi.Config{}`, iface.Bindings.Config)
 	})
+
+	t.Run("InvalidBaseURL", func(t *testing.T) {
+		iface := &model.Interface{
+			Name: "TestAPI",
+			Annotations: annotation.InterfaceAnnotations{
+				BaseURL: annotation.BaseURL{
+					Value: "://invalid-url",
+				},
+			},
+		}
+
+		err := BindInterface(iface)
+		require.Error(t, err)
+		require.Contains(t, err.Error(), "invalid base URL")
+		require.Contains(t, err.Error(), "://invalid-url")
+		require.Contains(t, err.Error(), "TestAPI")
+	})
 }

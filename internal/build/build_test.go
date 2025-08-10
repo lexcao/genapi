@@ -57,3 +57,79 @@ func TestRunWithCustomFileMode(t *testing.T) {
 
 	require.NoError(t, os.Remove(outputFile))
 }
+
+func TestRunWithInvalidBaseURL(t *testing.T) {
+	// Create test file with invalid base URL
+	testFile := "testdata/invalid_baseurl_test.go"
+	testContent := `package testdata
+
+import "github.com/lexcao/genapi"
+
+// TestAPI with invalid base URL for e2e validation test
+// @BaseURL("://invalid-url-format") 
+type TestAPI interface {
+	genapi.Interface
+	
+	// @GET("/test")
+	GetTest() error
+}`
+
+	err := os.WriteFile(testFile, []byte(testContent), 0600)
+	require.NoError(t, err)
+	defer func() {
+		os.Remove(testFile)
+		os.Remove("testdata/invalid_baseurl_test.gen.go") // cleanup any generated file
+	}()
+
+	// Test that build fails with our validation error
+	err = Run(Config{
+		Filename: testFile,
+		Output:   "testdata/invalid_baseurl_test.gen.go",
+	})
+	
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "invalid base URL")
+	require.Contains(t, err.Error(), "://invalid-url-format")
+	require.Contains(t, err.Error(), "TestAPI")
+	require.Contains(t, err.Error(), "missing protocol scheme")
+}
+
+func TestRunWithValidBaseURL(t *testing.T) {
+	// Create test file with valid base URL
+	testFile := "testdata/valid_baseurl_test.go"
+	testContent := `package testdata
+
+import "github.com/lexcao/genapi"
+
+// TestAPI with valid base URL for e2e validation test
+// @BaseURL("https://api.example.com") 
+type TestAPI interface {
+	genapi.Interface
+	
+	// @GET("/test")
+	GetTest() error
+}`
+
+	err := os.WriteFile(testFile, []byte(testContent), 0600)
+	require.NoError(t, err)
+	defer func() {
+		os.Remove(testFile)
+		os.Remove("testdata/valid_baseurl_test.gen.go")
+	}()
+
+	// Test that build succeeds with valid base URL
+	err = Run(Config{
+		Filename: testFile,
+		Output:   "testdata/valid_baseurl_test.gen.go",
+	})
+	
+	require.NoError(t, err)
+	
+	// Verify generated file contains correct base URL
+	generated, err := os.ReadFile("testdata/valid_baseurl_test.gen.go")
+	require.NoError(t, err)
+	
+	generatedContent := string(generated)
+	require.Contains(t, generatedContent, `BaseURL: "https://api.example.com"`)
+	require.Contains(t, generatedContent, "implTestAPI")
+}
