@@ -59,17 +59,20 @@ func TestRunWithCustomFileMode(t *testing.T) {
 }
 
 func TestRunWithInvalidBaseURL(t *testing.T) {
+	outputFile := "testdata/invalid_baseurl_test.gen.go"
+	
 	// Test that build fails with our validation error for invalid base URL
 	err := Run(Config{
 		Filename: "testdata/invalid_baseurl_test.go",
-		Output:   "testdata/invalid_baseurl_test.gen.go",
+		Output:   outputFile,
 	})
-	defer func() {
-		os.Remove("testdata/invalid_baseurl_test.gen.go") // cleanup any generated file
-	}()
 	
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "invalid base URL '://invalid-url-format' in interface TestAPI: parse \"://invalid-url-format\": missing protocol scheme")
+	
+	// Assert that no file is generated when build fails
+	_, statErr := os.Stat(outputFile)
+	require.True(t, os.IsNotExist(statErr), "output file should not exist when build fails")
 }
 
 func TestRunWithValidBaseURL(t *testing.T) {

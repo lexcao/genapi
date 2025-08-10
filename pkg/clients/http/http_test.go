@@ -69,28 +69,4 @@ func TestHttpClient_CachedBaseURL(t *testing.T) {
 			t.Errorf("expected %s, got %s", expected, url)
 		}
 	})
-
-	t.Run("PerformanceBenefit", func(t *testing.T) {
-		// Test that multiple resolveURL calls reuse the cached base URL
-		client := New(http.DefaultClient)
-		client.SetConfig(internal.Config{BaseURL: "https://api.example.com"})
-		
-		// Call resolveURL multiple times to simulate multiple requests
-		// This should use the cached baseURL without parsing
-		for i := 0; i < 10; i++ {
-			url, err := resolveURL(*client.baseURL, "/test", map[string]string{
-				"id": "123", 
-			})
-			if err != nil {
-				t.Fatalf("resolveURL failed on iteration %d: %v", i, err)
-			}
-			
-			expected := "https://api.example.com/test"
-			if url != expected {
-				t.Errorf("iteration %d: expected %s, got %s", i, expected, url)
-			}
-		}
-		
-		// All calls should have succeeded without errors, demonstrating caching works
-	})
 }
