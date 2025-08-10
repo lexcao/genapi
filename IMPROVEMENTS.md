@@ -143,7 +143,7 @@ if ctx == nil {
 - [x] Add file permission configuration (#3) - ✅ FIXED: Added configurable file permissions with secure default (0600)
 
 ### Phase 2 - Security & Quality
-- [ ] Add input validation for tests (#4)
+- [x] Add input validation for tests (#4) - ❌ WON'T DO: Test-only utilities should remain simple
 - [ ] Implement URL validation (#5)
 - [ ] Fix context handling (#9)
 - [ ] Standardize naming conventions (#10)
