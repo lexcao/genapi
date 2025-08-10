@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Filename string
 	Output   string
+	FileMode os.FileMode
 }
 
 func Run(config Config) error {
@@ -36,5 +37,9 @@ func Run(config Config) error {
 		output = config.Output
 	}
 
-	return os.WriteFile(output, content, 0644)
+	fileMode := config.FileMode
+	if fileMode == 0 {
+		fileMode = 0600
+	}
+	return os.WriteFile(output, content, fileMode)
 }

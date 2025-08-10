@@ -140,7 +140,7 @@ if ctx == nil {
 ### Phase 1 - Critical Fixes
 - [x] Fix HTTP client configuration bug (#1) - ✅ FIXED: SetConfig now preserves injected clients
 - [x] Replace registry panics with error handling (#2) - ✅ FIXED: Improved panic message with debugging guidance (maintains panics as appropriate for programming errors)
-- [ ] Add file permission configuration (#3)
+- [x] Add file permission configuration (#3) - ✅ FIXED: Added configurable file permissions with secure default (0600)
 
 ### Phase 2 - Security & Quality
 - [ ] Add input validation for tests (#4)
