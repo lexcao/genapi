@@ -12,14 +12,6 @@ func (c *HttpClient) GetClient() *http.Client {
 	return c.client
 }
 
-// GetBaseURL returns the cached base URL for testing purposes
-func (c *HttpClient) GetBaseURL() string {
-	if c.baseURL == nil {
-		return ""
-	}
-	return c.baseURL.String()
-}
-
 func TestHttpClient(t *testing.T) {
 	internal.TestHttpClient(t, func() internal.HttpClientTester { return DefaultClient })
 }
@@ -28,17 +20,11 @@ func TestHttpClient_CachedBaseURL(t *testing.T) {
 	t.Run("ValidBaseURL", func(t *testing.T) {
 		client := New(http.DefaultClient)
 		
-		// Should cache valid URL
+		// Should cache valid URL and work correctly
 		client.SetConfig(internal.Config{BaseURL: "https://api.example.com"})
 		
-		// Verify baseURL is cached
-		cachedURL := client.GetBaseURL()
-		if cachedURL != "https://api.example.com" {
-			t.Fatalf("expected cached URL to be https://api.example.com, got %s", cachedURL)
-		}
-		
 		// Test URL resolution works with cached URL
-		url, err := client.resolveURL("/test", nil)
+		url, err := resolveURL(*client.baseURL, "/test", nil)
 		if err != nil {
 			t.Fatalf("resolveURL failed: %v", err)
 		}
@@ -72,10 +58,15 @@ func TestHttpClient_CachedBaseURL(t *testing.T) {
 		// Empty base URL should be valid (parsed as relative URL)
 		client.SetConfig(internal.Config{BaseURL: ""})
 		
-		// Verify baseURL is cached (empty string should be cached as empty)
-		cachedURL := client.GetBaseURL()
-		if cachedURL != "" {
-			t.Fatalf("expected cached URL to be empty, got %s", cachedURL)
+		// Test URL resolution works with empty base URL
+		url, err := resolveURL(*client.baseURL, "/test", nil)
+		if err != nil {
+			t.Fatalf("resolveURL failed: %v", err)
+		}
+		
+		expected := "/test"
+		if url != expected {
+			t.Errorf("expected %s, got %s", expected, url)
 		}
 	})
 
@@ -87,7 +78,7 @@ func TestHttpClient_CachedBaseURL(t *testing.T) {
 		// Call resolveURL multiple times to simulate multiple requests
 		// This should use the cached baseURL without parsing
 		for i := 0; i < 10; i++ {
-			url, err := client.resolveURL("/test", map[string]string{
+			url, err := resolveURL(*client.baseURL, "/test", map[string]string{
 				"id": "123", 
 			})
 			if err != nil {
@@ -100,10 +91,6 @@ func TestHttpClient_CachedBaseURL(t *testing.T) {
 			}
 		}
 		
-		// Verify the cached URL is still correct
-		cachedURL := client.GetBaseURL()
-		if cachedURL != "https://api.example.com" {
-			t.Errorf("cached URL changed during multiple resolveURL calls: %s", cachedURL)
-		}
+		// All calls should have succeeded without errors, demonstrating caching works
 	})
 }

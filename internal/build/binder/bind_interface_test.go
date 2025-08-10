@@ -56,8 +56,6 @@ func TestBindInterface(t *testing.T) {
 
 		err := BindInterface(iface)
 		require.Error(t, err)
-		require.Contains(t, err.Error(), "invalid base URL")
-		require.Contains(t, err.Error(), "://invalid-url")
-		require.Contains(t, err.Error(), "TestAPI")
+		require.Equal(t, "invalid base URL '://invalid-url' in interface TestAPI: parse \"://invalid-url\": missing protocol scheme", err.Error())
 	})
 }

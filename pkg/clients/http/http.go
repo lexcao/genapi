@@ -55,7 +55,7 @@ func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
 		body = bytes.NewBuffer(bodyBytes)
 	}
 
-	url, err := c.resolveURL(req.Path, req.PathParams)
+	url, err := resolveURL(*c.baseURL, req.Path, req.PathParams)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (c *HttpClient) Do(req *internal.Request) (*internal.Response, error) {
 	return c.client.Do(httpReq)
 }
 
-func (c *HttpClient) resolveURL(path string, pathParams map[string]string) (string, error) {
+func resolveURL(baseURL url.URL, path string, pathParams map[string]string) (string, error) {
 	var params []string
 	for key, value := range pathParams {
 		params = append(params, "{"+key+"}", url.PathEscape(value))
@@ -90,5 +90,5 @@ func (c *HttpClient) resolveURL(path string, pathParams map[string]string) (stri
 		return "", err
 	}
 
-	return c.baseURL.ResolveReference(part).String(), nil
+	return baseURL.ResolveReference(part).String(), nil
 }

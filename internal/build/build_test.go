@@ -59,77 +59,33 @@ func TestRunWithCustomFileMode(t *testing.T) {
 }
 
 func TestRunWithInvalidBaseURL(t *testing.T) {
-	// Create test file with invalid base URL
-	testFile := "testdata/invalid_baseurl_test.go"
-	testContent := `package testdata
-
-import "github.com/lexcao/genapi"
-
-// TestAPI with invalid base URL for e2e validation test
-// @BaseURL("://invalid-url-format") 
-type TestAPI interface {
-	genapi.Interface
-	
-	// @GET("/test")
-	GetTest() error
-}`
-
-	err := os.WriteFile(testFile, []byte(testContent), 0600)
-	require.NoError(t, err)
-	defer func() {
-		os.Remove(testFile)
-		os.Remove("testdata/invalid_baseurl_test.gen.go") // cleanup any generated file
-	}()
-
-	// Test that build fails with our validation error
-	err = Run(Config{
-		Filename: testFile,
+	// Test that build fails with our validation error for invalid base URL
+	err := Run(Config{
+		Filename: "testdata/invalid_baseurl_test.go",
 		Output:   "testdata/invalid_baseurl_test.gen.go",
 	})
+	defer func() {
+		os.Remove("testdata/invalid_baseurl_test.gen.go") // cleanup any generated file
+	}()
 	
 	require.Error(t, err)
-	require.Contains(t, err.Error(), "invalid base URL")
-	require.Contains(t, err.Error(), "://invalid-url-format")
-	require.Contains(t, err.Error(), "TestAPI")
-	require.Contains(t, err.Error(), "missing protocol scheme")
+	require.Contains(t, err.Error(), "invalid base URL '://invalid-url-format' in interface TestAPI: parse \"://invalid-url-format\": missing protocol scheme")
 }
 
 func TestRunWithValidBaseURL(t *testing.T) {
-	// Create test file with valid base URL
-	testFile := "testdata/valid_baseurl_test.go"
-	testContent := `package testdata
-
-import "github.com/lexcao/genapi"
-
-// TestAPI with valid base URL for e2e validation test
-// @BaseURL("https://api.example.com") 
-type TestAPI interface {
-	genapi.Interface
-	
-	// @GET("/test")
-	GetTest() error
-}`
-
-	err := os.WriteFile(testFile, []byte(testContent), 0600)
-	require.NoError(t, err)
-	defer func() {
-		os.Remove(testFile)
-		os.Remove("testdata/valid_baseurl_test.gen.go")
-	}()
-
 	// Test that build succeeds with valid base URL
-	err = Run(Config{
-		Filename: testFile,
-		Output:   "testdata/valid_baseurl_test.gen.go",
+	err := Run(Config{
+		Filename: "testdata/valid_baseurl_test.go",
+		Output:   "testdata/valid_baseurl_test.gen.actual.go",
 	})
-	
 	require.NoError(t, err)
-	
-	// Verify generated file contains correct base URL
-	generated, err := os.ReadFile("testdata/valid_baseurl_test.gen.go")
+
+	actual, err := os.ReadFile("testdata/valid_baseurl_test.gen.actual.go")
 	require.NoError(t, err)
-	
-	generatedContent := string(generated)
-	require.Contains(t, generatedContent, `BaseURL: "https://api.example.com"`)
-	require.Contains(t, generatedContent, "implTestAPI")
+
+	expect, err := os.ReadFile("testdata/valid_baseurl_test.gen.expect.go")
+	require.NoError(t, err)
+
+	require.Equal(t, expect, actual)
+	require.NoError(t, os.Remove("testdata/valid_baseurl_test.gen.actual.go"))
 }
