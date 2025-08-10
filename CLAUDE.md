@@ -58,6 +58,71 @@ make website
 # or: go run ./website/server.go -dir ./website
 ```
 
+## GitHub Workflow
+
+### Remote Setup
+```bash
+# Add upstream remote (if working with a fork)
+git remote add upstream https://github.com/original-repo/genapi.git
+
+# Verify remotes
+git remote -v
+# origin    https://github.com/your-fork/genapi.git (fetch)
+# origin    https://github.com/your-fork/genapi.git (push) 
+# upstream  https://github.com/original-repo/genapi.git (fetch)
+# upstream  https://github.com/original-repo/genapi.git (push)
+```
+
+### Branch Management
+```bash
+# Sync with upstream before creating feature branches
+git checkout main
+git fetch upstream
+git merge upstream/main
+git push origin main
+
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Push feature branch to origin
+git push -u origin feature/your-feature-name
+```
+
+### Pull Request Workflow
+```bash
+# Before creating PR, ensure feature branch is up to date
+git checkout main
+git fetch upstream  
+git merge upstream/main
+git checkout feature/your-feature-name
+git rebase main
+
+# Run all checks before pushing
+make all
+
+# Push updated feature branch
+git push origin feature/your-feature-name --force-with-lease
+
+# Create PR targeting upstream/main
+gh pr create --base main --head your-fork:feature/your-feature-name \
+  --title "feat: your feature description" \
+  --body "Description of changes"
+```
+
+### Sync with Upstream
+```bash
+# Regular sync to stay current with upstream
+git checkout main
+git fetch upstream
+git merge upstream/main
+git push origin main
+
+# Update existing feature branches
+git checkout feature/your-feature-name  
+git rebase main
+git push origin feature/your-feature-name --force-with-lease
+```
+
 ## Module Structure
 
 This is a multi-module repository with separate `go.mod` files in:
@@ -77,3 +142,8 @@ Interfaces with `//go:generate` directives and genapi annotations become concret
 ## HTTP Client Architecture
 
 The system supports pluggable HTTP clients through the `HttpClient` interface. Default is `pkg/clients/http`, with `pkg/clients/resty` as an alternative. Custom implementations must implement `SetConfig(Config)` and `Do(*Request) (*Response, error)`.
+
+## Task Management
+
+For each task, you should propose a solution for review, DO NOT start coding without approval.
+
