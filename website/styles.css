@@ -1397,7 +1397,6 @@ html.dark-mode .wordmark-dark { display: block; }
 .docs-section .sidebar,
 .card,
 .release,
-.subpage,
 figure.code-block {
     min-width: 0;
     max-width: 100%;
@@ -1435,7 +1434,10 @@ figure.code-block pre,
 
 figure.code-block { margin: 1rem 0; }
 
-.subpage { padding: 2.5rem 0 4rem; }
+.subpage {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+}
 
 .lead {
     font-size: 1.125rem;
