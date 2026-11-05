@@ -72,6 +72,8 @@
 html {
     font-size: 16px;
     scroll-behavior: smooth;
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 body {
@@ -80,6 +82,8 @@ body {
     color: var(--text);
     background-color: var(--bg);
     transition: var(--transition);
+    overflow-x: clip;
+    max-width: 100%;
 }
 
 a {
@@ -448,13 +452,21 @@ header {
 
 .hero .container {
     display: grid;
-    grid-template-columns: 0.8fr 1.2fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 3rem;
     align-items: center;
 }
 
 .hero-content {
-    max-width: 540px;
+    max-width: 34rem;
+}
+
+.hero h1 {
+    font-size: clamp(1.7rem, 2.5vw, 2.25rem);
+    text-wrap: balance;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    line-break: auto;
 }
 
 .hero-description {
@@ -539,9 +551,10 @@ header {
     background-color: transparent;
     border-radius: 0 0 8px 8px;
     height: auto;
-    display: flex;
-    overflow-y: hidden;
-    overflow-x: auto;
+    display: block;
+    overflow: auto;
+    max-width: 100%;
+    min-width: 0;
     transition: var(--transition);
     font-size: 0.8rem;
 }
@@ -555,7 +568,9 @@ header {
     font-family: var(--font-mono);
     font-size: 0.82rem;
     line-height: 1.4;
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
     overflow: visible;
 }
 
@@ -1403,8 +1418,11 @@ figure.code-block {
     flex: 1;
 }
 
-.terminal-body,
-.terminal-body pre,
+.terminal-body {
+    overflow: auto;
+    max-width: 100%;
+}
+
 figure.code-block pre,
 .code-example pre,
 .tab-pane pre,

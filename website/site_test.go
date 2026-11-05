@@ -156,8 +156,32 @@ func TestStaticSite(t *testing.T) {
 	if strings.Count(sitemap, `hreflang="en"`) != 8 || strings.Count(sitemap, `hreflang="zh-CN"`) != 8 || strings.Count(sitemap, `hreflang="x-default"`) != 8 {
 		t.Fatal("sitemap hreflang counts")
 	}
-	robots := string(mustRead(t, filepath.Join(dir, "robots.txt")))
-	assertContains(t, "robots.txt", robots, "Sitemap: https://lexcao.io/genapi/sitemap.xml")
+	if _, err := os.Stat(filepath.Join(dir, "robots.txt")); !os.IsNotExist(err) {
+		t.Fatal("website/robots.txt must not be published")
+	}
+	for i, page := range pages {
+		body := bodies[i]
+		const marker = `<link rel="canonical" href="`
+		start := strings.Index(body, marker)
+		if start < 0 {
+			t.Fatalf("%s missing canonical", page.path)
+		}
+		rest := body[start+len(marker):]
+		end := strings.Index(rest, `">`)
+		if end < 0 {
+			t.Fatalf("%s canonical unclosed", page.path)
+		}
+		canonical := rest[:end]
+		if !strings.HasSuffix(canonical, "/") {
+			t.Fatalf("%s canonical %q has no trailing slash", page.path, canonical)
+		}
+		if canonical != page.canonical {
+			t.Fatalf("%s canonical %q, want %q", page.path, canonical, page.canonical)
+		}
+		if !strings.Contains(sitemap, "<loc>"+canonical+"</loc>") {
+			t.Fatalf("sitemap missing loc for canonical %s", canonical)
+		}
+	}
 }
 
 func mustRead(t *testing.T, path string) []byte {
