@@ -1,29 +1,32 @@
 :root {
-    /* Light Theme */
-    --light-bg: #f8f9fa;
-    --light-bg-secondary: #ffffff;
-    --light-text: #212529;
-    --light-text-secondary: #6c757d;
-    --light-border: #e9ecef;
-    --light-primary: #3949ab;
-    --light-primary-hover: #303f9f;
-    --light-secondary: #7986cb;
-    --light-code-bg: #f5f7f9;
-    --light-code-text: #24292e;
-    --light-card-bg: #ffffff;
-    
-    /* Dark Theme */
-    --dark-bg: #121212;
-    --dark-bg-secondary: #1e1e1e;
-    --dark-text: #e9e9e9;
-    --dark-text-secondary: #adb5bd;
-    --dark-border: #2d2d2d;
-    --dark-primary: #7986cb;
-    --dark-primary-hover: #5c6bc0;
-    --dark-secondary: #3949ab;
-    --dark-code-bg: #1a1a1a;
-    --dark-code-text: #f8f8f2;
-    --dark-card-bg: #1e1e1e;
+    /* Light: warm paper and ink. Go blue is a signal, not the fill. */
+    --light-bg: #f4f1ea;
+    --light-bg-secondary: #fbf9f4;
+    --light-text: #161411;
+    --light-text-secondary: #4a453c;
+    --light-border: #e3dcd0;
+    --light-primary: #0a6278;
+    --light-primary-hover: #084e60;
+    --light-secondary: #0a6278;
+    --light-code-bg: #fbf9f4;
+    --light-code-text: #161411;
+    --light-card-bg: #fbf9f4;
+    --light-ink: #161411;
+    --signal: #00add8;
+
+    /* Dark: the same paper inverted. */
+    --dark-bg: #12110e;
+    --dark-bg-secondary: #1b1916;
+    --dark-text: #f3efe6;
+    --dark-text-secondary: #c9c0b2;
+    --dark-border: #2e2a24;
+    --dark-primary: #7fd4e8;
+    --dark-primary-hover: #b7eaf4;
+    --dark-secondary: #7fd4e8;
+    --dark-code-bg: #1b1916;
+    --dark-code-text: #f3efe6;
+    --dark-card-bg: #1b1916;
+    --dark-ink: #f3efe6;
     
     /* Default (Light) */
     --bg: var(--light-bg);
@@ -37,6 +40,7 @@
     --code-bg: var(--light-code-bg);
     --code-text: var(--light-code-text);
     --card-bg: var(--light-card-bg);
+    --ink: var(--light-ink);
     
     /* Constants */
     --radius: 8px;
@@ -60,6 +64,7 @@
     --code-bg: var(--dark-code-bg);
     --code-text: var(--dark-code-text);
     --card-bg: var(--dark-card-bg);
+    --ink: var(--dark-ink);
 }
 
 /* Base Styles */
@@ -1498,15 +1503,16 @@ figure.code-block { margin: 1rem 0; }
     margin-left: 0.4rem;
     padding: 0.1rem 0.55rem;
     border-radius: 999px;
-    background: var(--primary);
-    color: #fff;
+    background: var(--ink);
+    color: var(--bg);
     font-size: 0.75rem;
     vertical-align: middle;
 }
 
 .note {
-    border-left: 4px solid var(--primary);
-    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
     padding: 0.9rem 1rem;
     margin: 1rem 0 1.5rem;
 }
@@ -1592,4 +1598,209 @@ a:focus-visible, button:focus-visible {
     .hero-description { font-size: 1.05rem; }
     .header-container { gap: 0.4rem; }
     .lang-switch a { padding: 0.15rem 0.4rem; }
+}
+
+/* Ink and signal */
+::selection {
+    background: var(--signal);
+    color: #141311;
+}
+
+html {
+    scrollbar-color: var(--border) transparent;
+}
+
+h1 {
+    letter-spacing: -0.03em;
+}
+
+.lead, .hero-description, .section-desc, .reasons dd, .step-content p, .subpage > p {
+    max-width: 68ch;
+}
+
+.btn-primary {
+    background: var(--ink);
+    color: var(--bg);
+}
+
+.btn-primary:hover {
+    background: var(--text);
+    color: var(--bg);
+}
+
+.btn-secondary {
+    background: transparent;
+}
+
+.signal-row {
+    margin: 0 0 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    letter-spacing: 0.04em;
+}
+
+.sheet-rule {
+    height: 2px;
+    background: var(--signal);
+    transform-origin: left center;
+}
+
+.terminal-header {
+    justify-content: space-between;
+    gap: 1rem;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+}
+
+.sheet-source {
+    margin-left: auto;
+    font-size: 0.82rem;
+}
+
+.hero-terminal {
+    background: var(--card-bg);
+    border-color: var(--border);
+    box-shadow: 0 18px 40px rgba(22, 20, 17, 0.08);
+}
+
+.dark-mode .hero-terminal {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.dark-mode .btn-github {
+    background: var(--ink);
+    color: var(--bg);
+}
+
+.dark-mode .btn-github svg {
+    fill: var(--bg);
+}
+
+.dark-mode .btn-github:hover {
+    background: #fff;
+    color: #161411;
+}
+
+.dark-mode .btn-secondary {
+    border-color: #6d655b;
+    color: var(--text);
+}
+
+.reasons {
+    display: grid;
+    gap: 0;
+    margin: 0;
+}
+
+.reasons > div {
+    display: grid;
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+    gap: 1.5rem 3rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.reasons > div:last-child {
+    border-bottom: 1px solid var(--border);
+}
+
+.reasons dt {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.reasons dd {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.section-title {
+    text-align: start;
+    margin-bottom: 1.25rem;
+}
+
+.why-section .section-title,
+.examples-section .section-title,
+.getting-started-section .section-title,
+.docs-section > .section-title {
+    margin-bottom: 2.5rem;
+}
+
+.code-header {
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+}
+
+.code-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.copy-btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    font: inherit;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+html[lang="en"] .label-zh,
+html[lang="zh-CN"] .label-en {
+    display: none;
+}
+
+.tab-header {
+    background: transparent;
+}
+
+.tab-button {
+    min-height: 44px;
+}
+
+pre[class*="language-"],
+code[class*="language-"] {
+    background: var(--code-bg) !important;
+    text-shadow: none !important;
+}
+
+@media (max-width: 720px) {
+    .reasons > div {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .sheet-rule {
+        animation: draw-rule 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .main-nav a::after {
+        transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sheet-rule,
+    .btn,
+    .main-nav a::after,
+    html {
+        animation: none;
+        scroll-behavior: auto;
+        transition: none;
+    }
+}
+
+@keyframes draw-rule {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
 }

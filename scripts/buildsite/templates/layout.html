@@ -174,7 +174,7 @@
 
 {{define "snippet"}}
 <figure class="code-block">
-    <figcaption class="code-header"><span>{{.Caption}}</span>{{if .BlobURL}}<a href="{{.BlobURL}}">GitHub</a>{{end}}</figcaption>
+    <figcaption class="code-header"><span>{{.Caption}}</span><span class="code-actions">{{if .BlobURL}}<a href="{{.BlobURL}}"><span class="label-en">Source</span><span class="label-zh">源文件</span></a>{{end}}<button type="button" class="copy-btn" data-copy><span class="label-en">Copy</span><span class="label-zh">复制</span></button></span></figcaption>
     <pre><code class="language-{{.Lang}}">{{.Body}}</code></pre>
 </figure>
 {{end}}

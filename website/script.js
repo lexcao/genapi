@@ -77,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const header = document.querySelector('header');
             const headerHeight = header ? header.offsetHeight : 0;
             const top = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
-            window.scrollTo({ top, behavior: 'smooth' });
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
         });
     }
 
@@ -91,6 +92,26 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.add('active');
             const target = document.querySelector(link.getAttribute('href'));
             if (target) target.classList.add('active');
+        });
+    }
+
+    const copyButtons = document.querySelectorAll('[data-copy]');
+    for (const button of copyButtons) {
+        button.addEventListener('click', async () => {
+            const figure = button.closest('figure');
+            const code = figure ? figure.querySelector('code') : null;
+            if (!code) return;
+            const text = code.textContent || '';
+            try {
+                await navigator.clipboard.writeText(text);
+            } catch (e) {
+                return;
+            }
+            const previous = button.textContent;
+            button.textContent = button.lang === 'zh-CN' || document.documentElement.lang === 'zh-CN' ? '已复制' : 'Copied';
+            window.setTimeout(() => {
+                button.textContent = previous;
+            }, 1400);
         });
     }
 });

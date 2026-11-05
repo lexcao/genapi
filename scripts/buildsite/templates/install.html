@@ -2,36 +2,49 @@
 <div class="container subpage">
     {{if .Crumbs}}<nav class="breadcrumbs" aria-label="{{tr .LangID "Breadcrumb" "面包屑"}}">{{range $i, $c := .Crumbs}}{{if $i}}<span aria-hidden="true"> / </span>{{end}}<a href="{{$c.Href}}">{{$c.Name}}</a>{{end}}</nav>{{end}}
     <h1>{{.H1}}</h1>
-    <p class="lead" id="intro">{{.Intro}}</p>
+    <p class="lead" id="intro">{{tr .LangID "Add the module, then generate the client. Go 1.18 or higher." "添加模块，然后生成客户端。需要 Go 1.18 或更高版本。"}}</p>
 
-    <h2>{{tr .LangID "Module" "模块"}}</h2>
-    <p>{{tr .LangID "The root module path and Go version are the first lines of go.mod. The README also says Go 1.18 or higher." "模块路径和 Go 版本是 go.mod 开头的几行。README 也写了 Go 1.18 or higher。"}}</p>
-    {{template "snippet" .Snippets.GoMod}}
-    {{template "snippet" .Snippets.GoVersionDoc}}
-    <p>{{tr .LangID "Install the module with the command in the README Installation section:" "用 README Installation 一节里的命令安装模块："}}</p>
-    {{template "snippet" .Snippets.GoGet}}
+    <h2>{{tr .LangID "Add the module" "添加模块"}}</h2>
+    <p>{{tr .LangID "The module path is github.com/lexcao/genapi. go.mod names Go 1.18." "模块路径是 github.com/lexcao/genapi。go.mod 写的是 Go 1.18。"}}</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go.mod</span><a href="{{.Snippets.GoMod.BlobURL}}">{{tr .LangID "Source" "源文件"}}</a></figcaption>
+        <pre><code class="language-text">{{.Snippets.GoMod.Body}}</code></pre>
+    </figure>
+    <p>{{tr .LangID "From your module directory:" "在你的模块目录里执行："}}</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go get</span><button type="button" class="copy-btn" data-copy>{{tr .LangID "Copy" "复制"}}</button></figcaption>
+        <pre><code class="language-bash">go get github.com/lexcao/genapi</code></pre>
+    </figure>
 
     <h2>{{tr .LangID "Generate the client" "生成客户端"}}</h2>
-    <p>{{tr .LangID "The README quick start invokes the generator with go run from a //go:generate line, then runs go generate. The line below is copied verbatim, including its spacing." "README 快速开始通过 //go:generate 里的 go run 调用生成器，然后运行 go generate。下面这行按原文复制，包括其中的空格。"}}</p>
-    {{template "snippet" .Snippets.GoDirective}}
-    {{template "snippet" .Snippets.GoGenerate}}
-    <p>{{tr .LangID "The repository Makefile generate target runs go generate for every module:" "仓库 Makefile 的 generate 目标会对每个模块运行 go generate："}}</p>
-    {{template "snippet" .Snippets.MakeGen}}
+    <p>{{tr .LangID "Put this directive on the file that declares the interface, then run go generate." "把下面这行放在声明 interface 的文件上，然后运行 go generate。"}}</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>//go:generate</span><button type="button" class="copy-btn" data-copy>{{tr .LangID "Copy" "复制"}}</button></figcaption>
+        <pre><code class="language-go">{{.Snippets.GoDirective.Body}}</code></pre>
+    </figure>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go generate</span><button type="button" class="copy-btn" data-copy>{{tr .LangID "Copy" "复制"}}</button></figcaption>
+        <pre><code class="language-bash">go generate ./...</code></pre>
+    </figure>
+    <p>{{tr .LangID "Inside a clone of this repository, make generate does the same job." "在本仓库的克隆里，make generate 做的是同一件事。"}}</p>
 
     <h2>{{tr .LangID "Optional Resty client" "可选的 Resty 客户端"}}</h2>
-    <p>{{tr .LangID "Resty lives in its own module. Its go.mod sets the Go version and toolchain below. Both READMEs document a go get command." "Resty 是单独的模块。它的 go.mod 设置了下面的 Go 版本和 toolchain。两份 README 都写了 go get 命令。"}}</p>
-    {{template "snippet" .Snippets.RestyMod}}
-    {{template "snippet" .Snippets.RestyGet}}
-    {{template "snippet" .Snippets.RestyGetBare}}
+    <p>{{tr .LangID "Resty is a separate module. Its go.mod requires Go 1.23.0." "Resty 是独立模块。它的 go.mod 要求 Go 1.23.0。"}}</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go get</span><button type="button" class="copy-btn" data-copy>{{tr .LangID "Copy" "复制"}}</button></figcaption>
+        <pre><code class="language-bash">go get github.com/lexcao/genapi/pkg/clients/resty</code></pre>
+    </figure>
 
     <h2>go install</h2>
-    <div class="note">
-        <p>{{tr .LangID "README.md, pkg/clients/resty/README.md, go.mod, and pkg/clients/resty/go.mod do not contain a go install command. The generator is started with go run, from the //go:generate line quoted above." "README.md、pkg/clients/resty/README.md、go.mod 和 pkg/clients/resty/go.mod 里没有 go install 命令。生成器由上面引用的 //go:generate 行里的 go run 启动。"}}</p>
-    </div>
+    <p class="note">{{tr .LangID "There is no go install command. The files that document installation do not contain one. Start the generator with go run, from the //go:generate line above." "没有 go install 命令。写明安装方式的文件里都没有这条命令。生成器由上面的 //go:generate 行里的 go run 启动。"}}</p>
 
-    <h2>{{tr .LangID "Clone the repository" "克隆仓库"}}</h2>
-    <p>{{tr .LangID "Working on genapi itself uses the clone commands from the README Development section. Installing the module does not require a clone." "改 genapi 本身时，用 README Development 一节里的克隆命令。安装模块不需要克隆。"}}</p>
-    {{template "snippet" .Snippets.Clone}}
+    <h2>{{tr .LangID "Work on genapi" "改 genapi 本身"}}</h2>
+    <p>{{tr .LangID "Installing the module does not require a clone. To change genapi, clone it:" "安装模块不需要克隆。要改 genapi，先克隆："}}</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>git clone</span><button type="button" class="copy-btn" data-copy>{{tr .LangID "Copy" "复制"}}</button></figcaption>
+        <pre><code class="language-bash">git clone https://github.com/lexcao/genapi.git
+cd genapi</code></pre>
+    </figure>
 
     <ul class="pager">
         <li><a href="{{.HrefExamples}}">{{tr .LangID "Examples" "示例"}}</a></li>

@@ -133,94 +133,51 @@
 <div class="container subpage">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">genapi</a><span aria-hidden="true"> / </span><a href="./">Install</a></nav>
     <h1>Install</h1>
-    <p class="lead" id="intro">Commands on this page are copied from README.md, pkg/clients/resty/README.md, the Makefile, and the go.mod files.</p>
+    <p class="lead" id="intro">Add the module, then generate the client. Go 1.18 or higher.</p>
 
-    <h2>Module</h2>
-    <p>The root module path and Go version are the first lines of go.mod. The README also says Go 1.18 or higher.</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>go.mod (lines 1–3)</span><a href="https://github.com/lexcao/genapi/blob/main/go.mod#L1-L3">GitHub</a></figcaption>
-    <pre><code class="language-text">module github.com/lexcao/genapi
+    <h2>Add the module</h2>
+    <p>The module path is github.com/lexcao/genapi. go.mod names Go 1.18.</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go.mod</span><a href="https://github.com/lexcao/genapi/blob/main/go.mod#L1-L3">Source</a></figcaption>
+        <pre><code class="language-text">module github.com/lexcao/genapi
 
 go 1.18</code></pre>
-</figure>
-
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (line 241)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L241">GitHub</a></figcaption>
-    <pre><code class="language-text">- Go 1.18 or higher</code></pre>
-</figure>
-
-    <p>Install the module with the command in the README Installation section:</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (line 23)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L23">GitHub</a></figcaption>
-    <pre><code class="language-bash">go get github.com/lexcao/genapi</code></pre>
-</figure>
-
+    </figure>
+    <p>From your module directory:</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go get</span><button type="button" class="copy-btn" data-copy>Copy</button></figcaption>
+        <pre><code class="language-bash">go get github.com/lexcao/genapi</code></pre>
+    </figure>
 
     <h2>Generate the client</h2>
-    <p>The README quick start invokes the generator with go run from a //go:generate line, then runs go generate. The line below is copied verbatim, including its spacing.</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (line 35)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L35">GitHub</a></figcaption>
-    <pre><code class="language-go">//go:generate go run github.com/lexcao/genapi/cmd/genapi  -file $GOFILE</code></pre>
-</figure>
-
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (line 55)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L55">GitHub</a></figcaption>
-    <pre><code class="language-bash">$ go generate ./api</code></pre>
-</figure>
-
-    <p>The repository Makefile generate target runs go generate for every module:</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>Makefile (lines 22–23)</span><a href="https://github.com/lexcao/genapi/blob/main/Makefile#L22-L23">GitHub</a></figcaption>
-    <pre><code class="language-text">generate:
-	go generate ./...</code></pre>
-</figure>
-
+    <p>Put this directive on the file that declares the interface, then run go generate.</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>//go:generate</span><button type="button" class="copy-btn" data-copy>Copy</button></figcaption>
+        <pre><code class="language-go">//go:generate go run github.com/lexcao/genapi/cmd/genapi  -file $GOFILE</code></pre>
+    </figure>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go generate</span><button type="button" class="copy-btn" data-copy>Copy</button></figcaption>
+        <pre><code class="language-bash">go generate ./...</code></pre>
+    </figure>
+    <p>Inside a clone of this repository, make generate does the same job.</p>
 
     <h2>Optional Resty client</h2>
-    <p>Resty lives in its own module. Its go.mod sets the Go version and toolchain below. Both READMEs document a go get command.</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>pkg/clients/resty/go.mod (lines 1–5)</span><a href="https://github.com/lexcao/genapi/blob/main/pkg/clients/resty/go.mod#L1-L5">GitHub</a></figcaption>
-    <pre><code class="language-text">module github.com/lexcao/genapi/pkg/clients/resty
-
-go 1.23.0
-
-toolchain go1.24.5</code></pre>
-</figure>
-
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (line 111)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L111">GitHub</a></figcaption>
-    <pre><code class="language-bash">$ go get github.com/lexcao/genapi/pkg/clients/resty</code></pre>
-</figure>
-
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>pkg/clients/resty/README.md (line 7)</span><a href="https://github.com/lexcao/genapi/blob/main/pkg/clients/resty/README.md#L7">GitHub</a></figcaption>
-    <pre><code class="language-bash">go get github.com/lexcao/genapi/pkg/clients/resty</code></pre>
-</figure>
-
+    <p>Resty is a separate module. Its go.mod requires Go 1.23.0.</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>go get</span><button type="button" class="copy-btn" data-copy>Copy</button></figcaption>
+        <pre><code class="language-bash">go get github.com/lexcao/genapi/pkg/clients/resty</code></pre>
+    </figure>
 
     <h2>go install</h2>
-    <div class="note">
-        <p>README.md, pkg/clients/resty/README.md, go.mod, and pkg/clients/resty/go.mod do not contain a go install command. The generator is started with go run, from the //go:generate line quoted above.</p>
-    </div>
+    <p class="note">There is no go install command. The files that document installation do not contain one. Start the generator with go run, from the //go:generate line above.</p>
 
-    <h2>Clone the repository</h2>
-    <p>Working on genapi itself uses the clone commands from the README Development section. Installing the module does not require a clone.</p>
-    
-<figure class="code-block">
-    <figcaption class="code-header"><span>README.md (lines 248–249)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L248-L249">GitHub</a></figcaption>
-    <pre><code class="language-bash">$ git clone https://github.com/lexcao/genapi.git
-$ cd genapi</code></pre>
-</figure>
-
+    <h2>Work on genapi</h2>
+    <p>Installing the module does not require a clone. To change genapi, clone it:</p>
+    <figure class="code-block">
+        <figcaption class="code-header"><span>git clone</span><button type="button" class="copy-btn" data-copy>Copy</button></figcaption>
+        <pre><code class="language-bash">git clone https://github.com/lexcao/genapi.git
+cd genapi</code></pre>
+    </figure>
 
     <ul class="pager">
         <li><a href="../examples/">Examples</a></li>

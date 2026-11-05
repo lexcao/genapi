@@ -123,8 +123,11 @@ func TestStaticSite(t *testing.T) {
 	if !strings.Contains(bodies[2], "go get github.com/lexcao/genapi") {
 		t.Fatal("install page missing go get")
 	}
-	if !strings.Contains(bodies[2], "do not contain a go install command") {
+	if !strings.Contains(bodies[2], "There is no go install command") {
 		t.Fatal("install page missing the go install note")
+	}
+	if strings.Contains(bodies[2], "README.md (line") {
+		t.Fatal("install page still cites README line numbers")
 	}
 
 	sitemap := string(mustRead(t, filepath.Join(dir, "sitemap.xml")))

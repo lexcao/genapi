@@ -9,28 +9,20 @@
                 <a href="{{.HrefStart}}" class="btn btn-primary">{{tr .LangID "Get started" "开始使用"}}</a>
                 <a href="{{.HrefExamples}}" class="btn btn-secondary">{{tr .LangID "View examples" "查看示例"}}</a>
             </div>
+            <p class="signal-row">HTTP <span aria-hidden="true">·</span> {{tr .LangID "Declarative" "声明式"}} <span aria-hidden="true">·</span> Go</p>
             <p class="source-note"><a href="{{.BlogURL}}">{{tr .LangID "Read the blog post" "阅读博客文章"}}</a></p>
-            <div class="hero-features">
-                <div class="feature-tag">HTTP</div>
-                <div class="feature-tag">{{tr .LangID "Declarative" "声明式"}}</div>
-                <div class="feature-tag">Go</div>
-            </div>
         </div>
         <div class="hero-code">
             <div class="hero-terminal">
+                <div class="sheet-rule" aria-hidden="true"></div>
                 <div class="terminal-header">
-                    <div class="terminal-buttons" aria-hidden="true">
-                        <span class="terminal-button close"></span>
-                        <span class="terminal-button minimize"></span>
-                        <span class="terminal-button maximize"></span>
-                    </div>
                     <div class="terminal-title">{{.Snippets.APIGo.Caption}}</div>
+                    <a class="sheet-source" href="{{.Snippets.APIGo.BlobURL}}">{{tr .LangID "Source" "源文件"}}</a>
                 </div>
                 <div class="terminal-body">
                     <pre><code class="language-go">{{.Snippets.APIGo.Body}}</code></pre>
                 </div>
             </div>
-            <p class="source-note"><a href="{{.Snippets.APIGo.BlobURL}}">{{.Snippets.APIGo.Caption}}</a></p>
         </div>
     </div>
 </section>
@@ -61,24 +53,24 @@
 <section id="why-genapi" class="why-section">
     <div class="container">
         <h2 class="section-title">{{tr .LangID "Why genapi?" "为什么用 genapi"}}</h2>
-        <div class="cards-grid">
-            <div class="card">
-                <h3>{{tr .LangID "Less boilerplate" "少写样板代码"}}</h3>
-                <p>{{tr .LangID "The interface is what you maintain. go generate writes the method bodies that call the HTTP client." "你维护的是 interface。go generate 写下调用 HTTP 客户端的方法体。"}}</p>
+        <dl class="reasons">
+            <div>
+                <dt>{{tr .LangID "Less boilerplate" "少写样板代码"}}</dt>
+                <dd>{{tr .LangID "The interface is what you maintain. go generate writes the method bodies that call the HTTP client." "你维护的是 interface。go generate 写下调用 HTTP 客户端的方法体。"}}</dd>
             </div>
-            <div class="card">
-                <h3>{{tr .LangID "Type safety" "类型检查"}}</h3>
-                <p>{{tr .LangID "Arguments and results are ordinary Go types, checked when the package compiles." "参数和返回值都是普通 Go 类型，在编译这个包时检查。"}}</p>
+            <div>
+                <dt>{{tr .LangID "Type safety" "类型检查"}}</dt>
+                <dd>{{tr .LangID "Arguments and results are ordinary Go types, checked when the package compiles." "参数和返回值都是普通 Go 类型，在编译这个包时检查。"}}</dd>
             </div>
-            <div class="card">
-                <h3>{{tr .LangID "Interface and implementation" "接口与实现"}}</h3>
-                <p>{{tr .LangID "examples/github keeps the interface in api.go and the generated implementation in api.gen.go." "examples/github 把 interface 放在 api.go，把生成的实现放在 api.gen.go。"}}</p>
+            <div>
+                <dt>{{tr .LangID "Interface and implementation" "接口与实现"}}</dt>
+                <dd>{{tr .LangID "examples/github keeps the interface in api.go and the generated implementation in api.gen.go." "examples/github 把 interface 放在 api.go，把生成的实现放在 api.gen.go。"}}</dd>
             </div>
-            <div class="card">
-                <h3>{{tr .LangID "Runtime HTTP client" "运行时的 HTTP 客户端"}}</h3>
-                <p>{{tr .LangID "pkg/clients/resty/example/main.go passes resty.DefaultClient to genapi.WithHttpClient." "pkg/clients/resty/example/main.go 把 resty.DefaultClient 传给 genapi.WithHttpClient。"}}</p>
+            <div>
+                <dt>{{tr .LangID "Runtime HTTP client" "运行时的 HTTP 客户端"}}</dt>
+                <dd>{{tr .LangID "pkg/clients/resty/example/main.go passes resty.DefaultClient to genapi.WithHttpClient." "pkg/clients/resty/example/main.go 把 resty.DefaultClient 传给 genapi.WithHttpClient。"}}</dd>
             </div>
-        </div>
+        </dl>
     </div>
 </section>
 
