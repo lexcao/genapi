@@ -1,0 +1,21 @@
+{{define "content"}}
+<div class="container subpage">
+    {{if .Crumbs}}<nav class="breadcrumbs" aria-label="{{tr .LangID "Breadcrumb" "面包屑"}}">{{range $i, $c := .Crumbs}}{{if $i}}<span aria-hidden="true"> / </span>{{end}}<a href="{{$c.Href}}">{{$c.Name}}</a>{{end}}</nav>{{end}}
+    <h1>{{.H1}}</h1>
+    <p class="lead" id="intro">{{.Intro}}</p>
+    {{range .Releases}}
+    <article class="release">
+        <h2>{{.TagName}}{{if .IsLatest}} <span class="badge">{{tr $.LangID "Latest" "最新"}}</span>{{end}}</h2>
+        <p class="release-meta">{{tr $.LangID "Published" "发布时间"}} {{.PublishedBeijing}} {{tr $.LangID "Beijing time (UTC+8). GitHub publishedAt:" "（北京时间，UTC+8）。GitHub publishedAt："}} <time datetime="{{.PublishedAt}}">{{.PublishedAt}}</time></p>
+        <pre class="release-body"><code>{{.Body}}</code></pre>
+        <p><a href="{{.URL}}">{{.URL}}</a></p>
+    </article>
+    {{end}}
+    <ul class="pager">
+        <li><a href="{{.HrefInstall}}">{{tr .LangID "Install" "安装"}}</a></li>
+        <li><a href="{{.HrefExamples}}">{{tr .LangID "Examples" "示例"}}</a></li>
+        <li><a href="{{.BlogURL}}">{{tr .LangID "Blog" "博客"}}</a></li>
+        <li><a href="{{.ReleasesURL}}">GitHub Releases</a></li>
+    </ul>
+</div>
+{{end}}

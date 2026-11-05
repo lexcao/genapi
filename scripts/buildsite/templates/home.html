@@ -1,0 +1,177 @@
+{{define "content"}}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>{{.H1}}</h1>
+            <!-- intro is static HTML and stays visible without JavaScript -->
+            <p class="hero-description" id="intro">{{.Intro}}</p>
+            <div class="hero-cta">
+                <a href="{{.HrefStart}}" class="btn btn-primary">{{tr .LangID "Get started" "开始使用"}}</a>
+                <a href="{{.HrefExamples}}" class="btn btn-secondary">{{tr .LangID "View examples" "查看示例"}}</a>
+            </div>
+            <p class="source-note"><a href="{{.BlogURL}}">{{tr .LangID "Read the blog post" "阅读博客文章"}}</a></p>
+            <div class="hero-features">
+                <div class="feature-tag">HTTP</div>
+                <div class="feature-tag">{{tr .LangID "Declarative" "声明式"}}</div>
+                <div class="feature-tag">Go</div>
+            </div>
+        </div>
+        <div class="hero-code">
+            <div class="hero-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons" aria-hidden="true">
+                        <span class="terminal-button close"></span>
+                        <span class="terminal-button minimize"></span>
+                        <span class="terminal-button maximize"></span>
+                    </div>
+                    <div class="terminal-title">{{.Snippets.APIGo.Caption}}</div>
+                </div>
+                <div class="terminal-body">
+                    <pre><code class="language-go">{{.Snippets.APIGo.Body}}</code></pre>
+                </div>
+            </div>
+            <p class="source-note"><a href="{{.Snippets.APIGo.BlobURL}}">{{.Snippets.APIGo.Caption}}</a></p>
+        </div>
+    </div>
+</section>
+
+<section id="examples" class="examples-section">
+    <div class="container">
+        <h2 class="section-title">{{tr .LangID "Examples" "示例"}}</h2>
+        <p class="section-desc center">{{tr .LangID "The first three listings are the files in examples/github. The fourth is pkg/clients/resty/example/main.go. The examples page repeats the examples/github files without tabs." "前三段是 examples/github 里的文件，第四段是 pkg/clients/resty/example/main.go。示例页会不使用标签页、完整列出 examples/github 的文件。"}}</p>
+        <div class="code-examples">
+            <div class="tabs">
+                <div class="tab-header" role="tablist">
+                    <button class="tab-button active" type="button" data-tab="definition">{{tr .LangID "Interface" "Interface"}}</button>
+                    <button class="tab-button" type="button" data-tab="generated">{{tr .LangID "Generated client" "生成的客户端"}}</button>
+                    <button class="tab-button" type="button" data-tab="usage">main.go</button>
+                    <button class="tab-button" type="button" data-tab="replace-runtime">Resty</button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="definition">{{template "snippet" .Snippets.APIGo}}</div>
+                    <div class="tab-pane" id="generated">{{template "snippet" .Snippets.APIGen}}</div>
+                    <div class="tab-pane" id="usage">{{template "snippet" .Snippets.MainGo}}</div>
+                    <div class="tab-pane" id="replace-runtime">{{template "snippet" .Snippets.RestyMain}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="why-genapi" class="why-section">
+    <div class="container">
+        <h2 class="section-title">{{tr .LangID "Why genapi?" "为什么用 genapi"}}</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>{{tr .LangID "Less boilerplate" "少写样板代码"}}</h3>
+                <p>{{tr .LangID "The interface is what you maintain. go generate writes the method bodies that call the HTTP client." "你维护的是 interface。go generate 写下调用 HTTP 客户端的方法体。"}}</p>
+            </div>
+            <div class="card">
+                <h3>{{tr .LangID "Type safety" "类型检查"}}</h3>
+                <p>{{tr .LangID "Arguments and results are ordinary Go types, checked when the package compiles." "参数和返回值都是普通 Go 类型，在编译这个包时检查。"}}</p>
+            </div>
+            <div class="card">
+                <h3>{{tr .LangID "Interface and implementation" "接口与实现"}}</h3>
+                <p>{{tr .LangID "examples/github keeps the interface in api.go and the generated implementation in api.gen.go." "examples/github 把 interface 放在 api.go，把生成的实现放在 api.gen.go。"}}</p>
+            </div>
+            <div class="card">
+                <h3>{{tr .LangID "Runtime HTTP client" "运行时的 HTTP 客户端"}}</h3>
+                <p>{{tr .LangID "pkg/clients/resty/example/main.go passes resty.DefaultClient to genapi.WithHttpClient." "pkg/clients/resty/example/main.go 把 resty.DefaultClient 传给 genapi.WithHttpClient。"}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="getting-started" class="getting-started-section">
+    <div class="container">
+        <h2 class="section-title">{{tr .LangID "Get started" "开始使用"}}</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>{{tr .LangID "Add the module" "添加模块"}}</h3>
+                    <p><a href="{{.HrefInstall}}">{{tr .LangID "Install page" "安装页"}}</a> {{tr .LangID "quotes the README and go.mod. The module line from the README is:" "照录了 README 和 go.mod。README 里的安装命令是："}}</p>
+                    {{template "snippet" .Snippets.GoGet}}
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>{{tr .LangID "Declare the interface" "声明 interface"}}</h3>
+                    <p>{{tr .LangID "This is the interface checked in at examples/github/api/api.go." "这是仓库里 examples/github/api/api.go 的 interface。"}}</p>
+                    {{template "snippet" .Snippets.BaseAnn}}
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>{{tr .LangID "Run go generate" "运行 go generate"}}</h3>
+                    <p>{{tr .LangID "The README quick start runs:" "README 快速开始里的命令是："}}</p>
+                    {{template "snippet" .Snippets.GoGenerate}}
+                    {{template "snippet" .Snippets.GoDirective}}
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>{{tr .LangID "Call the client" "调用客户端"}}</h3>
+                    <p>{{tr .LangID "examples/github/main.go constructs the client and calls Contributors." "examples/github/main.go 创建客户端并调用 Contributors。"}}</p>
+                    {{template "snippet" .Snippets.MainGo}}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="documentation" class="docs-section">
+    <h2 class="section-title">{{tr .LangID "Annotation reference" "注解参考"}}</h2>
+    <div class="container">
+        <div class="sidebar">
+            <ul class="annotation-nav">
+                <li><a href="#base-config" class="active">{{tr .LangID "Base configuration" "基础配置"}}</a></li>
+                <li><a href="#http-methods">{{tr .LangID "HTTP methods" "HTTP 方法"}}</a></li>
+                <li><a href="#parameters">{{tr .LangID "Parameters" "参数"}}</a></li>
+                <li><a href="#request-body">{{tr .LangID "Request body" "请求体"}}</a></li>
+                <li><a href="#response">{{tr .LangID "Response" "响应"}}</a></li>
+                <li><a href="#headers">{{tr .LangID "Headers" "请求头"}}</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="base-config" class="annotation-section active">
+                <h3 class="section-header">{{tr .LangID "Base configuration" "基础配置"}}</h3>
+                <p>{{tr .LangID "examples/github/api/api.go sets @BaseURL and @Header on the interface." "examples/github/api/api.go 在 interface 上写了 @BaseURL 和 @Header。"}}</p>
+                {{template "snippet" .Snippets.BaseAnn}}
+            </div>
+            <div id="http-methods" class="annotation-section">
+                <h3 class="section-header">{{tr .LangID "HTTP methods" "HTTP 方法"}}</h3>
+                <p>{{tr .LangID "examples/github uses @GET and @POST. website/api/todo.go also uses @PUT and @DELETE. The parser accepts those names, plus the aliases returned by RequestLine.alias." "examples/github 使用 @GET 和 @POST。website/api/todo.go 还使用 @PUT 和 @DELETE。解析器接受这些名字，以及 RequestLine.alias 返回的别名。"}}</p>
+                {{template "snippet" .Snippets.MethodsGH}}
+                {{template "snippet" .Snippets.MethodsTodo}}
+                {{template "snippet" .Snippets.Alias}}
+            </div>
+            <div id="parameters" class="annotation-section">
+                <h3 class="section-header">{{tr .LangID "Parameters" "参数"}}</h3>
+                <p>{{tr .LangID "Path placeholders such as {owner} are arguments of the same name. @Query in the end-to-end test takes a key and a value. A value written as {name} is taken from the argument of that name." "路径里的 {owner} 这类占位符对应同名参数。端到端测试里的 @Query 接受一个 key 和一个 value。写成 {name} 的 value 取自同名参数。"}}</p>
+                {{template "snippet" .Snippets.Query}}
+            </div>
+            <div id="request-body" class="annotation-section">
+                <h3 class="section-header">{{tr .LangID "Request body" "请求体"}}</h3>
+                <p>{{tr .LangID "CreateIssue takes an Issue value. The generated method sets Body to that value." "CreateIssue 接收一个 Issue。生成的方法把 Body 设为这个值。"}}</p>
+                {{template "snippet" .Snippets.BodyIface}}
+                {{template "snippet" .Snippets.BodyGen}}
+            </div>
+            <div id="response" class="annotation-section">
+                <h3 class="section-header">{{tr .LangID "Response" "响应"}}</h3>
+                <p>{{tr .LangID "Contributors returns ([]Contributor, error) and the generated method calls genapi.HandleResponse. CreateIssue returns error and the generated method calls genapi.HandleResponse0. A single non-error result uses genapi.MustHandleResponse, as written in the binder." "Contributors 返回 ([]Contributor, error)，生成的方法调用 genapi.HandleResponse。CreateIssue 返回 error，生成的方法调用 genapi.HandleResponse0。单个非 error 的返回值会使用 genapi.MustHandleResponse，binder 里就是这样写的。"}}</p>
+                {{template "snippet" .Snippets.ResultBind}}
+            </div>
+            <div id="headers" class="annotation-section">
+                <h3 class="section-header">{{tr .LangID "Headers" "请求头"}}</h3>
+                <p>{{tr .LangID "The GitHub interface sets Accept on every call. The httpbin end-to-end test also sets a method header. Both use @Header with a name and a value." "GitHub interface 为每次调用设置 Accept。httpbin 端到端测试还给方法设置了请求头。两处都是 @Header 加名字和值。"}}</p>
+                {{template "snippet" .Snippets.BaseAnn}}
+                {{template "snippet" .Snippets.Query}}
+            </div>
+        </div>
+    </div>
+</section>
+{{end}}

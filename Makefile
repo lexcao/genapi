@@ -1,4 +1,4 @@
-.PHONY: all test lint generate website
+.PHONY: all test lint generate website website-build
 
 GO_MOD_DIRS := $(shell find . -type f -name 'go.mod' -exec dirname {} \; | sort)
 
@@ -17,10 +17,14 @@ test:
 	$(call run_in_modules,go test -v -race -count=1 ./...)
 
 lint:
-	$(call run_in_modules,golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=)
+	$(call run_in_modules,golangci-lint run)
 
 generate:
 	go generate ./...
 
 website:
 	go run ./website/server.go -dir ./website
+
+website-build:
+	python3 ./website/scripts/build-assets.py
+	go run ./scripts/buildsite

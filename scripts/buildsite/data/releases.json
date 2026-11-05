@@ -1,0 +1,44 @@
+{
+  "generatedBy": "scripts/buildsite",
+  "source": "git tag -l and gh release view",
+  "gitTags": [
+    "v0.0.1",
+    "v0.0.2",
+    "v0.0.3"
+  ],
+  "releases": [
+    {
+      "tagName": "v0.0.3",
+      "name": "v0.0.3",
+      "publishedAt": "2025-03-31T14:38:32Z",
+      "publishedAtBeijing": "2025-03-31 22:38:32",
+      "body": "**Full Changelog**: https://github.com/lexcao/genapi/compare/v0.0.2...v0.0.3",
+      "url": "https://github.com/lexcao/genapi/releases/tag/v0.0.3",
+      "isDraft": false,
+      "isPrerelease": false,
+      "isLatest": true
+    },
+    {
+      "tagName": "v0.0.2",
+      "name": "v0.0.2",
+      "publishedAt": "2025-03-06T15:08:21Z",
+      "publishedAtBeijing": "2025-03-06 23:08:21",
+      "body": "**Full Changelog**: https://github.com/lexcao/genapi/compare/v0.0.1...v0.0.2",
+      "url": "https://github.com/lexcao/genapi/releases/tag/v0.0.2",
+      "isDraft": false,
+      "isPrerelease": false,
+      "isLatest": false
+    },
+    {
+      "tagName": "v0.0.1",
+      "name": "v0.0.1",
+      "publishedAt": "2025-03-03T16:21:01Z",
+      "publishedAtBeijing": "2025-03-04 00:21:01",
+      "body": "First release!",
+      "url": "https://github.com/lexcao/genapi/releases/tag/v0.0.1",
+      "isDraft": false,
+      "isPrerelease": false,
+      "isLatest": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{{define "content"}}
+<div class="container subpage">
+    {{if .Crumbs}}<nav class="breadcrumbs" aria-label="{{tr .LangID "Breadcrumb" "面包屑"}}">{{range $i, $c := .Crumbs}}{{if $i}}<span aria-hidden="true"> / </span>{{end}}<a href="{{$c.Href}}">{{$c.Name}}</a>{{end}}</nav>{{end}}
+    <h1>{{.H1}}</h1>
+    <p class="lead" id="intro">{{.Intro}}</p>
+
+    <h2>examples/github/api/api.go</h2>
+    <p>{{tr .LangID "The interface you write. It embeds genapi.Interface and declares Contributors and CreateIssue." "手写的 interface。它嵌入 genapi.Interface，并声明了 Contributors 和 CreateIssue。"}}</p>
+    {{template "snippet" .Snippets.APIGo}}
+
+    <h2>examples/github/api/api.gen.go</h2>
+    <p>{{tr .LangID "The file the generator wrote. Its first line says it is generated and should not be edited." "生成器写出的文件。第一行写明这是生成的，不要手改。"}}</p>
+    {{template "snippet" .Snippets.APIGen}}
+
+    <h2>examples/github/main.go</h2>
+    <p>{{tr .LangID "A program that calls genapi.New and then Contributors. On error it reads the response body from *genapi.Error." "调用 genapi.New 和 Contributors 的程序。出错时从 *genapi.Error 读取响应体。"}}</p>
+    {{template "snippet" .Snippets.MainGo}}
+
+    <h2>{{tr .LangID "Outside examples/" "examples/ 之外"}}</h2>
+    <p>{{tr .LangID "The optional Resty adapter's example is pkg/clients/resty/example/main.go. It is not part of the examples/ directory." "可选 Resty 适配器的示例在 pkg/clients/resty/example/main.go，不在 examples/ 目录里。"}} <a href="{{.Snippets.RestyMain.BlobURL}}">pkg/clients/resty/example/main.go</a></p>
+
+    <ul class="pager">
+        <li><a href="{{.HrefInstall}}">{{tr .LangID "Install" "安装"}}</a></li>
+        <li><a href="{{.HrefChangelog}}">{{tr .LangID "Changelog" "更新日志"}}</a></li>
+        <li><a href="{{.BlogURL}}">{{tr .LangID "Blog" "博客"}}</a></li>
+    </ul>
+</div>
+{{end}}

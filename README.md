@@ -15,7 +15,7 @@ genapi is a declarative HTTP client generator for Go, inspired by OpenFeign(http
 - Custom header support
 - Flexible response handling
 - Context support for cancellation/timeouts
-- **Use your favorate http client in runtime**
+- **Use your favorite http client in runtime**
 
 ## Installation
 

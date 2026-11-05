@@ -36,7 +36,7 @@ func TestMain(m *testing.M) {
 	m.Run()
 
 	// clear binary
-	os.Remove("genapi")
+	_ = os.Remove("genapi")
 }
 
 func runCommand(name string, args ...string) error {

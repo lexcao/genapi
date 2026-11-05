@@ -24,7 +24,7 @@ func newServer(t *testing.T) http.HandlerFunc {
 
 		// Read and set body if present
 		if r.Body != nil && r.ContentLength > 0 {
-			defer r.Body.Close()
+			defer func() { _ = r.Body.Close() }()
 			var bodyData map[string]any
 			if err := json.NewDecoder(r.Body).Decode(&bodyData); err != nil {
 				http.Error(w, "Failed to read request body: "+err.Error(), http.StatusBadRequest)

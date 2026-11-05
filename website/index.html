@@ -1,763 +1,783 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>genapi - Type-safe HTTP Client Generator for Go</title>
+    <title>genapi — Declarative HTTP clients for Go — interface in, client out.</title>
+    <meta name="description" content="Declarative HTTP clients for Go — interface in, client out. Declare a Go interface, run go generate, and call the client.">
+    <link rel="canonical" href="https://lexcao.io/genapi/">
+    <link rel="alternate" hreflang="en" href="https://lexcao.io/genapi/">
+    <link rel="alternate" hreflang="zh-CN" href="https://lexcao.io/genapi/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://lexcao.io/genapi/">
+    <meta property="og:title" content="genapi — Declarative HTTP clients for Go — interface in, client out.">
+    <meta property="og:description" content="Declarative HTTP clients for Go — interface in, client out. Declare a Go interface, run go generate, and call the client.">
+    <meta property="og:url" content="https://lexcao.io/genapi/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="zh_CN">
+    <meta property="og:image" content="https://lexcao.io/genapi/assets/og-en.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="genapi wordmark. Declarative HTTP clients for Go — interface in, client out.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="genapi — Declarative HTTP clients for Go — interface in, client out.">
+    <meta name="twitter:description" content="Declarative HTTP clients for Go — interface in, client out. Declare a Go interface, run go generate, and call the client.">
+    <meta name="twitter:image" content="https://lexcao.io/genapi/assets/og-en.png">
+    <meta name="twitter:image:alt" content="genapi wordmark. Declarative HTTP clients for Go — interface in, client out.">
+    <link rel="icon" href="brand/favicon-light.svg?v=1" type="image/svg+xml">
+    <link rel="icon" href="brand/favicon-dark.svg?v=1" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="assets/favicon-32.png?v=1" type="image/png" sizes="32x32">
+    <link rel="icon" href="assets/favicon-32-dark.png?v=1" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="assets/favicon-16.png?v=1" type="image/png" sizes="16x16">
+    <link rel="icon" href="assets/favicon-16-dark.png?v=1" type="image/png" sizes="16x16" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=1" sizes="180x180">
+    <link rel="icon" href="assets/favicon.ico?v=1" sizes="any">
+    <script>
+    (function () {
+        try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (dark) document.documentElement.classList.add('dark-mode');
+        } catch (e) {}
+    })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "codeRepository": "https://github.com/lexcao/genapi",
+  "description": "Declarative HTTP clients for Go — interface in, client out. Declare a Go interface, run go generate, and call the client.",
+  "inLanguage": [
+    "en",
+    "zh-CN"
+  ],
+  "license": "https://github.com/lexcao/genapi/blob/main/LICENSE",
+  "name": "genapi",
+  "programmingLanguage": "Go",
+  "url": "https://lexcao.io/genapi/"
+}</script>
 </head>
-
-<body>
+<body class="page-home">
+    
     <div class="site-container">
         <header>
             <div class="header-container">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 24 24" width="32" height="32">
-                            <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1"></path>
-                            <path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path>
-                        </svg>
-                    </div>
-                    <div class="logo-text">genapi</div>
-                </div>
-                <nav class="main-nav">
+                <a class="logo" href="./" aria-label="genapi">
+                    <img class="wordmark wordmark-light" src="brand/wordmark-light.svg" alt="genapi" width="110" height="42">
+                    <img class="wordmark wordmark-dark" src="brand/wordmark-dark.svg" alt="" width="110" height="42" aria-hidden="true">
+                </a>
+                <nav class="main-nav" aria-label="Primary">
                     <ul>
-                        <li><a href="#examples">Examples</a></li>
-                        <li><a href="#why-genapi">Why genapi</a></li>
-                        <li><a href="#getting-started">Getting started</a></li>
-                        <li><a href="#documentation">Docs</a></li>
+                        <li><a href="install/" >Install</a></li>
+                        <li><a href="examples/" >Examples</a></li>
+                        <li><a href="changelog/" >Changelog</a></li>
+                        <li><a href="./#documentation">Reference</a></li>
+                        <li><a href="https://lexcao.io/posts/genapi/">Blog</a></li>
+                        <li><a href="https://pkg.go.dev/github.com/lexcao/genapi">pkg.go.dev</a></li>
+                        <li class="nav-collapse-only"><a href="https://github.com/lexcao/genapi">GitHub</a></li>
                     </ul>
                 </nav>
-                <div class="cta-buttons">
-                    <a href="https://github.com/lexcao/genapi" target="_blank" class="btn btn-github">
-                        <svg viewBox="0 0 24 24" width="18" height="18">
-                            <path
-                                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12">
-                            </path>
+                <div class="header-tools">
+                    <nav class="lang-switch" aria-label="Language">
+                        <a href="./" lang="en" hreflang="en" aria-current="page">EN</a>
+                        <a href="zh/" lang="zh-CN" hreflang="zh-CN" >中文</a>
+                    </nav>
+                    <button id="theme-toggle" class="btn btn-icon" type="button" aria-label="Toggle color theme">
+                        <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"></path>
+                        </svg>
+                        <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                        </svg>
+                    </button>
+                    <a href="https://github.com/lexcao/genapi" class="btn btn-github header-github">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
                         </svg>
                         GitHub
                     </a>
-                    <button id="theme-toggle" class="btn btn-icon">
-                        <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18">
-                            <path
-                                d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z">
-                            </path>
-                        </svg>
-                        <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <path
-                                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
-                            </path>
-                        </svg>
+                    <button class="mobile-menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </button>
                 </div>
-                <button class="mobile-menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
         </header>
-
         <main>
-            <section class="hero">
-                <div class="container">
-                    <div class="hero-content">
-                        <h1>Declarative HTTP Client Generator for Go</h1>
-                        <p class="hero-description">Generate HTTP clients from simple Go interface definitions
-                            with annotations</p>
-
-                        <div class="hero-cta">
-                            <a href="#getting-started" class="btn btn-primary">Get Started</a>
-                            <a href="https://github.com/lexcao/genapi" target="_blank" class="btn btn-secondary">View on
-                                GitHub</a>
-                        </div>
-
-                        <div class="hero-features">
-                            <div class="feature-tag">HTTP</div>
-                            <div class="feature-tag">Declarative</div>
-                            <div class="feature-tag">Code Generation</div>
-                        </div>
+            
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Declarative HTTP clients for Go — interface in, client out.</h1>
+            
+            <p class="hero-description" id="intro">Write a Go interface, annotate each call, and run go generate. The generated file implements that interface, and your code calls it with ordinary Go types.</p>
+            <div class="hero-cta">
+                <a href="./#getting-started" class="btn btn-primary">Get started</a>
+                <a href="examples/" class="btn btn-secondary">View examples</a>
+            </div>
+            <p class="source-note"><a href="https://lexcao.io/posts/genapi/">Read the blog post</a></p>
+            <div class="hero-features">
+                <div class="feature-tag">HTTP</div>
+                <div class="feature-tag">Declarative</div>
+                <div class="feature-tag">Go</div>
+            </div>
+        </div>
+        <div class="hero-code">
+            <div class="hero-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons" aria-hidden="true">
+                        <span class="terminal-button close"></span>
+                        <span class="terminal-button minimize"></span>
+                        <span class="terminal-button maximize"></span>
                     </div>
-
-                    <div class="hero-terminal">
-                        <div class="terminal-header">
-                            <div class="terminal-buttons">
-                                <span class="terminal-button close"></span>
-                                <span class="terminal-button minimize"></span>
-                                <span class="terminal-button maximize"></span>
-                            </div>
-                            <div class="terminal-title">todo.go</div>
-                        </div>
-                        <div class="terminal-body">
-                            <pre><code class="language-go">package api
+                    <div class="terminal-title">examples/github/api/api.go</div>
+                </div>
+                <div class="terminal-body">
+                    <pre><code class="language-go">package api
 
 import (
-    "context"
-    "github.com/lexcao/genapi"
+	&#34;context&#34;
+
+	&#34;github.com/lexcao/genapi&#34;
 )
 
-//go:generate go run github.com/lexcao/genapi/cmd/genapi -file $GOFILE
+//go:generate go run ../../../cmd/genapi/main.go -file $GOFILE
 
-// @BaseURL("https://jsonplaceholder.typicode.com")
-type TodoAPI interface {
-    genapi.Interface
+// @BaseURL(&#34;https://api.github.com&#34;)
+// @Header(&#34;Accept&#34;, &#34;application/vnd.github.v3&#43;json&#34;)
+type GitHub interface {
+	genapi.Interface
 
-    // @GET("/todos")
-    GetTodos(ctx context.Context) ([]Todo, error)
+	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
 
-    // @GET("/todos/{id}")
-    GetTodo(ctx context.Context, id string) (Todo, error)
-    
-    // @POST("/todos")
-    CreateTodo(ctx context.Context, todo Todo) (Todo, error)
-}</code></pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="hero-shape">
-                    <svg viewBox="0 0 1440 200">
-                        <path
-                            d="M0,160L48,138.7C96,117,192,75,288,64C384,53,480,75,576,101.3C672,128,768,160,864,160C960,160,1056,128,1152,122.7C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                        </path>
-                    </svg>
-                </div>
-            </section>
-
-            <section id="examples" class="examples-section">
-                <div class="container">
-                    <h2 class="section-title">Examples</h2>
-
-                    <div class="code-examples">
-                        <div class="tabs">
-                            <div class="tab-header">
-                                <button class="tab-button active" data-tab="definition">API Definition</button>
-                                <button class="tab-button" data-tab="generated">Generated Client</button>
-                                <button class="tab-button" data-tab="usage">Usage Example</button>
-                                <button class="tab-button" data-tab="replace-runtime">Replace Runtime Example</button>
-                            </div>
-
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="definition">
-                                    <pre><code class="language-go">package api
-
-import (
-    "context"
-    "github.com/lexcao/genapi"
-)
-
-//go:generate go run github.com/lexcao/genapi/cmd/genapi -file $GOFILE
-
-// @BaseURL("https://jsonplaceholder.typicode.com")
-type TodoAPI interface {
-    genapi.Interface
-
-    // @GET("/todos")
-    GetTodos(ctx context.Context) ([]Todo, error)
-
-    // @GET("/todos/{id}")
-    GetTodo(ctx context.Context, id string) (Todo, error)
-
-    // @POST("/todos")
-    CreateTodo(ctx context.Context, todo Todo) (Todo, error)
-
-    // @PUT("/todos/{id}")
-    UpdateTodo(ctx context.Context, id string, todo Todo) (Todo, error)
-
-    // @DELETE("/todos/{id}")
-    DeleteTodo(ctx context.Context, id string) error
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
 }
 
-type Todo struct {
-    UserID    int    `json:"userId"`
-    ID        int    `json:"id"`
-    Title     string `json:"title"`
-    Completed bool   `json:"completed"`
-}</code></pre>
-                                </div>
+type Contributor struct {
+	Login         string `json:&#34;login&#34;`
+	Contributions int    `json:&#34;contributions&#34;`
+}
 
-                                <div class="tab-pane" id="generated">
-                                    <pre><code class="language-go">// CODE GENERATED BY genapi. DO NOT EDIT.
+type Issue struct {
+	Title     string   `json:&#34;title&#34;`
+	Body      string   `json:&#34;body&#34;`
+	Assignees []string `json:&#34;assignees&#34;`
+	Milestone int      `json:&#34;milestone&#34;`
+	Labels    []string `json:&#34;labels&#34;`
+}</code></pre>
+                </div>
+            </div>
+            <p class="source-note"><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go">examples/github/api/api.go</a></p>
+        </div>
+    </div>
+</section>
+
+<section id="examples" class="examples-section">
+    <div class="container">
+        <h2 class="section-title">Examples</h2>
+        <p class="section-desc center">The first three listings are the files in examples/github. The fourth is pkg/clients/resty/example/main.go. The examples page repeats the examples/github files without tabs.</p>
+        <div class="code-examples">
+            <div class="tabs">
+                <div class="tab-header" role="tablist">
+                    <button class="tab-button active" type="button" data-tab="definition">Interface</button>
+                    <button class="tab-button" type="button" data-tab="generated">Generated client</button>
+                    <button class="tab-button" type="button" data-tab="usage">main.go</button>
+                    <button class="tab-button" type="button" data-tab="replace-runtime">Resty</button>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="definition">
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go">GitHub</a></figcaption>
+    <pre><code class="language-go">package api
+
+import (
+	&#34;context&#34;
+
+	&#34;github.com/lexcao/genapi&#34;
+)
+
+//go:generate go run ../../../cmd/genapi/main.go -file $GOFILE
+
+// @BaseURL(&#34;https://api.github.com&#34;)
+// @Header(&#34;Accept&#34;, &#34;application/vnd.github.v3&#43;json&#34;)
+type GitHub interface {
+	genapi.Interface
+
+	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
+
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
+}
+
+type Contributor struct {
+	Login         string `json:&#34;login&#34;`
+	Contributions int    `json:&#34;contributions&#34;`
+}
+
+type Issue struct {
+	Title     string   `json:&#34;title&#34;`
+	Body      string   `json:&#34;body&#34;`
+	Assignees []string `json:&#34;assignees&#34;`
+	Milestone int      `json:&#34;milestone&#34;`
+	Labels    []string `json:&#34;labels&#34;`
+}</code></pre>
+</figure>
+</div>
+                    <div class="tab-pane" id="generated">
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.gen.go</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.gen.go">GitHub</a></figcaption>
+    <pre><code class="language-go">// CODE GENERATED BY genapi. DO NOT EDIT.
 package api
 
 import (
-    "context"
-    "github.com/lexcao/genapi"
+	&#34;context&#34;
+	&#34;github.com/lexcao/genapi&#34;
+	&#34;net/http&#34;
 )
 
-type implTodoAPI struct {
-    client genapi.HttpClient
+type implGitHub struct {
+	client genapi.HttpClient
 }
 
 // SetHttpClient implments genapi.Interface
-func (i *implTodoAPI) SetHttpClient(client genapi.HttpClient) {
-    i.client = client
+func (i *implGitHub) SetHttpClient(client genapi.HttpClient) {
+	i.client = client
 }
 
-func (i *implTodoAPI) GetTodos(ctx context.Context) ([]Todo, error) {
-    resp, err := i.client.Do(&genapi.Request{
-        Method:  "GET",
-        Path:    "/todos",
-        Context: ctx,
-    })
-    return genapi.HandleResponse[[]Todo](resp, err)
+func (i *implGitHub) Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error) {
+	resp, err := i.client.Do(&amp;genapi.Request{
+		Method: &#34;GET&#34;,
+		Path:   &#34;/repos/{owner}/{repo}/contributors&#34;,
+		PathParams: map[string]string{
+			&#34;owner&#34;: owner,
+			&#34;repo&#34;:  repo,
+		},
+		Context: ctx,
+	})
+	return genapi.HandleResponse[[]Contributor](resp, err)
 }
 
-func (i *implTodoAPI) GetTodo(ctx context.Context, id string) (Todo, error) {
-    resp, err := i.client.Do(&genapi.Request{
-        Method:     "GET",
-        Path:       "/todos/{id}",
-        PathParams: map[string]string{"id": id},
-        Context:    ctx,
-    })
-    return genapi.HandleResponse[Todo](resp, err)
+func (i *implGitHub) CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error {
+	resp, err := i.client.Do(&amp;genapi.Request{
+		Method: &#34;POST&#34;,
+		Path:   &#34;/repos/{owner}/{repo}/issues&#34;,
+		PathParams: map[string]string{
+			&#34;owner&#34;: owner,
+			&#34;repo&#34;:  repo,
+		},
+		Context: ctx,
+		Body:    issue,
+	})
+	return genapi.HandleResponse0(resp, err)
 }
 
-func (i *implTodoAPI) CreateTodo(ctx context.Context, todo Todo) (Todo, error) {
-    resp, err := i.client.Do(&genapi.Request{
-        Method:  "POST",
-        Path:    "/todos",
-        Context: ctx,
-        Body:    todo,
-    })
-    return genapi.HandleResponse[Todo](resp, err)
+func init() {
+	genapi.Register[GitHub, *implGitHub](
+		genapi.Config{
+			BaseURL: &#34;https://api.github.com&#34;,
+			Header: http.Header{
+				&#34;Accept&#34;: []string{
+					&#34;application/vnd.github.v3&#43;json&#34;,
+				},
+			},
+		},
+	)
 }</code></pre>
-                                </div>
-
-                                <div class="tab-pane" id="usage">
-                                    <pre><code class="language-go">package main
+</figure>
+</div>
+                    <div class="tab-pane" id="usage">
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/main.go</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/main.go">GitHub</a></figcaption>
+    <pre><code class="language-go">package main
 
 import (
-    "context"
-    "fmt"
-    "log"
-    
-    "yourproject/api"
+	&#34;context&#34;
+	&#34;errors&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+
+	&#34;github.com/lexcao/genapi&#34;
+	&#34;github.com/lexcao/genapi/examples/github/api&#34;
 )
 
 func main() {
-    // Get API client instance
-    client := genapi.New[api.TodoAPI]()
-    
-    // Fetch all todos
-    todos, err := client.GetTodos(context.Background())
-    if err != nil {
-        log.Fatalf("Error fetching todos: %v", err)
-    }
-    
-    fmt.Printf("Found %d todos\n", len(todos))
-    
-    // Create a new todo
-    newTodo := api.Todo{
-        UserID:    1,
-        Title:     "Learn genapi",
-        Completed: false,
-    }
-    
-    created, err := client.CreateTodo(context.Background(), newTodo)
-    if err != nil {
-        log.Fatalf("Error creating todo: %v", err)
-    }
-    
-    fmt.Printf("Created todo with ID: %d\n", created.ID)
+	client := genapi.New[api.GitHub]()
+
+	contributors, err := client.Contributors(context.Background(), &#34;lexcao&#34;, &#34;genapi&#34;)
+	if err != nil {
+		fmt.Printf(&#34;failed to get contributors: %v\n&#34;, err)
+		var apiErr *genapi.Error
+		if errors.As(err, &amp;apiErr) {
+			body, _ := io.ReadAll(apiErr.Response.Body)
+			fmt.Printf(&#34;API error: %v\n&#34;, string(body))
+		}
+		return
+	}
+
+	for _, contributor := range contributors {
+		fmt.Printf(&#34;%s (%d)\n&#34;, contributor.Login, contributor.Contributions)
+	}
 }</code></pre>
-                                </div>
-
-
-                                <div class="tab-pane" id="replace-runtime">
-                                    <pre><code class="language-go">package main
+</figure>
+</div>
+                    <div class="tab-pane" id="replace-runtime">
+<figure class="code-block">
+    <figcaption class="code-header"><span>pkg/clients/resty/example/main.go</span><a href="https://github.com/lexcao/genapi/blob/main/pkg/clients/resty/example/main.go">GitHub</a></figcaption>
+    <pre><code class="language-go">package main
 
 import (
-    http_client "net/http"
-    resty_client "github.com/go-resty/resty/v2"
-    "yourproject/api"
-    "github.com/lexcao/genapi/pkg/clients/resty"
-    "github.com/lexcao/genapi/pkg/clients/http"
-    "github.com/lexcao/genapi"
+	&#34;context&#34;
+	&#34;errors&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+
+	&#34;github.com/lexcao/genapi&#34;
+	&#34;github.com/lexcao/genapi/examples/github/api&#34;
+	&#34;github.com/lexcao/genapi/pkg/clients/resty&#34;
 )
 
 func main() {
-    // Get API client instance
-    client := genapi.New[api.TodoAPI]()
+	client := genapi.New[api.GitHub](
+		genapi.WithHttpClient(resty.DefaultClient),
+	)
 
-    // Customize standard Go http.Client
-    customHttpClient := &http_client.Client{}
-    client.SetHttpClient(http.New(customHttpClient))
+	contributors, err := client.Contributors(context.Background(), &#34;lexcao&#34;, &#34;genapi&#34;)
+	if err != nil {
+		fmt.Printf(&#34;failed to get contributors: %v\n&#34;, err)
+		var apiErr *genapi.Error
+		if errors.As(err, &amp;apiErr) {
+			body, _ := io.ReadAll(apiErr.Response.Body)
+			fmt.Printf(&#34;API error: %v\n&#34;, string(body))
+		}
+		return
+	}
 
-    // Or use Resty client
-    restyClient := resty_client.New()
-    client.SetHttpClient(resty.New(restyClient))
-
-    // Custom HTTP clients can be used by implementing
-    // the genapi.HttpClient interface
-    // Use genapi.TestHttpClient for testing
+	for _, contributor := range contributors {
+		fmt.Printf(&#34;%s (%d)\n&#34;, contributor.Login, contributor.Contributions)
+	}
 }</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+</figure>
+</div>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
 
-            <section id="why-genapi" class="why-section">
-                <div class="container">
-                    <h2 class="section-title">Why genapi?</h2>
+<section id="why-genapi" class="why-section">
+    <div class="container">
+        <h2 class="section-title">Why genapi?</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Less boilerplate</h3>
+                <p>The interface is what you maintain. go generate writes the method bodies that call the HTTP client.</p>
+            </div>
+            <div class="card">
+                <h3>Type safety</h3>
+                <p>Arguments and results are ordinary Go types, checked when the package compiles.</p>
+            </div>
+            <div class="card">
+                <h3>Interface and implementation</h3>
+                <p>examples/github keeps the interface in api.go and the generated implementation in api.gen.go.</p>
+            </div>
+            <div class="card">
+                <h3>Runtime HTTP client</h3>
+                <p>pkg/clients/resty/example/main.go passes resty.DefaultClient to genapi.WithHttpClient.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-                    <div class="cards-grid">
-                        <div class="card">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24" width="32" height="32">
-                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2">
-                                    </path>
-                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                    <path d="M12 11h4"></path>
-                                    <path d="M12 16h4"></path>
-                                    <path d="M8 11h.01"></path>
-                                    <path d="M8 16h.01"></path>
-                                </svg>
-                            </div>
-                            <h3>Less Boilerplate</h3>
-                            <p>Focus on defining your API interface, not implementing repetitive HTTP client code</p>
-                        </div>
+<section id="getting-started" class="getting-started-section">
+    <div class="container">
+        <h2 class="section-title">Get started</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Add the module</h3>
+                    <p><a href="install/">Install page</a> quotes the README and go.mod. The module line from the README is:</p>
+                    
+<figure class="code-block">
+    <figcaption class="code-header"><span>README.md (line 23)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L23">GitHub</a></figcaption>
+    <pre><code class="language-bash">go get github.com/lexcao/genapi</code></pre>
+</figure>
 
-                        <div class="card">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24" width="32" height="32">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                            </div>
-                            <h3>Type Safety</h3>
-                            <p>Catch errors at compile time with Go's static type system. No more runtime surprises.</p>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24" width="32" height="32">
-                                    <path
-                                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                    </path>
-                                    <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
-                                    <polyline points="7.5 19.79 7.5 14.6 3 12"></polyline>
-                                    <polyline points="21 12 16.5 14.6 16.5 19.79"></polyline>
-                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                                </svg>
-                            </div>
-                            <h3>Clean Architecture</h3>
-                            <p>Clear separation of interface and implementation for more maintainable codebases</p>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24" width="32" height="32">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                                    <path d="M2 17l10 5 10-5"></path>
-                                    <path d="M2 12l10 5 10-5"></path>
-                                </svg>
-                            </div>
-                            <h3>Code Generation</h3>
-                            <p>Automatic generation of client implementation code that follows best practices</p>
-                        </div>
-                    </div>
                 </div>
-            </section>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Declare the interface</h3>
+                    <p>This is the interface checked in at examples/github/api/api.go.</p>
+                    
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go (lines 11–21)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go#L11-L21">GitHub</a></figcaption>
+    <pre><code class="language-go">// @BaseURL(&#34;https://api.github.com&#34;)
+// @Header(&#34;Accept&#34;, &#34;application/vnd.github.v3&#43;json&#34;)
+type GitHub interface {
+	genapi.Interface
 
+	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
 
-            <section id="getting-started" class="getting-started-section">
-                <div class="container">
-                    <h2 class="section-title">Get started</h2>
-
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>Add genapi to your project</h3>
-                                <div class="code-block">
-                                    <pre><code class="language-bash">$ go get github.com/lexcao/genapi</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>Define Your API Interface</h3>
-                                <p>Create a Go interface with annotations that describe your API endpoints</p>
-                                <div class="code-block">
-                                    <pre><code class="language-go">import "github.com/lexcao/genapi"
-//go:generate go run github.com/lexcao/genapi/cmd/genapi -file $GOFILE
-
-// @BaseURL("https://api.example.com")
-type UserAPI interface {
-    genapi.Interface
-    
-    // @GET("/users")
-    GetUsers(ctx context.Context) ([]User, error)
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
 }</code></pre>
-                                </div>
-                            </div>
-                        </div>
+</figure>
 
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>Run Code Generation</h3>
-                                <p>Use the genapi tool to generate implementation code from your interface</p>
-                                <div class="code-block">
-                                    <pre><code class="language-bash">$ go generate ./...</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
-                                <h3>Use Your Generated Client</h3>
-                                <p>Instantiate and use your type-safe client in your application</p>
-                                <div class="code-block">
-                                    <pre><code class="language-go">import "github.com/lexcao/genapi"
-
-// Create client
-client := genapi.New[api.UserAPI]()
-
-// Use client with type safety
-users, err := client.GetUsers(context.Background())</code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </section>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Run go generate</h3>
+                    <p>The README quick start runs:</p>
+                    
+<figure class="code-block">
+    <figcaption class="code-header"><span>README.md (line 55)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L55">GitHub</a></figcaption>
+    <pre><code class="language-bash">$ go generate ./api</code></pre>
+</figure>
 
-            <section id="documentation" class="docs-section">
-                <h2 class="section-title">Annotation Reference</h2>
-                <div class="container">
-                    <div class="sidebar">
-                        <ul class="annotation-nav">
-                            <li><a href="#base-config" class="active">Base Configuration</a></li>
-                            <li><a href="#http-methods">HTTP Methods</a></li>
-                            <li><a href="#parameters">Parameters</a></li>
-                            <li><a href="#request-body">Request Body</a></li>
-                            <li><a href="#response">Response Handling</a></li>
-                            <li><a href="#headers">Headers</a></li>
-                        </ul>
-                    </div>
+                    
+<figure class="code-block">
+    <figcaption class="code-header"><span>README.md (line 35)</span><a href="https://github.com/lexcao/genapi/blob/main/README.md#L35">GitHub</a></figcaption>
+    <pre><code class="language-go">//go:generate go run github.com/lexcao/genapi/cmd/genapi  -file $GOFILE</code></pre>
+</figure>
 
-                    <div class="content">
-                        <!-- Base Configuration Section -->
-                        <div id="base-config" class="annotation-section active">
-                            <h3 class="section-header">Base Configuration</h3>
-                            <p class="section-desc">Configure the base settings for your API client</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Call the client</h3>
+                    <p>examples/github/main.go constructs the client and calls Contributors.</p>
+                    
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/main.go</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/main.go">GitHub</a></figcaption>
+    <pre><code class="language-go">package main
 
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>@BaseURL</h4>
-                                    <p>Sets the base URL for all API endpoints. Must be set at the interface level.</p>
+import (
+	&#34;context&#34;
+	&#34;errors&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
 
-                                    <div class="tags">
-                                        <span class="tag">Interface-level</span>
-                                        <span class="tag">Optional</span>
-                                    </div>
+	&#34;github.com/lexcao/genapi&#34;
+	&#34;github.com/lexcao/genapi/examples/github/api&#34;
+)
 
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// @BaseURL("https://api.example.com/v1")
-type ExampleAPI interface {
-    genapi.Interface
-    
-    // Methods...
+func main() {
+	client := genapi.New[api.GitHub]()
+
+	contributors, err := client.Contributors(context.Background(), &#34;lexcao&#34;, &#34;genapi&#34;)
+	if err != nil {
+		fmt.Printf(&#34;failed to get contributors: %v\n&#34;, err)
+		var apiErr *genapi.Error
+		if errors.As(err, &amp;apiErr) {
+			body, _ := io.ReadAll(apiErr.Response.Body)
+			fmt.Printf(&#34;API error: %v\n&#34;, string(body))
+		}
+		return
+	}
+
+	for _, contributor := range contributors {
+		fmt.Printf(&#34;%s (%d)\n&#34;, contributor.Login, contributor.Contributions)
+	}
 }</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+</figure>
 
-                        <!-- HTTP Methods Section -->
-                        <div id="http-methods" class="annotation-section">
-                            <h3 class="section-header">HTTP Methods</h3>
-                            <p class="section-desc">Define HTTP method and path for endpoints</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>@GET, @POST, @PUT, @DELETE, @PATCH</h4>
-                                    <p>Specify the HTTP method and path for an API endpoint.</p>
+<section id="documentation" class="docs-section">
+    <h2 class="section-title">Annotation reference</h2>
+    <div class="container">
+        <div class="sidebar">
+            <ul class="annotation-nav">
+                <li><a href="#base-config" class="active">Base configuration</a></li>
+                <li><a href="#http-methods">HTTP methods</a></li>
+                <li><a href="#parameters">Parameters</a></li>
+                <li><a href="#request-body">Request body</a></li>
+                <li><a href="#response">Response</a></li>
+                <li><a href="#headers">Headers</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div id="base-config" class="annotation-section active">
+                <h3 class="section-header">Base configuration</h3>
+                <p>examples/github/api/api.go sets @BaseURL and @Header on the interface.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go (lines 11–21)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go#L11-L21">GitHub</a></figcaption>
+    <pre><code class="language-go">// @BaseURL(&#34;https://api.github.com&#34;)
+// @Header(&#34;Accept&#34;, &#34;application/vnd.github.v3&#43;json&#34;)
+type GitHub interface {
+	genapi.Interface
 
-                                    <div class="tags">
-                                        <span class="tag">Method-level</span>
-                                        <span class="tag">Required</span>
-                                    </div>
+	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
 
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// @GET("/users")
-GetUsers(ctx context.Context) ([]User, error)
-
-// @POST("/users")
-CreateUser(ctx context.Context, user User) (User, error)
-
-// @PUT("/users/{id}")
-UpdateUser(ctx context.Context, id string, user User) (User, error)
-
-// @DELETE("/users/{id}")
-DeleteUser(ctx context.Context, id string) error
-
-// @PATCH("/users/{id}/status")
-UpdateUserStatus(ctx context.Context, id string, status UserStatus) error</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Parameters Section -->
-                        <div id="parameters" class="annotation-section">
-                            <h3 class="section-header">Parameters</h3>
-                            <p class="section-desc">Working with URL parameters, query parameters, and paths</p>
-
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>Path Parameters</h4>
-                                    <p>Parameters enclosed in curly braces in the URL path are automatically mapped to
-                                        method arguments with the same name.</p>
-
-                                    <div class="tags">
-                                        <span class="tag">Path-based</span>
-                                    </div>
-
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// @GET("/users/{id}/posts/{postId}")
-GetUserPost(ctx context.Context, id string, postId int) (Post, error)</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>@Query</h4>
-                                    <p>Use @Query to define query parameters for an endpoint.</p>
-
-                                    <div class="tags">
-                                        <span class="tag">Parameter-level</span>
-                                        <span class="tag">Optional</span>
-                                    </div>
-
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// @GET("/users")
-// @Query("page", "limit", "sort")
-GetUsers(ctx context.Context, page int, limit int, sort string) ([]User, error)</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Request Body Section -->
-                        <div id="request-body" class="annotation-section">
-                            <h3 class="section-header">Request Body</h3>
-                            <p class="section-desc">Handling request payloads and serialization</p>
-
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>Automatic Body Serialization</h4>
-                                    <p>Complex types after the context parameter are automatically serialized as JSON
-                                        request bodies.</p>
-
-                                    <div class="tags">
-                                        <span class="tag">Convention-based</span>
-                                    </div>
-
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// @POST("/users")
-CreateUser(ctx context.Context, user User) (User, error)
-
-type User struct {
-    ID        string `json:"id,omitempty"`
-    Name      string `json:"name"`
-    Email     string `json:"email"`
-    CreatedAt string `json:"created_at,omitempty"`
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
 }</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+</figure>
 
-                        <!-- Response Section -->
-                        <div id="response" class="annotation-section">
-                            <h3 class="section-header">Response Handling</h3>
-                            <p class="section-desc">Processing API responses and handling errors</p>
+            </div>
+            <div id="http-methods" class="annotation-section">
+                <h3 class="section-header">HTTP methods</h3>
+                <p>examples/github uses @GET and @POST. website/api/todo.go also uses @PUT and @DELETE. The parser accepts those names, plus the aliases returned by RequestLine.alias.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go (lines 16–20)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go#L16-L20">GitHub</a></figcaption>
+    <pre><code class="language-go">	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
 
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>Automatic Response Deserialization</h4>
-                                    <p>Return types are automatically deserialized from JSON API responses.</p>
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error</code></pre>
+</figure>
 
-                                    <div class="tags">
-                                        <span class="tag">Convention-based</span>
-                                    </div>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>website/api/todo.go (lines 24–28)</span><a href="https://github.com/lexcao/genapi/blob/main/website/api/todo.go#L24-L28">GitHub</a></figcaption>
+    <pre><code class="language-go">	// @PUT(&#34;/todos/{id}&#34;)
+	UpdateTodo(ctx context.Context, id string, todo Todo) (Todo, error)
 
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// No response body
-func DeleteUser(ctx context.Context, id string) error
+	// @DELETE(&#34;/todos/{id}&#34;)
+	DeleteTodo(ctx context.Context, id string) error</code></pre>
+</figure>
 
-// API returns a User object as JSON, automatically deserialized to the User struct
-// Typed response with error handling
-func GetUser(ctx context.Context, id string) (User, error)
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>internal/build/parser/annotation/declarations.go (lines 137–149)</span><a href="https://github.com/lexcao/genapi/blob/main/internal/build/parser/annotation/declarations.go#L137-L149">GitHub</a></figcaption>
+    <pre><code class="language-go">func (r RequestLine) alias() []string {
+	return []string{
+		http.MethodGet,
+		http.MethodHead,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodPatch,
+		http.MethodDelete,
+		http.MethodConnect,
+		http.MethodOptions,
+		http.MethodTrace,
+	}
+}</code></pre>
+</figure>
 
-// You can specify the raw genapi.Response as well
-// Raw response access
-func GetRawResponse(ctx context.Context) (*genapi.Response, error)
+            </div>
+            <div id="parameters" class="annotation-section">
+                <h3 class="section-header">Parameters</h3>
+                <p>Path placeholders such as {owner} are arguments of the same name. @Query in the end-to-end test takes a key and a value. A value written as {name} is taken from the argument of that name.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>test/e2e/httpbin.go (lines 12–18)</span><a href="https://github.com/lexcao/genapi/blob/main/test/e2e/httpbin.go#L12-L18">GitHub</a></figcaption>
+    <pre><code class="language-go">	// @GET(&#34;/get&#34;)
+	// @Query(&#34;key&#34;, &#34;value&#34;)
+	// @Query(&#34;value&#34;, &#34;{value}&#34;)
+	// @Header(&#34;X-Hello&#34;, &#34;world&#34;)
+	Get(value string) (*Response, error)
 
-// Must-style response (panics on error)
-func MustGetUser(ctx context.Context, id string) User
-</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+	// @POST(&#34;/post&#34;)</code></pre>
+</figure>
 
-                        <!-- Headers Section -->
-                        <div id="headers" class="annotation-section">
-                            <h3 class="section-header">Headers & Auth</h3>
-                            <p class="section-desc">Working with HTTP headers and authentication</p>
-
-                            <div class="annotation-item">
-                                <div class="annotation-details">
-                                    <h4>@Header</h4>
-                                    <p>Define custom HTTP headers for requests.</p>
-
-                                    <div class="tags">
-                                        <span class="tag">Interface-level</span>
-                                        <span class="tag">Method-level</span>
-                                        <span class="tag">Optional</span>
-                                    </div>
-
-                                    <div class="code-example">
-                                        <div class="code-header">
-                                            <span>Example</span>
-                                        </div>
-                                        <pre><code class="language-go">// Header("User-Agent", "genapi")
-type SomeAPI interface {
-    genapi.Interface
-    
-    // @GET("/special-endpoint")
-    // @Header("X-Custom-Header: custom-value")
-    // @Header("X-Api-Version: 2")
-    GetSpecialData(ctx context.Context) (SpecialData, error)
+            </div>
+            <div id="request-body" class="annotation-section">
+                <h3 class="section-header">Request body</h3>
+                <p>CreateIssue takes an Issue value. The generated method sets Body to that value.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go (lines 19–34)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go#L19-L34">GitHub</a></figcaption>
+    <pre><code class="language-go">	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
 }
-</code></pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+
+type Contributor struct {
+	Login         string `json:&#34;login&#34;`
+	Contributions int    `json:&#34;contributions&#34;`
+}
+
+type Issue struct {
+	Title     string   `json:&#34;title&#34;`
+	Body      string   `json:&#34;body&#34;`
+	Assignees []string `json:&#34;assignees&#34;`
+	Milestone int      `json:&#34;milestone&#34;`
+	Labels    []string `json:&#34;labels&#34;`
+}</code></pre>
+</figure>
+
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.gen.go (lines 32–44)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.gen.go#L32-L44">GitHub</a></figcaption>
+    <pre><code class="language-go">func (i *implGitHub) CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error {
+	resp, err := i.client.Do(&amp;genapi.Request{
+		Method: &#34;POST&#34;,
+		Path:   &#34;/repos/{owner}/{repo}/issues&#34;,
+		PathParams: map[string]string{
+			&#34;owner&#34;: owner,
+			&#34;repo&#34;:  repo,
+		},
+		Context: ctx,
+		Body:    issue,
+	})
+	return genapi.HandleResponse0(resp, err)
+}</code></pre>
+</figure>
+
+            </div>
+            <div id="response" class="annotation-section">
+                <h3 class="section-header">Response</h3>
+                <p>Contributors returns ([]Contributor, error) and the generated method calls genapi.HandleResponse. CreateIssue returns error and the generated method calls genapi.HandleResponse0. A single non-error result uses genapi.MustHandleResponse, as written in the binder.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>internal/build/binder/result.go (lines 24–47)</span><a href="https://github.com/lexcao/genapi/blob/main/internal/build/binder/result.go#L24-L47">GitHub</a></figcaption>
+    <pre><code class="language-go">		switch typ {
+		case &#34;error&#34;:
+			results = model.BindingResults{
+				Assignment: &#34;resp, err&#34;,
+				Statement:  &#34;genapi.HandleResponse0(resp, err)&#34;,
+			}
+		case &#34;genapi.Response&#34;:
+			results = model.BindingResults{
+				Assignment: &#34;resp, _&#34;,
+				Statement:  &#34;*resp&#34;,
+			}
+		case &#34;*genapi.Response&#34;:
+			results = model.BindingResults{
+				Assignment: &#34;resp, _&#34;,
+				Statement:  &#34;resp&#34;,
+			}
+		default:
+			if disallowedResultPrimitives[typ] {
+				return &amp;ErrUnsupported{Message: fmt.Sprintf(&#34;type [%s] is not supported as a result type&#34;, typ)}
+			}
+			results = model.BindingResults{
+				Assignment: &#34;resp, err&#34;,
+				Statement:  fmt.Sprintf(&#34;genapi.MustHandleResponse[%s](resp, err)&#34;, typ),
+			}</code></pre>
+</figure>
+
+            </div>
+            <div id="headers" class="annotation-section">
+                <h3 class="section-header">Headers</h3>
+                <p>The GitHub interface sets Accept on every call. The httpbin end-to-end test also sets a method header. Both use @Header with a name and a value.</p>
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>examples/github/api/api.go (lines 11–21)</span><a href="https://github.com/lexcao/genapi/blob/main/examples/github/api/api.go#L11-L21">GitHub</a></figcaption>
+    <pre><code class="language-go">// @BaseURL(&#34;https://api.github.com&#34;)
+// @Header(&#34;Accept&#34;, &#34;application/vnd.github.v3&#43;json&#34;)
+type GitHub interface {
+	genapi.Interface
+
+	// @GET(&#34;/repos/{owner}/{repo}/contributors&#34;)
+	Contributors(ctx context.Context, owner string, repo string) ([]Contributor, error)
+
+	// @POST(&#34;/repos/{owner}/{repo}/issues&#34;)
+	CreateIssue(ctx context.Context, issue Issue, owner string, repo string) error
+}</code></pre>
+</figure>
+
+                
+<figure class="code-block">
+    <figcaption class="code-header"><span>test/e2e/httpbin.go (lines 12–18)</span><a href="https://github.com/lexcao/genapi/blob/main/test/e2e/httpbin.go#L12-L18">GitHub</a></figcaption>
+    <pre><code class="language-go">	// @GET(&#34;/get&#34;)
+	// @Query(&#34;key&#34;, &#34;value&#34;)
+	// @Query(&#34;value&#34;, &#34;{value}&#34;)
+	// @Header(&#34;X-Hello&#34;, &#34;world&#34;)
+	Get(value string) (*Response, error)
+
+	// @POST(&#34;/post&#34;)</code></pre>
+</figure>
+
+            </div>
+        </div>
+    </div>
+</section>
 
         </main>
-
         <footer>
             <div class="container">
                 <div class="footer-grid">
                     <div class="footer-brand">
-                        <div class="logo">
-                            <div class="logo-icon">
-                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1">
-                                    </path>
-                                    <path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div class="logo-text">genapi</div>
-                        </div>
-                        <p>Declarative HTTP Client Generator for Go</p>
+                        <a class="logo" href="./" aria-label="genapi">
+                            <img class="wordmark wordmark-light" src="brand/wordmark-light.svg" alt="genapi" width="84" height="32">
+                            <img class="wordmark wordmark-dark" src="brand/wordmark-dark.svg" alt="" width="84" height="32" aria-hidden="true">
+                        </a>
+                        <p>Declarative HTTP clients for Go — interface in, client out.</p>
                         <div class="social-links">
-                            <a href="https://github.com/lexcao/genapi" class="social-icon" aria-label="GitHub"
-                                target="_blank">
-                                <svg viewBox="0 0 24 24" width="20" height="20">
-                                    <path
-                                        d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12">
-                                    </path>
+                            <a href="https://github.com/lexcao/genapi" class="social-icon" aria-label="GitHub">
+                                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
                                 </svg>
                             </a>
                         </div>
                     </div>
-
                     <div class="footer-links-container">
                         <div class="footer-links">
-                            <h4>Documentation</h4>
+                            <h2>Documentation</h2>
                             <ul>
-                                <li><a href="#getting-started">Getting Started</a></li>
-                                <li><a href="#documentation">API Reference</a></li>
-                                <li><a href="#examples">Examples</a></li>
-                                <li><a href="https://pkg.go.dev/github.com/lexcao/genapi" target="_blank">GoDoc</a></li>
+                                <li><a href="./#getting-started">Getting started</a></li>
+                                <li><a href="install/">Install</a></li>
+                                <li><a href="examples/">Examples</a></li>
+                                <li><a href="./#documentation">Annotations</a></li>
+                                <li><a href="https://pkg.go.dev/github.com/lexcao/genapi">pkg.go.dev</a></li>
                             </ul>
                         </div>
-
                         <div class="footer-links">
-                            <h4>Community</h4>
+                            <h2>Community</h2>
                             <ul>
-                                <li><a href="https://github.com/lexcao/genapi/issues" target="_blank">GitHub Issues</a>
-                                </li>
-                                <li><a href="https://github.com/lexcao/genapi/discussions"
-                                        target="_blank">Discussions</a>
-                                </li>
-                                <li><a href="https://github.com/lexcao/genapi/blob/main/CONTRIBUTING.md"
-                                        target="_blank">Contributing</a></li>
-                                <li><a href="https://github.com/lexcao/genapi/blob/main/CODE_OF_CONDUCT.md"
-                                        target="_blank">Code of Conduct</a></li>
+                                <li><a href="https://lexcao.io/posts/genapi/">Blog</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/issues">GitHub Issues</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/discussions">Discussions</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/blob/main/CONTRIBUTING.md">Contributing</a></li>
                             </ul>
                         </div>
-
                         <div class="footer-links">
-                            <h4>Resources</h4>
+                            <h2>Resources</h2>
                             <ul>
-                                <li><a href="https://github.com/lexcao/genapi" target="_blank">GitHub</a></li>
-                                <li><a href="https://github.com/lexcao/genapi/releases" target="_blank">Releases</a>
-                                </li>
-                                <li><a href="https://go.dev" target="_blank">Go Language</a></li>
-                                <li><a href="https://github.com/lexcao/genapi/blob/main/LICENSE"
-                                        target="_blank">License</a>
-                                </li>
+                                <li><a href="https://github.com/lexcao/genapi">GitHub</a></li>
+                                <li><a href="changelog/">Changelog</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/releases">Releases</a></li>
+                                <li><a href="https://go.dev">Go</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/blob/main/LICENSE">Apache 2.0</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-
                 <div class="footer-bottom">
                     <div class="footer-copyright">
-                        <p>© 2025 genapi. Created by <a href="https://github.com/lexcao" target="_blank">lexcao</a>.</p>
-                        <p>Licensed under <a href="https://github.com/lexcao/genapi/blob/main/LICENSE"
-                                target="_blank">Apache 2.0</a></p>
+                        <p>© 2025–2026 genapi. Created by <a href="https://github.com/lexcao">lexcao</a>.</p>
+                        <p>Licensed under <a href="https://github.com/lexcao/genapi/blob/main/LICENSE">Apache 2.0</a></p>
                     </div>
+                    <p class="footer-lang">
+                        <a href="./" lang="en" hreflang="en">English</a>
+                        <span aria-hidden="true"> · </span>
+                        <a href="zh/" lang="zh-CN" hreflang="zh-CN">中文</a>
+                    </p>
                 </div>
             </div>
         </footer>
     </div>
-
+    <noscript>
+        <style>
+            .tab-pane, .annotation-section { display: block !important; }
+        </style>
+    </noscript>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
     <script src="script.js"></script>
 </body>
-
 </html>
+
+
