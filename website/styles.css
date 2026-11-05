@@ -507,9 +507,10 @@ header {
     max-width: 600px;
     margin: 0 auto;
     border-radius: var(--radius);
-    overflow: hidden;
+    overflow: hidden; /* radius only; code scrolls inside .terminal-body */
     background-color: transparent;
     border: 1px solid #e1e4e8;
+    min-width: 0;
 }
 
 .terminal-header {
@@ -557,11 +558,13 @@ header {
     border-radius: 0 0 8px 8px;
     height: auto;
     display: block;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     max-width: 100%;
     min-width: 0;
     transition: var(--transition);
     font-size: 0.8rem;
+    -webkit-overflow-scrolling: touch;
 }
 
 .language-go {
@@ -577,6 +580,7 @@ header {
     min-width: 100%;
     max-width: none;
     overflow: visible;
+    white-space: pre;
 }
 
 .terminal-body code {
@@ -1410,6 +1414,11 @@ figure.code-block {
 .hero-terminal {
     width: 100%;
     max-width: 100%;
+    /* Keep radius clipping on the chrome, but do not clip the code scrollport. */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 
 .terminal-header { min-width: 0; }
@@ -1423,8 +1432,26 @@ figure.code-block {
 }
 
 .terminal-body {
-    overflow: auto;
+    /* Horizontal scroll for long Go signatures / go:generate lines. */
+    overflow-x: auto;
+    overflow-y: hidden;
     max-width: 100%;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+}
+
+.terminal-body pre,
+.terminal-body code {
+    white-space: pre;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.terminal-body pre {
+    width: max-content;
+    min-width: 100%;
+    max-width: none;
 }
 
 figure.code-block pre,
@@ -1803,4 +1830,48 @@ code[class*="language-"] {
 @keyframes draw-rule {
     from { transform: scaleX(0); }
     to { transform: scaleX(1); }
+}
+
+/* hero-terminal overflow fix: visible scroll for long Go lines */
+.hero-terminal .terminal-body {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #9a9388 transparent;
+}
+
+.hero-terminal .terminal-body::-webkit-scrollbar {
+    height: 8px;
+}
+
+.hero-terminal .terminal-body::-webkit-scrollbar-thumb {
+    background: #9a9388;
+    border-radius: 999px;
+}
+
+.hero-terminal .terminal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.dark-mode .hero-terminal .terminal-body {
+    scrollbar-color: #6d655b transparent;
+}
+
+.dark-mode .hero-terminal .terminal-body::-webkit-scrollbar-thumb {
+    background: #6d655b;
+}
+
+/* Fit a bit more of the long signatures before scrolling. */
+.hero-terminal .terminal-body {
+    font-size: 0.74rem;
+}
+
+.hero-terminal .terminal-body pre {
+    font-size: 0.74rem;
+}
+
+@media (max-width: 480px) {
+    .hero-terminal .terminal-body,
+    .hero-terminal .terminal-body pre {
+        font-size: 0.68rem;
+    }
 }
