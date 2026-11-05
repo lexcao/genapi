@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新日志 — genapi</title>
+    <meta name="description" content="genapi 更新日志，内容来自 GitHub Releases：v0.0.3, v0.0.2, v0.0.1。">
+    <link rel="canonical" href="https://lexcao.io/genapi/zh/changelog/">
+    <link rel="alternate" hreflang="en" href="https://lexcao.io/genapi/changelog/">
+    <link rel="alternate" hreflang="zh-CN" href="https://lexcao.io/genapi/zh/changelog/">
+    <link rel="alternate" hreflang="x-default" href="https://lexcao.io/genapi/changelog/">
+    <meta property="og:title" content="更新日志 — genapi">
+    <meta property="og:description" content="genapi 更新日志，内容来自 GitHub Releases：v0.0.3, v0.0.2, v0.0.1。">
+    <meta property="og:url" content="https://lexcao.io/genapi/zh/changelog/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:image" content="https://lexcao.io/genapi/assets/og-zh.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="genapi 字标。用 interface 声明，生成 Go HTTP 客户端">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="更新日志 — genapi">
+    <meta name="twitter:description" content="genapi 更新日志，内容来自 GitHub Releases：v0.0.3, v0.0.2, v0.0.1。">
+    <meta name="twitter:image" content="https://lexcao.io/genapi/assets/og-zh.png">
+    <meta name="twitter:image:alt" content="genapi 字标。用 interface 声明，生成 Go HTTP 客户端">
+    <link rel="icon" href="../../brand/favicon-light.svg?v=1" type="image/svg+xml">
+    <link rel="icon" href="../../brand/favicon-dark.svg?v=1" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="../../assets/favicon-32.png?v=1" type="image/png" sizes="32x32">
+    <link rel="icon" href="../../assets/favicon-32-dark.png?v=1" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)">
+    <link rel="icon" href="../../assets/favicon-16.png?v=1" type="image/png" sizes="16x16">
+    <link rel="icon" href="../../assets/favicon-16-dark.png?v=1" type="image/png" sizes="16x16" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png?v=1" sizes="180x180">
+    <link rel="icon" href="../../assets/favicon.ico?v=1" sizes="any">
+    <script>
+    (function () {
+        try {
+            var saved = localStorage.getItem('theme');
+            var dark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (dark) document.documentElement.classList.add('dark-mode');
+        } catch (e) {}
+    })();
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="../../styles.css">
+    <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareSourceCode",
+      "codeRepository": "https://github.com/lexcao/genapi",
+      "description": "genapi 更新日志，内容来自 GitHub Releases：v0.0.3, v0.0.2, v0.0.1。",
+      "inLanguage": [
+        "en",
+        "zh-CN"
+      ],
+      "license": "https://github.com/lexcao/genapi/blob/main/LICENSE",
+      "name": "genapi",
+      "programmingLanguage": "Go",
+      "url": "https://lexcao.io/genapi/zh/changelog/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "item": "https://lexcao.io/genapi/zh/",
+          "name": "genapi",
+          "position": 1
+        },
+        {
+          "@type": "ListItem",
+          "item": "https://lexcao.io/genapi/zh/changelog/",
+          "name": "更新日志",
+          "position": 2
+        }
+      ]
+    }
+  ]
+}</script>
+</head>
+<body class="page-changelog">
+    
+    <div class="site-container">
+        <header>
+            <div class="header-container">
+                <a class="logo" href="../" aria-label="genapi">
+                    <img class="wordmark wordmark-light" src="../../brand/wordmark-light.svg" alt="genapi" width="110" height="42">
+                    <img class="wordmark wordmark-dark" src="../../brand/wordmark-dark.svg" alt="" width="110" height="42" aria-hidden="true">
+                </a>
+                <nav class="main-nav" aria-label="主导航">
+                    <ul>
+                        <li><a href="../install/" >安装</a></li>
+                        <li><a href="../examples/" >示例</a></li>
+                        <li><a href="./" aria-current="page">更新日志</a></li>
+                        <li><a href="../#documentation">注解</a></li>
+                        <li><a href="https://lexcao.io/zh/posts/genapi/">博客</a></li>
+                        <li><a href="https://pkg.go.dev/github.com/lexcao/genapi">pkg.go.dev</a></li>
+                        <li class="nav-collapse-only"><a href="https://github.com/lexcao/genapi">GitHub</a></li>
+                    </ul>
+                </nav>
+                <div class="header-tools">
+                    <nav class="lang-switch" aria-label="语言">
+                        <a href="../../changelog/" lang="en" hreflang="en" >EN</a>
+                        <a href="./" lang="zh-CN" hreflang="zh-CN" aria-current="page">中文</a>
+                    </nav>
+                    <button id="theme-toggle" class="btn btn-icon" type="button" aria-label="切换颜色主题">
+                        <svg class="moon-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"></path>
+                        </svg>
+                        <svg class="sun-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                        </svg>
+                    </button>
+                    <a href="https://github.com/lexcao/genapi" class="btn btn-github header-github">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+                        </svg>
+                        GitHub
+                    </a>
+                    <button class="mobile-menu-toggle" type="button" aria-label="菜单" aria-expanded="false">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main>
+            
+<div class="container subpage">
+    <nav class="breadcrumbs" aria-label="面包屑"><a href="../">genapi</a><span aria-hidden="true"> / </span><a href="./">更新日志</a></nav>
+    <h1>更新日志</h1>
+    <p class="lead" id="intro">每一节对应一个 GitHub Release。说明文字是 Release 正文的原文。时间同时给出 GitHub 的 publishedAt，以及同一时刻的北京时间（UTC&#43;8）。</p>
+    
+    <article class="release">
+        <h2>v0.0.3 <span class="badge">最新</span></h2>
+        <p class="release-meta">发布时间 2025-03-31 22:38:32 （北京时间，UTC&#43;8）。GitHub publishedAt： <time datetime="2025-03-31T14:38:32Z">2025-03-31T14:38:32Z</time></p>
+        <pre class="release-body"><code>**Full Changelog**: https://github.com/lexcao/genapi/compare/v0.0.2...v0.0.3</code></pre>
+        <p><a href="https://github.com/lexcao/genapi/releases/tag/v0.0.3">https://github.com/lexcao/genapi/releases/tag/v0.0.3</a></p>
+    </article>
+    
+    <article class="release">
+        <h2>v0.0.2</h2>
+        <p class="release-meta">发布时间 2025-03-06 23:08:21 （北京时间，UTC&#43;8）。GitHub publishedAt： <time datetime="2025-03-06T15:08:21Z">2025-03-06T15:08:21Z</time></p>
+        <pre class="release-body"><code>**Full Changelog**: https://github.com/lexcao/genapi/compare/v0.0.1...v0.0.2</code></pre>
+        <p><a href="https://github.com/lexcao/genapi/releases/tag/v0.0.2">https://github.com/lexcao/genapi/releases/tag/v0.0.2</a></p>
+    </article>
+    
+    <article class="release">
+        <h2>v0.0.1</h2>
+        <p class="release-meta">发布时间 2025-03-04 00:21:01 （北京时间，UTC&#43;8）。GitHub publishedAt： <time datetime="2025-03-03T16:21:01Z">2025-03-03T16:21:01Z</time></p>
+        <pre class="release-body"><code>First release!</code></pre>
+        <p><a href="https://github.com/lexcao/genapi/releases/tag/v0.0.1">https://github.com/lexcao/genapi/releases/tag/v0.0.1</a></p>
+    </article>
+    
+    <ul class="pager">
+        <li><a href="../install/">安装</a></li>
+        <li><a href="../examples/">示例</a></li>
+        <li><a href="https://lexcao.io/zh/posts/genapi/">博客</a></li>
+        <li><a href="https://github.com/lexcao/genapi/releases">GitHub Releases</a></li>
+    </ul>
+</div>
+
+        </main>
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <a class="logo" href="../" aria-label="genapi">
+                            <img class="wordmark wordmark-light" src="../../brand/wordmark-light.svg" alt="genapi" width="84" height="32">
+                            <img class="wordmark wordmark-dark" src="../../brand/wordmark-dark.svg" alt="" width="84" height="32" aria-hidden="true">
+                        </a>
+                        <p>用 interface 声明，生成 Go HTTP 客户端</p>
+                        <div class="social-links">
+                            <a href="https://github.com/lexcao/genapi" class="social-icon" aria-label="GitHub">
+                                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-links-container">
+                        <div class="footer-links">
+                            <h2>文档</h2>
+                            <ul>
+                                <li><a href="../#getting-started">开始使用</a></li>
+                                <li><a href="../install/">安装</a></li>
+                                <li><a href="../examples/">示例</a></li>
+                                <li><a href="../#documentation">注解</a></li>
+                                <li><a href="https://pkg.go.dev/github.com/lexcao/genapi">pkg.go.dev</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h2>社区</h2>
+                            <ul>
+                                <li><a href="https://lexcao.io/zh/posts/genapi/">博客</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/issues">GitHub Issues</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/discussions">Discussions</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/blob/main/CONTRIBUTING.md">参与贡献</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-links">
+                            <h2>资源</h2>
+                            <ul>
+                                <li><a href="https://github.com/lexcao/genapi">GitHub</a></li>
+                                <li><a href="./">更新日志</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/releases">Releases</a></li>
+                                <li><a href="https://go.dev">Go</a></li>
+                                <li><a href="https://github.com/lexcao/genapi/blob/main/LICENSE">Apache 2.0</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        <p>© 2025–2026 genapi. 作者 <a href="https://github.com/lexcao">lexcao</a>.</p>
+                        <p>许可协议 <a href="https://github.com/lexcao/genapi/blob/main/LICENSE">Apache 2.0</a></p>
+                    </div>
+                    <p class="footer-lang">
+                        <a href="../../changelog/" lang="en" hreflang="en">English</a>
+                        <span aria-hidden="true"> · </span>
+                        <a href="./" lang="zh-CN" hreflang="zh-CN">中文</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <noscript>
+        <style>
+            .tab-pane, .annotation-section { display: block !important; }
+        </style>
+    </noscript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="../../script.js"></script>
+</body>
+</html>
+
+
