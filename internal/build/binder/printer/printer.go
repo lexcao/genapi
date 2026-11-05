@@ -34,7 +34,7 @@ func (p *Printer) NewLine() {
 }
 
 func (p *Printer) Quote(s string) {
-	p.builder.WriteString(fmt.Sprintf("%q", s))
+	_, _ = fmt.Fprintf(&p.builder, "%q", s)
 }
 
 func (p *Printer) Unquoted(s string) {

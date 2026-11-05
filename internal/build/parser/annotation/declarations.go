@@ -164,7 +164,7 @@ var errSkipTyped = errors.New("skip typed")
 func typed(annotation Annotation, input any) error {
 	t := reflect.TypeOf(input)
 
-	if t.Kind() != reflect.Ptr {
+	if t.Kind() != reflect.Pointer {
 		return errors.New("input must be a pointer")
 	}
 

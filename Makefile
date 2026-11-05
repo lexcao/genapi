@@ -17,7 +17,7 @@ test:
 	$(call run_in_modules,go test -v -race -count=1 ./...)
 
 lint:
-	$(call run_in_modules,golangci-lint run --out-format=colored-line-number --new=false --new-from-rev=)
+	$(call run_in_modules,golangci-lint run)
 
 generate:
 	go generate ./...
